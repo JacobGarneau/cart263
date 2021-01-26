@@ -3,7 +3,7 @@ class Animal {
     this.x = x;
     this.y = y;
     this.image = image;
-    this.angle = 0;
+    this.angle = random(0, 360);
     this.sausageDog = false;
   }
 
