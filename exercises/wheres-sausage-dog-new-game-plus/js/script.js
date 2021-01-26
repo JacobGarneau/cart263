@@ -21,6 +21,9 @@ let sausageDog;
 let flashingText = 255;
 let flashingTextDelay = 0;
 
+let frames = 0;
+let timeRemaining = 10;
+
 let state = `title`; // title, game, ending
 
 function preload() {
@@ -90,6 +93,7 @@ function game() {
 
   updateAnimals();
   updateSausageDog();
+  countdownTimer();
 }
 
 function goodEnding() {
@@ -141,6 +145,30 @@ function updateAnimals() {
 
 function updateSausageDog() {
   sausageDog.update();
+}
+
+function countdownTimer() {
+  if (!sausageDog.found) {
+    frames++;
+  }
+
+  if (frames >= 60) {
+    timeRemaining--;
+    frames = 0;
+  }
+
+  if (timeRemaining <= 0) {
+    state = `badEnding`;
+  }
+
+  push();
+  fill(255);
+  stroke(0);
+  strokeWeight(6);
+  textStyle(BOLD);
+  textSize(64);
+  text(`${timeRemaining} seconds left`, width / 2, 80);
+  pop();
 }
 
 function animateFlashingText() {
