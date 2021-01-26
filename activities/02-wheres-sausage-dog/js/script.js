@@ -8,8 +8,12 @@ Find the sausage dog, or else.
 
 const NUM_ANIMAL_IMAGES = 10;
 const NUM_ANIMALS = 100;
+
 let animalImages = [];
 let animals = [];
+
+let sausageDogImage;
+let sausageDog;
 
 function preload() {
   for (let i = 0; i < NUM_ANIMAL_IMAGES; i++) {
