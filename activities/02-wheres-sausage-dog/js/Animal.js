@@ -12,7 +12,7 @@ class Animal {
     imageMode(CENTER);
     translate(this.x, this.y);
     rotate(this.angle);
-    image(this.image, this.x, this.y);
+    image(this.image, 0, 0);
     pop();
   }
 
