@@ -16,7 +16,17 @@ class Animal {
     pop();
   }
 
+  overlap(x, y) {
+    let distance = 64;
+    let distX = dist(mouseX, 0, x, 0);
+    let distY = dist(mouseY, 0, y, 0);
+
+    if (distX <= distance && distY <= distance) {
+      return true;
+    }
+  }
+
   update() {
-    display();
+    this.display();
   }
 }

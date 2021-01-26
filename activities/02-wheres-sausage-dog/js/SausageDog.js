@@ -7,15 +7,13 @@ class SausageDog extends Animal {
 
   update() {
     super.update();
-    if (found) {
+    if (this.found) {
       this.angle += this.rotationSpeed;
     }
   }
 
   mousePressed() {
-    let distX = dist(mouseX, 0, this.x, 0);
-    let distY = dist(mouseY, 0, this.y, 0);
-    if (distX <= 10 && disyY <= 10) {
+    if (this.overlap(this.x, this.y)) {
       this.found = true;
     }
   }
