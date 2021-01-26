@@ -185,6 +185,17 @@ function animateFlashingText() {
   }
 }
 
+function returnToTitle() {
+  state = `title`;
+
+  animals = [];
+  sausageDog = undefined;
+  timeRemaining = 10;
+
+  createAnimals();
+  createSausageDog();
+}
+
 function mousePressed() {
   if (state === `title`) {
     state = `game`;
@@ -196,5 +207,7 @@ function mousePressed() {
 
       sausageDog.mousePressed();
     }
+  } else if (state === `goodEnding` || state === `badEnding`) {
+    returnToTitle();
   }
 }
