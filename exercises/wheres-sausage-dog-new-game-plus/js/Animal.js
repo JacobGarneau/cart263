@@ -7,6 +7,8 @@ class Animal {
     this.sausageDog = false;
   }
 
+  //  display()
+  //  Displays the animals on the canvas
   display() {
     push();
     imageMode(CENTER);
@@ -16,6 +18,8 @@ class Animal {
     pop();
   }
 
+  //  overlap()
+  //  Checks if the mouse position and the image overlap
   overlap() {
     let distance = 64;
     let distX = dist(mouseX, 0, this.x, 0);
@@ -26,12 +30,16 @@ class Animal {
     }
   }
 
+  //  mousePressed()
+  //  Handles the clicks
   mousePressed() {
     if (this.overlap() && this.sausageDog === true) {
       this.found = true;
     }
   }
 
+  //  update()
+  //  Updates the state of the animals on the canvas
   update() {
     this.display();
   }

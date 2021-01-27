@@ -6,6 +6,8 @@ class SausageDog extends Animal {
     this.sausageDog = true;
   }
 
+  //  update()
+  //  Updates the state of the sausage dog on the canvas
   update() {
     super.update();
     if (this.found) {

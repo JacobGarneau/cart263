@@ -26,6 +26,8 @@ let timeRemaining = 10;
 
 let state = `title`; // title, game, ending
 
+//  preload()
+//  p5: Loads the necessary assets
 function preload() {
   for (let i = 0; i < NUM_ANIMAL_IMAGES; i++) {
     let animalImage = loadImage(`${ANIMAL_IMAGE_PATH}${i}.png`);
@@ -35,6 +37,8 @@ function preload() {
   sausageDogImage = loadImage(SAUSAGE_DOG_IMAGE_PATH);
 }
 
+//  setup()
+//  p5: Sets up the necessary variables
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
@@ -42,6 +46,8 @@ function setup() {
   createSausageDog();
 }
 
+//  createAnimals()
+//  Creates the animals to be display on the canvas
 function createAnimals() {
   for (let i = 0; i < NUM_ANIMALS; i++) {
     let x = random(0, width);
@@ -52,12 +58,16 @@ function createAnimals() {
   }
 }
 
+//  createSausageDog()
+//  Creates the sausage dog
 function createSausageDog() {
   let x = random(0, width);
   let y = random(0, height);
   sausageDog = new SausageDog(x, y, sausageDogImage);
 }
 
+//  draw
+//  p5: Handles the states
 function draw() {
   if (state === `title`) {
     title();
@@ -70,6 +80,8 @@ function draw() {
   }
 }
 
+//  title()
+//  Displays the title screen
 function title() {
   animateFlashingText();
 
@@ -88,6 +100,8 @@ function title() {
   text(`Click anywhere to start the game`, width / 2, height - 80);
 }
 
+//  game()
+//  Displays the game screen
 function game() {
   background(255);
 
@@ -96,6 +110,8 @@ function game() {
   countdownTimer();
 }
 
+//  goodEnding()
+//  Displays the good ending screen
 function goodEnding() {
   animateFlashingText();
 
@@ -115,6 +131,8 @@ function goodEnding() {
   text(`Click anywhere to return to the title screen`, width / 2, height - 80);
 }
 
+//  badEnding()
+//  Displays the bad ending screen
 function badEnding() {
   animateFlashingText();
 
@@ -137,16 +155,22 @@ function badEnding() {
   text(`Click anywhere to return to the title screen`, width / 2, height - 80);
 }
 
+//  updateAnimals()
+//  Updates the state of the animals every frame
 function updateAnimals() {
   for (let i = 0; i < animals.length; i++) {
     animals[i].update();
   }
 }
 
+//  updateSausageDog()
+//  Updates the state of the sausage dog every frame
 function updateSausageDog() {
   sausageDog.update();
 }
 
+//  countdownTimer()
+//  Handles and displays the countdown timer
 function countdownTimer() {
   if (!sausageDog.found) {
     frames++;
@@ -171,6 +195,8 @@ function countdownTimer() {
   pop();
 }
 
+//  animateFlashingText()
+//  Handles the flshing text on the title and ending screens
 function animateFlashingText() {
   flashingTextDelay++;
 
@@ -185,6 +211,8 @@ function animateFlashingText() {
   }
 }
 
+//  returnToTitle()
+//  Resets the necessary variables to start the game over
 function returnToTitle() {
   state = `title`;
 
@@ -196,6 +224,8 @@ function returnToTitle() {
   createSausageDog();
 }
 
+//  mousePressed()
+//  p5: Handles clicks
 function mousePressed() {
   if (state === `title`) {
     state = `game`;
