@@ -161,8 +161,10 @@ let failureMessages = [
 
 let currentAnimal = ``;
 let currentAnswer = ``;
-let currentScore;
-let mistakes;
+let currentScore = 0;
+let mistakes = 0;
+let state = `title`; // title, game, ending
+let guessing = false;
 
 /*
 Description of preload
@@ -170,12 +172,16 @@ Description of preload
 function preload() {}
 
 /*
-p5: Sets up the annyang! library
+p5: Sets up the canvas and the annyang! library
 */
 function setup() {
+  createCanvas(windowWidth, windowHeight);
+
   if (annyang) {
     let commands = {
       "I think it is *animal": guessAnimal,
+      Start: startGame,
+      Next: generateAnimal,
     };
     annyang.addCommands(commands);
     annyang.start();
@@ -186,7 +192,39 @@ function setup() {
 p5: Draws on the canvas
 */
 function draw() {
-  createCanvas(windowWidth, windowHeight);
+  if (state === `title`) {
+    title();
+  } else if (state === `game`) {
+    game();
+  } else if (state === `ending`) {
+    ending();
+  }
+}
+
+/*
+Displays the title screen
+*/
+function title() {
+  background(0);
+
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(64);
+  text(
+    `Guess the name of the animal\nthat is spoken backwards`,
+    width / 2,
+    height / 2
+  );
+
+  fill(255);
+  textSize(24);
+  text(`Say "START" to start the game`, width / 2, height - 120);
+}
+
+/*
+Displays the game
+*/
+function game() {
   background(0);
   if (currentAnswer === currentAnimal) {
     fill(0, 255, 0);
@@ -197,6 +235,14 @@ function draw() {
   textAlign(CENTER, CENTER);
   textSize(72);
   text(currentAnswer, width / 2, height / 2);
+
+  fill(255);
+  textSize(24);
+  if (guessing) {
+    text(`Click to make the voice repeat`, width / 2, height - 120);
+  } else {
+    text(`Say "NEXT" to move on to the next animal`, width / 2, height - 120);
+  }
 }
 
 /*
@@ -217,23 +263,52 @@ function reverseString(string) {
 Handles the animal guesses
 */
 function guessAnimal(animal) {
-  currentAnswer = animal.toLowerCase();
-  console.log(currentAnswer);
+  if (guessing) {
+    currentAnswer = animal.toLowerCase();
+    console.log(currentAnswer);
 
-  if (currentAnswer === currentAnimal) {
-    responsiveVoice.speak(random(successMessages));
-    currentScore++;
-  } else {
-    responsiveVoice.speak(random(failureMessages));
-    mistakes++;
+    if (currentAnswer === currentAnimal) {
+      responsiveVoice.speak(random(successMessages), "UK English Female", {
+        onend: () => {
+          guessing = false;
+        },
+      });
+      currentScore++;
+    } else {
+      responsiveVoice.speak(random(failureMessages), "UK English Female", {
+        onend: () => {
+          guessing = false;
+        },
+      });
+      mistakes++;
+    }
   }
 }
 
 /*
-p5: Handles click events
+Picks a random animal from the list and reads its name
+*/
+function generateAnimal() {
+  setTimeout(() => {
+    currentAnimal = random(animals);
+    let reverseAnimal = reverseString(currentAnimal);
+    responsiveVoice.speak(reverseAnimal);
+    guessing = true;
+  }, 250);
+}
+
+/*
+Starts the game from the title screen
+*/
+function startGame() {
+  state = `game`;
+  generateAnimal();
+}
+
+/*
+p5: Repeats the name of the current animal when clicking the mouse
 */
 function mousePressed() {
-  currentAnimal = random(animals);
   let reverseAnimal = reverseString(currentAnimal);
   responsiveVoice.speak(reverseAnimal);
 }
