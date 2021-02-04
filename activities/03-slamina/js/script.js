@@ -207,10 +207,12 @@ function title() {
   textAlign(CENTER, CENTER);
   textSize(64);
   text(
-    `Guess the name of the animal\nthat is spoken backwards`,
+    `Guess the name of the animal\nthat is spoken backwards!`,
     width / 2,
-    height / 2
+    height / 2 - 60
   );
+  textSize(40);
+  text(`Say: "I think it is..."`, width / 2, height / 2 + 60);
 
   fill(255);
   textSize(24);
@@ -305,16 +307,24 @@ function guessAnimal(animal) {
 Picks a random animal from the list and reads its name
 */
 function generateAnimal() {
-  if (mistakes >= 3) {
-    state = `ending`;
-  } else {
-    setTimeout(() => {
+  if (!guessing) {
+    if (mistakes >= 3) {
+      state = `ending`;
+      checkHighScore();
+    } else {
       currentAnswer = ``;
       currentAnimal = random(animals);
       let reverseAnimal = reverseString(currentAnimal);
       responsiveVoice.speak(reverseAnimal);
       guessing = true;
-    }, 250);
+    }
+  }
+}
+
+function checkHighScore() {
+  let highScore = localStorage.getItem(`highScore`);
+  if (highScore !== null && score > highScore) {
+    localStorage.setItem(`highScore`, score);
   }
 }
 
