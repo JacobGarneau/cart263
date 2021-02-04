@@ -1,11 +1,11 @@
 "use strict";
 
 /*
-Title of Project
-Author Name
+Exercise 2: Slamina: New Game Plus
+Jacob Garneau
 
-This is a template. You must fill in the title,
-author, and this description to match your project!
+A game where you must try to guess the name of as many animals as possible before making three mistakes!
+To complicate things, the animal names are read backwards...
 */
 
 const animals = [
