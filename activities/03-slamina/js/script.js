@@ -161,15 +161,10 @@ let failureMessages = [
 
 let currentAnimal = ``;
 let currentAnswer = ``;
-let currentScore = 0;
+let score = 0;
 let mistakes = 0;
 let state = `title`; // title, game, ending
 let guessing = false;
-
-/*
-Description of preload
-*/
-function preload() {}
 
 /*
 p5: Sets up the canvas and the annyang! library
@@ -182,6 +177,7 @@ function setup() {
       "I think it is *animal": guessAnimal,
       Start: startGame,
       Next: generateAnimal,
+      Reset: reset,
     };
     annyang.addCommands(commands);
     annyang.start();
@@ -192,6 +188,8 @@ function setup() {
 p5: Draws on the canvas
 */
 function draw() {
+  background(0);
+
   if (state === `title`) {
     title();
   } else if (state === `game`) {
@@ -205,8 +203,6 @@ function draw() {
 Displays the title screen
 */
 function title() {
-  background(0);
-
   fill(255);
   textAlign(CENTER, CENTER);
   textSize(64);
@@ -225,7 +221,6 @@ function title() {
 Displays the game
 */
 function game() {
-  background(0);
   if (currentAnswer === currentAnimal) {
     fill(0, 255, 0);
   } else {
@@ -238,11 +233,32 @@ function game() {
 
   fill(255);
   textSize(24);
+  text(`Correct guesses: ${score}`, width / 2, 120);
+  text(`Mistakes: ${mistakes}`, width / 2, 160);
+
   if (guessing) {
     text(`Click to make the voice repeat`, width / 2, height - 120);
   } else {
-    text(`Say "NEXT" to move on to the next animal`, width / 2, height - 120);
+    if (mistakes >= 3) {
+      text(`Say "NEXT" to go to the ending screen`, width / 2, height - 120);
+    } else {
+      text(`Say "NEXT" to move on to the next animal`, width / 2, height - 120);
+    }
   }
+}
+
+/*
+Displays the ending screen
+*/
+function ending() {
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(64);
+  text(`You got ${score} animals right!`, width / 2, height / 2);
+
+  fill(255);
+  textSize(24);
+  text(`Say "RESET" to return to the title screen`, width / 2, height - 120);
 }
 
 /*
@@ -273,7 +289,7 @@ function guessAnimal(animal) {
           guessing = false;
         },
       });
-      currentScore++;
+      score++;
     } else {
       responsiveVoice.speak(random(failureMessages), "UK English Female", {
         onend: () => {
@@ -289,12 +305,17 @@ function guessAnimal(animal) {
 Picks a random animal from the list and reads its name
 */
 function generateAnimal() {
-  setTimeout(() => {
-    currentAnimal = random(animals);
-    let reverseAnimal = reverseString(currentAnimal);
-    responsiveVoice.speak(reverseAnimal);
-    guessing = true;
-  }, 250);
+  if (mistakes >= 3) {
+    state = `ending`;
+  } else {
+    setTimeout(() => {
+      currentAnswer = ``;
+      currentAnimal = random(animals);
+      let reverseAnimal = reverseString(currentAnimal);
+      responsiveVoice.speak(reverseAnimal);
+      guessing = true;
+    }, 250);
+  }
 }
 
 /*
@@ -303,6 +324,17 @@ Starts the game from the title screen
 function startGame() {
   state = `game`;
   generateAnimal();
+}
+
+/*
+Resets the game and returns to the title screen
+*/
+function reset() {
+  if (state === `ending`) {
+    state = `title`;
+    score = 0;
+    mistakes = 0;
+  }
 }
 
 /*
