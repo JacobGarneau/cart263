@@ -321,8 +321,8 @@ function generateAnimal() {
     displayAnswer = false;
 
     if (mistakes >= maxMistakes) {
-      state = `ending`;
       checkHighScore();
+      state = `ending`;
     } else {
       currentAnswer = ``;
       currentAnimal = random(animals);
@@ -333,12 +333,23 @@ function generateAnimal() {
   }
 }
 
+/*
+Checks the current high score and updates it if the current score is higher
+*/
 function checkHighScore() {
   let highScore = localStorage.getItem(`highScore`);
-  if (highScore !== null && score > highScore) {
+  if (
+    (highScore !== undefined && highScore !== null && score > highScore) ||
+    highScore === undefined ||
+    highScore === null
+  ) {
     localStorage.setItem(`highScore`, score);
     currentHighScore = score;
-  } else if (highScore !== null && highScore >= score) {
+  } else if (
+    highScore !== undefined &&
+    highScore !== null &&
+    highScore >= score
+  ) {
     currentHighScore = highScore;
   }
 }
