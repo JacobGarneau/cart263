@@ -165,6 +165,7 @@ let score = 0;
 let mistakes = 0;
 let state = `title`; // title, game, ending
 let guessing = false;
+let displayAnswer = false;
 
 /*
 p5: Sets up the canvas and the annyang! library
@@ -246,6 +247,10 @@ function game() {
     } else {
       text(`Say "NEXT" to move on to the next animal`, width / 2, height - 120);
     }
+
+    if (displayAnswer) {
+      text(`The answer was "${currentAnimal}"`, width / 2, height / 2 + 60);
+    }
   }
 }
 
@@ -296,6 +301,7 @@ function guessAnimal(animal) {
       responsiveVoice.speak(random(failureMessages), "UK English Female", {
         onend: () => {
           guessing = false;
+          displayAnswer = true;
         },
       });
       mistakes++;
@@ -307,7 +313,9 @@ function guessAnimal(animal) {
 Picks a random animal from the list and reads its name
 */
 function generateAnimal() {
-  if (!guessing) {
+  if (state === `game` && !guessing) {
+    displayAnswer = false;
+
     if (mistakes >= 3) {
       state = `ending`;
       checkHighScore();
@@ -351,6 +359,8 @@ function reset() {
 p5: Repeats the name of the current animal when clicking the mouse
 */
 function mousePressed() {
-  let reverseAnimal = reverseString(currentAnimal);
-  responsiveVoice.speak(reverseAnimal);
+  if (guessing) {
+    let reverseAnimal = reverseString(currentAnimal);
+    responsiveVoice.speak(reverseAnimal);
+  }
 }
