@@ -144,20 +144,21 @@ const animals = [
   "yak",
   "zebra",
 ];
-let successMessages = [
+const successMessages = [
   `Congratulations!`,
   `Good job!`,
   `You're doing great!`,
   `Keep it up!`,
   `That's right!`,
 ];
-let failureMessages = [
+const failureMessages = [
   `This is not the answer I was looking for...`,
   `You can do better!`,
   `You're completely wrong!`,
   `Listen closer...`,
   `My disappointment is immeasurable and my day is ruined.`,
 ];
+const maxMistakes = 3;
 
 let currentAnimal = ``;
 let currentAnswer = ``;
@@ -166,6 +167,7 @@ let mistakes = 0;
 let state = `title`; // title, game, ending
 let guessing = false;
 let displayAnswer = false;
+let currentHighScore;
 
 /*
 p5: Sets up the canvas and the annyang! library
@@ -237,12 +239,12 @@ function game() {
   fill(255);
   textSize(24);
   text(`Correct guesses: ${score}`, width / 2, 120);
-  text(`Mistakes: ${mistakes}`, width / 2, 160);
+  text(`Mistakes: ${mistakes} / ${maxMistakes}`, width / 2, 160);
 
   if (guessing) {
     text(`Click to make the voice repeat`, width / 2, height - 120);
   } else {
-    if (mistakes >= 3) {
+    if (mistakes >= maxMistakes) {
       text(`Say "NEXT" to go to the ending screen`, width / 2, height - 120);
     } else {
       text(`Say "NEXT" to move on to the next animal`, width / 2, height - 120);
@@ -261,7 +263,9 @@ function ending() {
   fill(255);
   textAlign(CENTER, CENTER);
   textSize(64);
-  text(`You got ${score} animals right!`, width / 2, height / 2);
+  text(`You got ${score} animals right!`, width / 2, height / 2 - 60);
+  textSize(40);
+  text(`High score: ${currentHighScore}`, width / 2, height / 2 + 60);
 
   fill(255);
   textSize(24);
@@ -316,7 +320,7 @@ function generateAnimal() {
   if (state === `game` && !guessing) {
     displayAnswer = false;
 
-    if (mistakes >= 3) {
+    if (mistakes >= maxMistakes) {
       state = `ending`;
       checkHighScore();
     } else {
@@ -333,6 +337,9 @@ function checkHighScore() {
   let highScore = localStorage.getItem(`highScore`);
   if (highScore !== null && score > highScore) {
     localStorage.setItem(`highScore`, score);
+    currentHighScore = score;
+  } else if (highScore !== null && highScore >= score) {
+    currentHighScore = highScore;
   }
 }
 
