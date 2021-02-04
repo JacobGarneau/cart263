@@ -144,9 +144,25 @@ const animals = [
   "yak",
   "zebra",
 ];
+let successMessages = [
+  `Congratulations!`,
+  `Good job!`,
+  `You're doing great!`,
+  `Keep it up!`,
+  `That's right!`,
+];
+let failureMessages = [
+  `This is not the answer I was looking for...`,
+  `You can do better!`,
+  `You're completely wrong!`,
+  `Listen closer...`,
+  `My disappointment is immeasurable and my day is ruined.`,
+];
 
 let currentAnimal = ``;
 let currentAnswer = ``;
+let currentScore;
+let mistakes;
 
 /*
 Description of preload
@@ -154,7 +170,7 @@ Description of preload
 function preload() {}
 
 /*
-Description of setup
+p5: Sets up the annyang! library
 */
 function setup() {
   if (annyang) {
@@ -167,7 +183,7 @@ function setup() {
 }
 
 /*
-Description of draw()
+p5: Draws on the canvas
 */
 function draw() {
   createCanvas(windowWidth, windowHeight);
@@ -198,18 +214,26 @@ function reverseString(string) {
 }
 
 /*
+Handles the animal guesses
+*/
+function guessAnimal(animal) {
+  currentAnswer = animal.toLowerCase();
+  console.log(currentAnswer);
+
+  if (currentAnswer === currentAnimal) {
+    responsiveVoice.speak(random(successMessages));
+    currentScore++;
+  } else {
+    responsiveVoice.speak(random(failureMessages));
+    mistakes++;
+  }
+}
+
+/*
 p5: Handles click events
 */
 function mousePressed() {
   currentAnimal = random(animals);
   let reverseAnimal = reverseString(currentAnimal);
   responsiveVoice.speak(reverseAnimal);
-}
-
-/*
-Handles the animal guesses
-*/
-function guessAnimal(animal) {
-  currentAnswer = animal.toLowerCase();
-  console.log(currentAnswer);
 }
