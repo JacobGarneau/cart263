@@ -64,6 +64,17 @@ function draw() {
     height / 2
   );
   pop();
+
+  push();
+  textAlign(CENTER, CENTER);
+  textSize(24);
+  text(`Press C to clear the current profile`, width / 2, height - 80);
+  text(
+    `Press R to regenerate your alias and secret weapon`,
+    width / 2,
+    height - 120
+  );
+  pop();
 }
 
 function generateSpyProfile() {
@@ -90,12 +101,17 @@ function setSpyData() {
 }
 
 function keyPressed() {
-  if (keyCode === 82) {
+  if (keyCode === 67) {
     let resetCmd = prompt(
-      `Type "RESET" to reset your profile\nType anything else to cancel`
+      `Type "CLEAR" to confirm\nType anything else to cancel`
     );
-    if (resetCmd === "RESET" || resetCmd === "reset" || resetCmd === "Reset") {
+    if (resetCmd === "CLEAR" || resetCmd === "clear" || resetCmd === "Clear") {
       generateSpyProfile();
     }
+  } else if (keyCode === 82) {
+    spyProfile.alias = random(instrumentData.instruments);
+    spyProfile.secretWeapon = random(objectData.objects);
+
+    localStorage.setItem("spy-profile-data", JSON.stringify(spyProfile));
   }
 }
