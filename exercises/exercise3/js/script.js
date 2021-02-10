@@ -1,8 +1,8 @@
 "use strict";
 
 /**
-Title of Project
-Author Name
+Spy Profile Generator++
+Jacob Garneau
 
 This is a template. You must fill in the title,
 author, and this description to match your project!
@@ -86,5 +86,16 @@ function setSpyData() {
     spyProfile.alias = data.alias;
     spyProfile.secretWeapon = data.secretWeapon;
     spyProfile.password = data.password;
+  }
+}
+
+function keyPressed() {
+  if (keyCode === 82) {
+    let resetCmd = prompt(
+      `Type "RESET" to reset your profile\nType anything else to cancel`
+    );
+    if (resetCmd === "RESET" || resetCmd === "reset" || resetCmd === "Reset") {
+      generateSpyProfile();
+    }
   }
 }
