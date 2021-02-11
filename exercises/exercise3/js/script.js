@@ -94,7 +94,7 @@ function draw() {
   textSize(24);
   text(`Press C to clear the current profile`, width / 2, height - 80);
   text(
-    `Press R to regenerate your alias and secret weapon`,
+    `Press R to regenerate your agent information`,
     width / 2,
     height - 120
   );
