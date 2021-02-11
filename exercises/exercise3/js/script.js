@@ -10,14 +10,22 @@ author, and this description to match your project!
 
 let spyProfile = {
   name: "[REDACTED]",
-  alias: "[REDACTED]",
-  secretWeapon: "[REDACTED]",
-  password: "[REDACTED]",
+  alias: "[REDACTED]", // adjectiveX + instrumentX
+  secretWeapon: "[REDACTED]", // objectX
+  country: "[REDACTED]", // countryX
+  favouriteColor: "[REDACTED]", //  colorX
+  affiliation: "[REDACTED]", // food
+  password: "[REDACTED]", // cardX + number
 };
 
-let tarotData = undefined;
-let objectData = undefined;
-let instrumentData = undefined;
+let tarotData;
+let objectData;
+let instrumentData;
+let adjData;
+let countryData;
+let colorData;
+let affiliationData;
+
 let data;
 
 /**
@@ -32,6 +40,16 @@ function preload() {
   );
   instrumentData = loadJSON(
     "https://raw.githubusercontent.com/dariusk/corpora/master/data/music/instruments.json"
+  );
+  adjData = loadJSON("js/data/adjectives.json");
+  countryData = loadJSON(
+    "https://raw.githubusercontent.com/dariusk/corpora/master/data/geography/countries.json"
+  );
+  colorData = loadJSON(
+    "https://raw.githubusercontent.com/dariusk/corpora/master/data/colors/crayola.json"
+  );
+  affiliationData = loadJSON(
+    "https://raw.githubusercontent.com/dariusk/corpora/master/data/governments/us_federal_agencies.json"
   );
 }
 
@@ -59,7 +77,13 @@ function draw() {
   textAlign(CENTER, CENTER);
   textSize(40);
   text(
-    `NAME: ${spyProfile.name}\nALIAS: ${spyProfile.alias}\nSECRET WEAPON: ${spyProfile.secretWeapon}\nPASSWORD: ${spyProfile.password}`,
+    `NAME: ${spyProfile.name}
+    ALIAS: ${spyProfile.alias}
+    SECRET WEAPONS: ${spyProfile.secretWeapon}
+    FAVOURITE COLOUR: ${spyProfile.favouriteColor}
+    COUNTRY OF ORIGIN: ${spyProfile.country}
+    AFFILIATION: ${spyProfile.affiliation}
+    PASSWORD: ${spyProfile.password}`,
     width / 2,
     height / 2
   );
@@ -81,10 +105,20 @@ function generateSpyProfile() {
   spyProfile.name = prompt("ENTER AGENT NAME");
 
   let card = random(tarotData.tarot_interpretations);
+  let favouriteColor = random(colorData.colors);
 
-  spyProfile.alias = random(instrumentData.instruments);
-  spyProfile.secretWeapon = random(objectData.objects);
-  spyProfile.password = random(card.keywords);
+  spyProfile.alias = `${random(adjData.adjs)} ${random(
+    instrumentData.instruments
+  )}`;
+  spyProfile.secretWeapon = `${random(objectData.objects)} and ${random(
+    objectData.objects
+  )}`;
+  spyProfile.country = random(countryData.countries);
+  spyProfile.favouriteColor = favouriteColor.color;
+  spyProfile.affiliation = random(affiliationData.agencies);
+  spyProfile.password = `${random(card.keywords)}${Math.floor(
+    random(11, 100)
+  )}`;
 
   localStorage.setItem("spy-profile-data", JSON.stringify(spyProfile));
 }
@@ -96,6 +130,9 @@ function setSpyData() {
     spyProfile.name = data.name;
     spyProfile.alias = data.alias;
     spyProfile.secretWeapon = data.secretWeapon;
+    spyProfile.favouriteColor = data.favouriteColor;
+    spyProfile.country = data.country;
+    spyProfile.affiliation = data.affiliation;
     spyProfile.password = data.password;
   }
 }
@@ -109,8 +146,17 @@ function keyPressed() {
       generateSpyProfile();
     }
   } else if (keyCode === 82) {
-    spyProfile.alias = random(instrumentData.instruments);
-    spyProfile.secretWeapon = random(objectData.objects);
+    let favouriteColor = random(colorData.colors);
+
+    spyProfile.alias = `${random(adjData.adjs)} ${random(
+      instrumentData.instruments
+    )}`;
+    spyProfile.secretWeapon = `${random(objectData.objects)} and ${random(
+      objectData.objects
+    )}`;
+    spyProfile.country = random(countryData.countries);
+    spyProfile.favouriteColor = favouriteColor.color;
+    spyProfile.affiliation = random(affiliationData.agencies);
 
     localStorage.setItem("spy-profile-data", JSON.stringify(spyProfile));
   }
