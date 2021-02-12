@@ -4,18 +4,17 @@
 Spy Profile Generator++
 Jacob Garneau
 
-This is a template. You must fill in the title,
-author, and this description to match your project!
+[REDACTED]
 */
 
 let spyProfile = {
   name: "[REDACTED]",
-  alias: "[REDACTED]", // adjectiveX + instrumentX
-  secretWeapon: "[REDACTED]", // objectX
-  country: "[REDACTED]", // countryX
-  favouriteColor: "[REDACTED]", //  colorX
+  alias: "[REDACTED]", // adjective + instrument
+  secretWeapon: "[REDACTED]", // object
+  country: "[REDACTED]", // country
+  favouriteColor: "[REDACTED]", //  color
   affiliation: "[REDACTED]", // food
-  password: "[REDACTED]", // cardX + number
+  password: "[REDACTED]", // card + number
 };
 
 let tarotData;
@@ -29,7 +28,7 @@ let affiliationData;
 let data;
 
 /**
-Description of preload
+p5: preloads the necessary variables and files
 */
 function preload() {
   tarotData = loadJSON(
@@ -54,7 +53,7 @@ function preload() {
 }
 
 /**
-Description of setup
+p5: sets up the canvas and the local storage data
 */
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -68,7 +67,7 @@ function setup() {
 }
 
 /**
-Description of draw()
+p5: draws the content on the canvas
 */
 function draw() {
   background(219, 252, 255);
@@ -93,14 +92,13 @@ function draw() {
   textAlign(CENTER, CENTER);
   textSize(24);
   text(`Press C to clear the current profile`, width / 2, height - 80);
-  text(
-    `Press R to regenerate your agent information`,
-    width / 2,
-    height - 120
-  );
+  text(`Press R to regenerate your agent information`, width / 2, height - 120);
   pop();
 }
 
+/*
+generates a new spy profile
+*/
 function generateSpyProfile() {
   spyProfile.name = prompt("ENTER AGENT NAME");
 
@@ -123,6 +121,9 @@ function generateSpyProfile() {
   localStorage.setItem("spy-profile-data", JSON.stringify(spyProfile));
 }
 
+/*
+assigns the data from local storage into local variables
+*/
 function setSpyData() {
   let password = prompt("ENTER AGENT PASSWORD");
 
@@ -137,6 +138,9 @@ function setSpyData() {
   }
 }
 
+/*
+p5: handles keyboard inputs
+*/
 function keyPressed() {
   if (keyCode === 67) {
     let resetCmd = prompt(
