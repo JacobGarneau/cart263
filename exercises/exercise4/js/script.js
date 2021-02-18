@@ -1,6 +1,6 @@
 "use strict";
 
-/**
+/*
 Bubble Popper++
 Jacob Garneau
 
@@ -17,6 +17,12 @@ let sounds = {
   pop: undefined,
   inflate: undefined,
 };
+let images = {
+  bubble: undefined,
+  sky: undefined,
+};
+let baseIndexFinger;
+let tipIndexFinger;
 
 /*
 p5: preloads sound files
@@ -25,9 +31,12 @@ function preload() {
   soundFormats("wav");
   sounds.pop = loadSound("assets/sounds/pop");
   sounds.inflate = loadSound("assets/sounds/inflate");
+
+  images.bubble = loadImage("assets/images/bubble.png");
+  images.sky = loadImage("assets/images/sky.jpg");
 }
 
-/**
+/*
 p5: sets up variables and objects
 */
 function setup() {
@@ -59,70 +68,37 @@ function setup() {
   };
 }
 
-/**
-Description of draw()
+/*
+p5: draws on the canvas
 */
 function draw() {
   background(0);
+  image(images.sky, 0, 0, width, height);
 
-  if (modelLoaded) {
-    image(ml5.flipImage(video), 0, 0, width, height);
-  }
-
-  push();
-  noStroke();
-  fill(255, 255, 0);
-  ellipse(mouseX, mouseY, 10);
-  pop();
+  // DISPLAY VIDEO FOR DEBUGGING
+  // if (modelLoaded) {
+  //   image(ml5.flipImage(video), 0, 0, width, height);
+  // }
 
   if (predictions.length > 0) {
     for (let i = 0; i < predictions.length; i++) {
-      let tipIndexFinger = {
+      tipIndexFinger = {
         x: predictions[i].annotations.indexFinger[3][0],
         y: predictions[i].annotations.indexFinger[3][1],
         z: predictions[i].annotations.indexFinger[3][2],
       };
-      let baseIndexFinger = {
+      baseIndexFinger = {
         x: predictions[i].annotations.indexFinger[0][0],
         y: predictions[i].annotations.indexFinger[0][1],
         z: predictions[i].annotations.indexFinger[0][2],
       };
 
-      push();
-      stroke(255);
-      strokeWeight(4);
-      line(
-        baseIndexFinger.x,
-        baseIndexFinger.y,
-        tipIndexFinger.x,
-        tipIndexFinger.y
-      );
-      pop();
+      drawPin();
+      checkBubblePop();
+      displayBubble();
+      displayText();
 
-      push();
-      noStroke();
-      fill(255, 0, 0);
-      ellipse(baseIndexFinger.x, baseIndexFinger.y, 10, 10);
-      pop();
-
-      let d = dist(tipIndexFinger.x, tipIndexFinger.y, bubble.x, bubble.y);
-
-      if (d <= bubble.size / 2) {
-        bubble.y = height;
-        bubble.x = random(0, width);
-        if (bubble.maxSize > 20) {
-          bubble.maxSize -= 5;
-          bubble.speed -= 1;
-        }
-
-        bubble.size = 0;
-        bubblesPopped++;
-
-        sounds.pop.play();
-        sounds.inflate.play();
-      }
-
-      //  hand trackng dots
+      //  HAND TRACKING DOTS DISPLAY
       // for (let j = 0; j < predictions[i].annotations.thumb.length; j++) {
       //   push();
       //   noStroke();
@@ -189,7 +165,56 @@ function draw() {
       // }
     }
   }
+}
 
+/*
+draws the pin on the index finger
+*/
+function drawPin() {
+  push();
+  stroke(255);
+  strokeWeight(4);
+  line(
+    baseIndexFinger.x,
+    baseIndexFinger.y,
+    tipIndexFinger.x,
+    tipIndexFinger.y
+  );
+  pop();
+
+  push();
+  noStroke();
+  fill(255, 0, 0);
+  ellipse(baseIndexFinger.x, baseIndexFinger.y, 10, 10);
+  pop();
+}
+
+/*
+checks if the pin touches the bubble and makes it pop if so
+*/
+function checkBubblePop() {
+  let d = dist(tipIndexFinger.x, tipIndexFinger.y, bubble.x, bubble.y);
+
+  if (d <= bubble.size / 2) {
+    bubble.y = height;
+    bubble.x = random(0, width);
+    if (bubble.maxSize > 20) {
+      bubble.maxSize -= 5;
+      bubble.speed -= 2;
+    }
+
+    bubble.size = 0;
+    bubblesPopped++;
+
+    sounds.pop.play();
+    sounds.inflate.play();
+  }
+}
+
+/*
+displays and moves the bubble
+*/
+function displayBubble() {
   bubble.x += bubble.vx;
   bubble.y += bubble.vy;
 
@@ -203,11 +228,15 @@ function draw() {
   }
 
   push();
-  noStroke();
-  fill(127, 0, 127);
-  ellipse(bubble.x, bubble.y, bubble.size);
+  imageMode(CENTER);
+  image(images.bubble, bubble.x, bubble.y, bubble.size, bubble.size);
   pop();
+}
 
+/*
+displays the text and counts the amount of bubbles popped
+*/
+function displayText() {
   push();
   stroke(0);
   strokeWeight(3);
