@@ -1,10 +1,10 @@
 "use strict";
 
 /**
-Bubble Popper ++
+Bubble Popper++
 Jacob Garneau
 
-Pop them bubbles!
+Pop them bubbles, yo!
 */
 
 let video;
@@ -12,11 +12,7 @@ let handpose;
 let predictions = [];
 let modelLoaded = false;
 let bubble;
-
-/**
-Description of preload
-*/
-function preload() {}
+let bubblesPopped = 0;
 
 /**
 Description of setup
@@ -100,6 +96,8 @@ function draw() {
       if (d <= bubble.size / 2) {
         bubble.y = height;
         bubble.x = random(0, width);
+
+        bubblesPopped++;
       }
 
       //  hand trackng dots
@@ -182,5 +180,14 @@ function draw() {
   noStroke();
   fill(127, 0, 127);
   ellipse(bubble.x, bubble.y, bubble.size);
+  pop();
+
+  push();
+  stroke(0);
+  strokeWeight(3);
+  fill(255);
+  textSize(20);
+  textAlign(CENTER, CENTER);
+  text(`Bubbles popped: ${bubblesPopped}`, width / 2, 24);
   pop();
 }
