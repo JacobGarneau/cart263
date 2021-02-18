@@ -96,6 +96,10 @@ function draw() {
       if (d <= bubble.size / 2) {
         bubble.y = height;
         bubble.x = random(0, width);
+        if (bubble.size > 10) {
+          bubble.size -= 10;
+          bubble.speed -= 1;
+        }
 
         bubblesPopped++;
       }
