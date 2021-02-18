@@ -13,9 +13,22 @@ let predictions = [];
 let modelLoaded = false;
 let bubble;
 let bubblesPopped = 0;
+let sounds = {
+  pop: undefined,
+  inflate: undefined,
+};
+
+/*
+p5: preloads sound files
+*/
+function preload() {
+  soundFormats("wav");
+  sounds.pop = loadSound("assets/sounds/pop");
+  sounds.inflate = loadSound("assets/sounds/inflate");
+}
 
 /**
-Description of setup
+p5: sets up variables and objects
 */
 function setup() {
   createCanvas(640, 480);
@@ -39,6 +52,7 @@ function setup() {
   bubble = {
     x: random(0, width),
     y: height,
+    maxSize: 100,
     size: 100,
     vx: 0,
     vy: -10,
@@ -96,12 +110,16 @@ function draw() {
       if (d <= bubble.size / 2) {
         bubble.y = height;
         bubble.x = random(0, width);
-        if (bubble.size > 10) {
-          bubble.size -= 10;
+        if (bubble.maxSize > 20) {
+          bubble.maxSize -= 5;
           bubble.speed -= 1;
         }
 
+        bubble.size = 0;
         bubblesPopped++;
+
+        sounds.pop.play();
+        sounds.inflate.play();
       }
 
       //  hand trackng dots
@@ -178,6 +196,10 @@ function draw() {
   if (bubble.y < 0) {
     bubble.y = height;
     bubble.x = random(0, width);
+  }
+
+  if (bubble.size < bubble.maxSize) {
+    bubble.size += 5;
   }
 
   push();
