@@ -8,7 +8,7 @@ The Truman Game - A game where you are the producer of the Truman Show. Make as 
 */
 
 let pixelFont;
-let mapData;
+let data;
 let images = {
   map: undefined,
   marker: undefined,
@@ -21,7 +21,8 @@ const WORK_WINDOW_SIZE = {
 };
 const TRAVEL_INCREMENT = 6;
 
-let ratings = [0, 25, 50, 75, 100];
+let currentRating = 0;
+let ratings = [500, 500, 500, 500, 500];
 let funds = 500;
 let doubt = 0;
 
@@ -29,16 +30,17 @@ let currentLocation;
 let targetLocation;
 let travelledDistance;
 let movable = true;
-
 let truman = {
   x: 0,
   y: 0,
 };
 
+let action = [];
+
 function preload() {
   pixelFont = loadFont("assets/fonts/04B_03__.TTF");
 
-  mapData = loadJSON("js/data/map.json");
+  data = loadJSON("js/data/map.json");
 
   images.map = loadImage("assets/images/map.png");
   images.marker = loadImage("assets/images/marker.png");
@@ -46,9 +48,11 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  currentLocation = mapData.locations[0];
+  currentLocation = data.locations[2];
   truman.x = currentLocation.x;
   truman.y = currentLocation.y;
+  action[0] = data.events[currentLocation.events[0]];
+  action[1] = data.events[currentLocation.events[1]];
 }
 
 function draw() {
@@ -93,7 +97,7 @@ function drawDoubtMeter() {
   fill(127, 127, 255);
   rectMode(CENTER);
   rect(
-    (windowWidth - dyn(900, `x`)) / 4,
+    (width - dyn(900, `x`)) / 4,
     dyn(180, `y`) + 2,
     dyn(240, `x`),
     dyn(50, `y`)
@@ -102,7 +106,7 @@ function drawDoubtMeter() {
 
   push();
   let doubtRect = {
-    x: (windowWidth - dyn(900, `x`)) / 4 - dyn(240, `x`) / 2 + 2,
+    x: (width - dyn(900, `x`)) / 4 - dyn(240, `x`) / 2 + 2,
     y: dyn(155, `y`) + 4,
     width: map(doubt, 0, 100, 0, dyn(240, `x`) + 2),
     height: dyn(50, `y`) - 4,
@@ -122,7 +126,7 @@ function drawRatingsGraph() {
   fill(0);
   rectMode(CENTER);
   rect(
-    (windowWidth - dyn(900, `x`)) / 4,
+    (width - dyn(900, `x`)) / 4,
     dyn(570, `y`),
     dyn(240, `x`),
     dyn(180, `y`)
@@ -135,7 +139,7 @@ function drawRatingsGraph() {
 
   for (let i = 0; i < ratings.length; i++) {
     let ratingsRect = {
-      x: (windowWidth - dyn(900, `x`)) / 4 - dyn(120, `x`) + 2,
+      x: (width - dyn(900, `x`)) / 4 - dyn(120, `x`) + 2,
       y: map(ratings[i], 0, 1000, dyn(650, `y`), dyn(480, `y`) + 2),
       width: (dyn(240, `x`) - 4) / ratings.length,
       height: dyn(8, `y`),
@@ -152,7 +156,27 @@ function drawRatingsGraph() {
 }
 
 //  Draws the command buttons
-function drawCommandButtons() {}
+function drawCommandButtons() {
+  push();
+  textAlign(CENTER, CENTER);
+  textSize(32);
+  fill(255, 0, 255);
+  text(`[1]`, ((width - dyn(900, `x`)) / 4) * 3 + dyn(780, `x`), dyn(420, `y`));
+  text(`[2]`, ((width - dyn(900, `x`)) / 4) * 3 + dyn(780, `x`), dyn(580, `y`));
+
+  fill(255, 255, 0);
+  text(
+    action[0].type.toUpperCase(),
+    ((width - dyn(900, `x`)) / 4) * 3 + dyn(900, `x`),
+    dyn(420, `y`)
+  );
+  text(
+    action[1].type.toUpperCase(),
+    ((width - dyn(900, `x`)) / 4) * 3 + dyn(900, `x`),
+    dyn(580, `y`)
+  );
+  pop();
+}
 
 //  Draws the text in the static UI
 function drawUIText() {
@@ -161,11 +185,11 @@ function drawUIText() {
   textSize(24);
   textAlign(CENTER, CENTER);
   fill(255);
-  for (let i = 0; i < mapData.locations.length; i++) {
+  for (let i = 0; i < data.locations.length; i++) {
     text(
-      mapData.locations[i].description.toUpperCase(),
-      width / 2 - dyn(mapData.locations[i].x, `x`),
-      height / 2 - dyn(mapData.locations[i].y, `y`)
+      data.locations[i].description.toUpperCase(),
+      width / 2 - dyn(data.locations[i].x, `x`),
+      height / 2 - dyn(data.locations[i].y, `y`)
     );
   }
   pop();
@@ -175,22 +199,28 @@ function drawUIText() {
   fill(255);
   textAlign(CENTER, CENTER);
   textSize(32);
-  text(`DOUBT`, (windowWidth - dyn(900, `x`)) / 4, dyn(120, `y`));
-  text(`FUNDS`, (windowWidth - dyn(900, `x`)) / 4, dyn(280, `y`));
-  text(`RATINGS`, (windowWidth - dyn(900, `x`)) / 4, dyn(440, `y`));
+  text(`DOUBT`, (width - dyn(900, `x`)) / 4, dyn(120, `y`));
+  text(`FUNDS`, (width - dyn(900, `x`)) / 4, dyn(280, `y`));
+  text(`RATINGS`, (width - dyn(900, `x`)) / 4, dyn(440, `y`));
   text(
     `LOCATION`,
-    ((windowWidth - dyn(900, `x`)) / 4) * 3 + dyn(900, `x`),
+    ((width - dyn(900, `x`)) / 4) * 3 + dyn(900, `x`),
     dyn(120, `y`)
   );
 
   textSize(48);
-  text(doubt + `%`, (windowWidth - dyn(900, `x`)) / 4, dyn(180, `y`));
-  text(funds + `$`, (windowWidth - dyn(900, `x`)) / 4, dyn(340, `y`));
+  text(doubt + `%`, (width - dyn(900, `x`)) / 4, dyn(180, `y`));
+
+  text(`THE TRUMAN GAME`, width / 2, dyn(36, `y`));
+
+  fill(0, 255, 0);
+  text(funds + `$`, (width - dyn(900, `x`)) / 4, dyn(340, `y`));
+
+  textAlign(CENTER, TOP);
   text(
     currentLocation.description.toUpperCase(),
-    ((windowWidth - dyn(900, `x`)) / 4) * 3 + dyn(900, `x`),
-    dyn(180, `y`)
+    ((width - dyn(900, `x`)) / 4) * 3 + dyn(900, `x`),
+    dyn(160, `y`)
   );
   pop();
 }
@@ -208,7 +238,7 @@ function drawTruman() {
 //  Moves the character from one region of town to another
 function moveTruman() {
   movable = false;
-  targetLocation = mapData.locations[random(currentLocation.destinations)];
+  targetLocation = data.locations[random(currentLocation.destinations)];
 
   let travelX = dist(currentLocation.x, 0, targetLocation.x, 0);
   let travelY = dist(0, currentLocation.y, 0, targetLocation.y);
@@ -235,10 +265,12 @@ function moveTruman() {
       currentLocation = targetLocation;
       truman.x = currentLocation.x;
       truman.y = currentLocation.y;
+      action[0] = data.events[currentLocation.events[0]];
+      action[1] = data.events[currentLocation.events[1]];
       movable = true;
       clearInterval(travelTime);
     }
-  }, 100);
+  }, 150);
 }
 
 function mousePressed() {
@@ -247,13 +279,43 @@ function mousePressed() {
   }
 }
 
+function keyPressed() {
+  let key;
+
+  if (keyCode === 49) {
+    key = 0;
+  } else if (keyCode === 50) {
+    key = 1;
+  }
+
+  if (action[key].gain === `doubt`) {
+    doubt -= action[key].gainAmount;
+  } else if (action[key].gain === `money`) {
+    funds += action[key].gainAmount;
+  } else if (action[key].gain === `ratings`) {
+    currentRating += action[key].gainAmount;
+  }
+
+  if (action[key].loss === "doubt") {
+    doubt += action[key].lossAmount;
+    if (doubt > 100) {
+      doubt = 100;
+      state = `ending`;
+    }
+  } else if (action[key].loss === `money`) {
+    funds -= action[key].lossAmount;
+  } else if (action[key].loss === `ratings`) {
+    currentRating -= action[key].lossAmount;
+  }
+}
+
 //  Converts the inputted numbers so that they fit to any screen
 function dyn(number, axis) {
   let result;
   if (axis === `x`) {
-    result = (number / WORK_WINDOW_SIZE.x) * windowWidth;
+    result = (number / WORK_WINDOW_SIZE.x) * width;
   } else if (axis === `y`) {
-    result = (number / WORK_WINDOW_SIZE.y) * windowHeight;
+    result = (number / WORK_WINDOW_SIZE.y) * height;
   }
   return result;
 }
