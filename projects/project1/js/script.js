@@ -11,6 +11,7 @@ let pixelFont;
 let mapData;
 let images = {
   map: undefined,
+  marker: undefined,
 };
 
 let state = `simulation`; //  title, simulation, management, ending
@@ -22,6 +23,8 @@ let workWindowSize = {
 let ratings = [0, 25, 50, 75, 100];
 let funds = 500;
 let doubt = 0;
+let currentLocation;
+let targetLocation;
 
 function preload() {
   pixelFont = loadFont("assets/fonts/04B_03__.TTF");
@@ -29,10 +32,12 @@ function preload() {
   mapData = loadJSON("js/data/map.json");
 
   images.map = loadImage("assets/images/map.png");
+  images.marker = loadImage("assets/images/marker.png");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  currentLocation = mapData.locations[0];
 }
 
 function draw() {
@@ -60,51 +65,13 @@ function simulation() {
   image(images.map, width / 2, height / 2, dyn(900, `x`), dyn(600, `y`));
   pop();
 
-  //  Draw the map text
-  push();
-  textSize(24);
-  textAlign(CENTER, CENTER);
-  fill(255);
-  text(`DOWNTOWN`, width / 2 - dyn(100, `x`), height / 2 + dyn(70, `y`));
-  text(
-    `NORTHERN\nDISTRICT`,
-    width / 2 - dyn(50, `x`),
-    height / 2 - dyn(70, `y`)
-  );
-  text(
-    `SOUTHERN\nDISTRICT`,
-    width / 2 + dyn(130, `x`),
-    height / 2 + dyn(70, `y`)
-  );
-  text(
-    `EASTERN\nDISTRICT`,
-    width / 2 + dyn(180, `x`),
-    height / 2 - dyn(60, `y`)
-  );
-  text(`WESTERN\nDISTRICT`, width / 2 - dyn(290, `x`), height / 2);
-  text(`BEACH`, width / 2 - dyn(210, `x`), height / 2 + dyn(180, `y`));
-  text(`FOREST`, width / 2 + dyn(300, `x`), height / 2 + dyn(50, `y`));
-  pop();
+  drawTruman();
 
-  //  Draw the meter and the graph
+  //  Draw the game UI
   drawDoubtMeter();
   drawRatingsGraph();
-
-  //  Draw the info text
-  push();
-  fill(255);
-  textAlign(CENTER, CENTER);
-  textSize(32);
-  text(`DOUBT`, (windowWidth - dyn(900, `x`)) / 4, dyn(120, `y`));
-  text(`FUNDS`, (windowWidth - dyn(900, `x`)) / 4, dyn(280, `y`));
-  text(`RATINGS`, (windowWidth - dyn(900, `x`)) / 4, dyn(440, `y`));
-
-  textSize(48);
-  text(doubt + `%`, (windowWidth - dyn(900, `x`)) / 4, dyn(180, `y`));
-  text(funds + `$`, (windowWidth - dyn(900, `x`)) / 4, dyn(340, `y`));
-  pop();
-
-  //  Draw the command buttons
+  drawCommandButtons();
+  drawUIText();
 }
 
 //  Draws the doubt meter
@@ -171,6 +138,69 @@ function drawRatingsGraph() {
     );
   }
   pop();
+}
+
+//  Draws the command buttons
+function drawCommandButtons() {}
+
+//  Draws the text in the static UI
+function drawUIText() {
+  //  Draw the map text
+  push();
+  textSize(24);
+  textAlign(CENTER, CENTER);
+  fill(255);
+  for (let i = 0; i < mapData.locations.length; i++) {
+    text(
+      mapData.locations[i].description.toUpperCase(),
+      width / 2 - dyn(mapData.locations[i].x, `x`),
+      height / 2 - dyn(mapData.locations[i].y, `y`)
+    );
+  }
+  pop();
+
+  //  Draw the info text
+  push();
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(32);
+  text(`DOUBT`, (windowWidth - dyn(900, `x`)) / 4, dyn(120, `y`));
+  text(`FUNDS`, (windowWidth - dyn(900, `x`)) / 4, dyn(280, `y`));
+  text(`RATINGS`, (windowWidth - dyn(900, `x`)) / 4, dyn(440, `y`));
+  text(
+    `LOCATION`,
+    ((windowWidth - dyn(900, `x`)) / 4) * 3 + dyn(900, `x`),
+    dyn(120, `y`)
+  );
+
+  textSize(48);
+  text(doubt + `%`, (windowWidth - dyn(900, `x`)) / 4, dyn(180, `y`));
+  text(funds + `$`, (windowWidth - dyn(900, `x`)) / 4, dyn(340, `y`));
+  text(
+    currentLocation.description.toUpperCase(),
+    ((windowWidth - dyn(900, `x`)) / 4) * 3 + dyn(900, `x`),
+    dyn(180, `y`)
+  );
+  pop();
+}
+
+//  Draws the main character
+function drawTruman() {
+  imageMode(CENTER);
+  image(
+    images.marker,
+    width / 2 - dyn(currentLocation.x, `x`),
+    height / 2 - dyn(currentLocation.y, `y`)
+  );
+}
+
+function moveTruman() {
+  targetLocation = mapData.locations[random(currentLocation.destinations)];
+  currentLocation = targetLocation;
+}
+
+function mousePressed() {
+  moveTruman();
 }
 
 //  Converts the inputted numbers so that they fit to any screen
