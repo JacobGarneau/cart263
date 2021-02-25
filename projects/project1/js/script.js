@@ -15,16 +15,25 @@ let images = {
 };
 
 let state = `simulation`; //  title, simulation, management, ending
-let workWindowSize = {
+const WORK_WINDOW_SIZE = {
   x: 1536,
   y: 754,
 };
+const TRAVEL_INCREMENT = 6;
 
 let ratings = [0, 25, 50, 75, 100];
 let funds = 500;
 let doubt = 0;
+
 let currentLocation;
 let targetLocation;
+let travelledDistance;
+let movable = true;
+
+let truman = {
+  x: 0,
+  y: 0,
+};
 
 function preload() {
   pixelFont = loadFont("assets/fonts/04B_03__.TTF");
@@ -38,6 +47,8 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   currentLocation = mapData.locations[0];
+  truman.x = currentLocation.x;
+  truman.y = currentLocation.y;
 }
 
 function draw() {
@@ -189,27 +200,60 @@ function drawTruman() {
   imageMode(CENTER);
   image(
     images.marker,
-    width / 2 - dyn(currentLocation.x, `x`),
-    height / 2 - dyn(currentLocation.y, `y`)
+    width / 2 - dyn(truman.x, `x`),
+    height / 2 - dyn(truman.y, `y`)
   );
 }
 
+//  Moves the character from one region of town to another
 function moveTruman() {
+  movable = false;
   targetLocation = mapData.locations[random(currentLocation.destinations)];
-  currentLocation = targetLocation;
+
+  let travelX = dist(currentLocation.x, 0, targetLocation.x, 0);
+  let travelY = dist(0, currentLocation.y, 0, targetLocation.y);
+  travelledDistance = 0;
+
+  console.log(travelX + `, ` + travelY);
+
+  let travelTime = setInterval(() => {
+    if (travelledDistance < TRAVEL_INCREMENT) {
+      if (currentLocation.x < targetLocation.x) {
+        truman.x += travelX / TRAVEL_INCREMENT;
+      } else if (currentLocation.x > targetLocation.x) {
+        truman.x -= travelX / TRAVEL_INCREMENT;
+      }
+
+      if (currentLocation.y < targetLocation.y) {
+        truman.y += travelY / TRAVEL_INCREMENT;
+      } else if (currentLocation.y > targetLocation.y) {
+        truman.y -= travelY / TRAVEL_INCREMENT;
+      }
+
+      travelledDistance++;
+    } else if (travelledDistance === TRAVEL_INCREMENT) {
+      currentLocation = targetLocation;
+      truman.x = currentLocation.x;
+      truman.y = currentLocation.y;
+      movable = true;
+      clearInterval(travelTime);
+    }
+  }, 100);
 }
 
 function mousePressed() {
-  moveTruman();
+  if (movable) {
+    moveTruman();
+  }
 }
 
 //  Converts the inputted numbers so that they fit to any screen
 function dyn(number, axis) {
   let result;
   if (axis === `x`) {
-    result = (number / workWindowSize.x) * windowWidth;
+    result = (number / WORK_WINDOW_SIZE.x) * windowWidth;
   } else if (axis === `y`) {
-    result = (number / workWindowSize.y) * windowHeight;
+    result = (number / WORK_WINDOW_SIZE.y) * windowHeight;
   }
   return result;
 }
