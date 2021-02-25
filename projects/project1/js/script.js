@@ -9,6 +9,10 @@ The Truman Game - A game where you are the producer of the Truman Show. Make as 
 
 let pixelFont;
 let mapData;
+let images = {
+  map: undefined,
+};
+
 let state = `simulation`; //  title, simulation, management, ending
 let workWindowSize = {
   x: 1536,
@@ -23,6 +27,8 @@ function preload() {
   pixelFont = loadFont("assets/fonts/04B_03__.TTF");
 
   mapData = loadJSON("js/data/map.json");
+
+  images.map = loadImage("assets/images/map.png");
 }
 
 function setup() {
@@ -50,9 +56,59 @@ function simulation() {
   fill(0, 127, 127);
   rectMode(CENTER);
   rect(width / 2, height / 2, dyn(900, `x`), dyn(600, `y`));
+  imageMode(CENTER);
+  image(images.map, width / 2, height / 2, dyn(900, `x`), dyn(600, `y`));
   pop();
 
-  //  Draw the doubt meter
+  //  Draw the map text
+  push();
+  textSize(24);
+  textAlign(CENTER, CENTER);
+  fill(255);
+  text(`DOWNTOWN`, width / 2 - dyn(100, `x`), height / 2 + dyn(70, `y`));
+  text(
+    `NORTHERN\nDISTRICT`,
+    width / 2 - dyn(50, `x`),
+    height / 2 - dyn(70, `y`)
+  );
+  text(
+    `SOUTHERN\nDISTRICT`,
+    width / 2 + dyn(130, `x`),
+    height / 2 + dyn(70, `y`)
+  );
+  text(
+    `EASTERN\nDISTRICT`,
+    width / 2 + dyn(180, `x`),
+    height / 2 - dyn(60, `y`)
+  );
+  text(`WESTERN\nDISTRICT`, width / 2 - dyn(290, `x`), height / 2);
+  text(`BEACH`, width / 2 - dyn(210, `x`), height / 2 + dyn(180, `y`));
+  text(`FOREST`, width / 2 + dyn(300, `x`), height / 2 + dyn(50, `y`));
+  pop();
+
+  //  Draw the meter and the graph
+  drawDoubtMeter();
+  drawRatingsGraph();
+
+  //  Draw the info text
+  push();
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(32);
+  text(`DOUBT`, (windowWidth - dyn(900, `x`)) / 4, dyn(120, `y`));
+  text(`FUNDS`, (windowWidth - dyn(900, `x`)) / 4, dyn(280, `y`));
+  text(`RATINGS`, (windowWidth - dyn(900, `x`)) / 4, dyn(440, `y`));
+
+  textSize(48);
+  text(doubt + `%`, (windowWidth - dyn(900, `x`)) / 4, dyn(180, `y`));
+  text(funds + `$`, (windowWidth - dyn(900, `x`)) / 4, dyn(340, `y`));
+  pop();
+
+  //  Draw the command buttons
+}
+
+//  Draws the doubt meter
+function drawDoubtMeter() {
   push();
   stroke(255);
   strokeWeight(4);
@@ -78,8 +134,10 @@ function simulation() {
   fill(255, 127, 127);
   rect(doubtRect.x, doubtRect.y, doubtRect.width, doubtRect.height);
   pop();
+}
 
-  //  Draw the ratings graph
+//  Draws the ratings graph
+function drawRatingsGraph() {
   push();
   stroke(255);
   strokeWeight(4);
@@ -113,22 +171,6 @@ function simulation() {
     );
   }
   pop();
-
-  //  Draw the info text
-  push();
-  fill(255);
-  textAlign(CENTER, CENTER);
-  textSize(32);
-  text(`DOUBT`, (windowWidth - dyn(900, `x`)) / 4, dyn(120, `y`));
-  text(`FUNDS`, (windowWidth - dyn(900, `x`)) / 4, dyn(280, `y`));
-  text(`RATINGS`, (windowWidth - dyn(900, `x`)) / 4, dyn(440, `y`));
-
-  textSize(48);
-  text(doubt + `%`, (windowWidth - dyn(900, `x`)) / 4, dyn(180, `y`));
-  text(funds + `$`, (windowWidth - dyn(900, `x`)) / 4, dyn(340, `y`));
-  pop();
-
-  //  Draw the command buttons
 }
 
 //  Converts the inputted numbers so that they fit to any screen
