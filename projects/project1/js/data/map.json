@@ -1,0 +1,51 @@
+{
+  "cityC": {
+    "x": 0,
+    "y": 0,
+    "destinations": ["cityN", "cityS", "cityW", "beach"],
+    "description": "Downtown",
+    "events": ["sleep", "camera"]
+  },
+  "cityN": {
+    "x": 0,
+    "y": 0,
+    "destinations": ["cityC", "cityS", "cityE", "cityW"],
+    "description": "Northern District",
+    "events": ["crowd", "camera"]
+  },
+  "cityS": {
+    "x": 0,
+    "y": 0,
+    "destinations": ["cityC", "cityN", "cityE", "forest"],
+    "description": "Southern District",
+    "events": ["sleep", "ad"]
+  },
+  "cityE": {
+    "x": 0,
+    "y": 0,
+    "destinations": ["cityN", "cityS", "forest"],
+    "description": "Eastern District",
+    "events": ["ad", "camera"]
+  },
+  "cityW": {
+    "x": 0,
+    "y": 0,
+    "destinations": ["cityN", "cityC", "beach"],
+    "description": "Western District",
+    "events": ["sleep", "crowd"]
+  },
+  "beach": {
+    "x": 0,
+    "y": 0,
+    "destinations": ["cityC", "cityW"],
+    "description": "Beach",
+    "events": ["drama", "camera"]
+  },
+  "forest": {
+    "x": 0,
+    "y": 0,
+    "destinations": ["cityS", "cityE"],
+    "description": "Forest",
+    "events": ["drama", "crowd"]
+  }
+}

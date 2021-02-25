@@ -8,6 +8,7 @@ The Truman Game - A game where you are the producer of the Truman Show. Make as 
 */
 
 let pixelFont;
+let mapData;
 let state = `simulation`; //  title, simulation, management, ending
 let workWindowSize = {
   x: 1536,
@@ -16,10 +17,12 @@ let workWindowSize = {
 
 let ratings = [0, 25, 50, 75, 100];
 let funds = 500;
-let doubt = 75;
+let doubt = 0;
 
 function preload() {
   pixelFont = loadFont("assets/fonts/04B_03__.TTF");
+
+  mapData = loadJSON("js/data/map.json");
 }
 
 function setup() {
