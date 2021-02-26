@@ -32,7 +32,9 @@ let currentLocation;
 let targetLocation;
 let travelledDistance;
 
-let alertLocation;
+let alerts = [];
+const ALERT_COST = 150;
+
 let readInputs = true;
 let truman = {
   x: 0,
@@ -53,7 +55,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  currentLocation = data.locations[2];
+  currentLocation = data.locations[0];
   truman.x = currentLocation.x;
   truman.y = currentLocation.y;
   action[0] = data.events[currentLocation.events[0]];
@@ -83,10 +85,7 @@ function simulation() {
   pop();
 
   drawTruman();
-
-  if (alertLocation !== undefined) {
-    drawAlert();
-  }
+  drawAlerts();
 
   //  Draw the game UI
   drawDoubtMeter();
@@ -221,6 +220,36 @@ function drawUIText() {
 
   text(`THE TRUMAN GAME`, width / 2, dyn(36, `y`));
 
+  //  Draw the alert notification text
+  push();
+  if (alerts.length === 0) {
+    text(`NO ACTIVE ALERTS`, width / 2, height - dyn(40, `y`));
+  } else {
+    textAlign(LEFT, CENTER);
+
+    let red = [255, 0, 0];
+    let yellow = [255, 255, 0];
+    let pink = [255, 0, 255];
+    if (alerts.length === 1) {
+      let string = [
+        [`${alerts.length} ACTIVE ALERT. PRESS `, yellow],
+        [`[F]`, pink],
+        [` TO FIX `, yellow],
+        [`(-${alerts.length * ALERT_COST}$)`, red],
+      ];
+      drawCompositeText(width / 2, height - dyn(40, `y`), string);
+    } else if (alerts.length > 1) {
+      let string = [
+        [`${alerts.length} ACTIVE ALERTS. PRESS `, yellow],
+        [`[F]`, pink],
+        [` TO FIX `, yellow],
+        [`(-${alerts.length * ALERT_COST}$)`, red],
+      ];
+      drawCompositeText(width / 2, height - dyn(40, `y`), string);
+    }
+  }
+  pop();
+
   fill(0, 255, 0);
   text(funds + `$`, (width - dyn(900, `x`)) / 4, dyn(340, `y`));
 
@@ -231,6 +260,28 @@ function drawUIText() {
     dyn(160, `y`)
   );
   pop();
+}
+
+//  Draws text wth multiple colors in a single sentence
+function drawCompositeText(x, y, textArray) {
+  let totalWidth = 0;
+
+  for (let i = 0; i < textArray.length; i++) {
+    let part = textArray[i];
+    let textString = part[0];
+    totalWidth += textWidth(textString);
+  }
+
+  let posX = x;
+  for (let i = 0; i < textArray.length; i++) {
+    let part = textArray[i];
+    let textString = part[0];
+    let textColor = part[1];
+    let textW = textWidth(textString);
+    fill(textColor);
+    text(textString, posX - totalWidth / 2, y);
+    posX += textW;
+  }
 }
 
 //  Draws the main character
@@ -280,14 +331,22 @@ function moveTruman() {
 }
 
 function rollForAlert() {
-  for (let i = 0; i < data.locations.length; i++) {
-    alertLocation = data.locations[i];
+  let roll = random(0, 100);
+  let alertLocation = random(data.locations);
+  if (roll < 40 && alertLocation !== targetLocation) {
+    alerts.push(alertLocation);
+    console.log(alerts);
   }
 }
 
-function drawAlert() {
-  fill(255, 0, 255);
-  ellipse(alertLocation.x, alertLocation.y, 50);
+function drawAlerts() {
+  for (let i = 0; i < alerts.length; i++) {
+    image(
+      images.alert,
+      width / 2 - dyn(alerts[i].x, `x`),
+      height / 2 - dyn(alerts[i].y, `y`) - 50
+    );
+  }
 }
 
 //  Handle the events being triggered by key presses
@@ -320,42 +379,44 @@ function keyPressed() {
       funds += Math.floor((currentRating - 500) / 10);
     }
 
-    if (action[key].loss === "doubt") {
-      doubt += action[key].lossAmount;
-      if (doubt > 100) {
-        doubt = 100;
-        state = `ending`;
+    if (key === 0 || key === 1) {
+      if (action[key].loss === "doubt") {
+        doubt += action[key].lossAmount;
+        if (doubt > 100) {
+          doubt = 100;
+          state = `ending`;
+        }
+      } else if (action[key].loss === `money`) {
+        funds -= action[key].lossAmount;
+        if (funds < 0) {
+          funds = 0;
+          state = `ending`;
+        }
+      } else if (action[key].loss === `ratings`) {
+        currentRating -= action[key].lossAmount;
+        if (currentRating < 0) {
+          currentRating = 0;
+          state = `ending`;
+        }
+        ratings.shift();
+        ratings.push(currentRating);
       }
-    } else if (action[key].loss === `money`) {
-      funds -= action[key].lossAmount;
-      if (funds < 0) {
-        funds = 0;
-        state = `ending`;
-      }
-    } else if (action[key].loss === `ratings`) {
-      currentRating -= action[key].lossAmount;
-      if (currentRating < 0) {
-        currentRating = 0;
-        state = `ending`;
-      }
-      ratings.shift();
-      ratings.push(currentRating);
-    }
 
-    if (action[key].gain === `doubt`) {
-      doubt -= action[key].gainAmount;
-      if (doubt < 0) {
-        doubt = 0;
+      if (action[key].gain === `doubt`) {
+        doubt -= action[key].gainAmount;
+        if (doubt < 0) {
+          doubt = 0;
+        }
+      } else if (action[key].gain === `money`) {
+        funds += action[key].gainAmount;
+      } else if (action[key].gain === `ratings`) {
+        currentRating += action[key].gainAmount;
+        if (currentRating > 1000) {
+          currentRating = 1000;
+        }
+        ratings.shift();
+        ratings.push(currentRating);
       }
-    } else if (action[key].gain === `money`) {
-      funds += action[key].gainAmount;
-    } else if (action[key].gain === `ratings`) {
-      currentRating += action[key].gainAmount;
-      if (currentRating > 1000) {
-        currentRating = 1000;
-      }
-      ratings.shift();
-      ratings.push(currentRating);
     }
   }
 }
