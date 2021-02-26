@@ -96,9 +96,25 @@ function simulation() {
   drawUIText();
 
   adjustValues();
+
+  if (currentRating <= 0) {
+    state = `ending`;
+  }
+
+  if (funds <= 0) {
+    state = `ending`;
+  }
+
+  if (doubt >= 100) {
+    state = `ending`;
+  }
 }
 
-function ending() {}
+function ending() {
+  drawDoubtMeter();
+  drawRatingsGraph();
+  drawUIText();
+}
 
 //  Draws the doubt meter
 function drawDoubtMeter() {
@@ -375,7 +391,6 @@ function keyPressed() {
       currentRating += random([10, -10]);
       if (currentRating < 0) {
         currentRating = 0;
-        state = `ending`;
       } else if (currentRating > 1000) {
         currentRating = 1000;
       }
@@ -386,21 +401,23 @@ function keyPressed() {
     let key;
 
     if (keyCode === 49 || keyCode === 97) {
+      //  Pick action 1
       key = 0;
       moveTruman();
       rollForAlert();
       fundsTarget += Math.floor(currentRating / 10);
     } else if (keyCode === 50 || keyCode === 98) {
+      //  Pick action 2
       key = 1;
       moveTruman();
       rollForAlert();
       fundsTarget += Math.floor((currentRating - 500) / 10);
     } else if (keyCode === 70) {
+      //  Fix all alerts
       fundsTarget -= alerts.length * ALERT_COST;
       alerts = [];
       if (fundsTarget < 0) {
         fundsTarget = 0;
-        state = `ending`;
       }
     }
 
@@ -409,19 +426,16 @@ function keyPressed() {
         doubtTarget += action[key].lossAmount;
         if (doubtTarget > 100) {
           doubtTarget = 100;
-          state = `ending`;
         }
       } else if (action[key].loss === `money`) {
         fundsTarget -= action[key].lossAmount;
         if (fundsTarget < 0) {
           fundsTarget = 0;
-          state = `ending`;
         }
       } else if (action[key].loss === `ratings`) {
         currentRating -= action[key].lossAmount;
         if (currentRating < 0) {
           currentRating = 0;
-          state = `ending`;
         }
         ratings.shift();
         ratings.push(currentRating);
