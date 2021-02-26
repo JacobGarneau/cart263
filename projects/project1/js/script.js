@@ -15,7 +15,7 @@ let images = {
   alert: undefined,
 };
 
-let state = `title`; //  title, simulation, ending
+let state = `simulation`; //  title, simulation, ending
 const WORK_WINDOW_SIZE = {
   x: 1536,
   y: 754,
@@ -26,7 +26,9 @@ let currentRating = 500;
 let refreshRatings;
 let ratings = [500, 500, 500, 500, 500, 500, 500, 500];
 let funds = 500;
+let fundsTarget = funds;
 let doubt = 0;
+let doubtTarget = doubt;
 
 let currentLocation;
 let targetLocation;
@@ -55,7 +57,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  currentLocation = data.locations[0];
+  currentLocation = data.locations[2];
   truman.x = currentLocation.x;
   truman.y = currentLocation.y;
   action[0] = data.events[currentLocation.events[0]];
@@ -92,6 +94,8 @@ function simulation() {
   drawRatingsGraph();
   drawCommandButtons();
   drawUIText();
+
+  adjustValues();
 }
 
 function ending() {}
@@ -349,6 +353,20 @@ function drawAlerts() {
   }
 }
 
+function adjustValues() {
+  if (funds < fundsTarget) {
+    funds++;
+  } else if (funds > fundsTarget) {
+    funds--;
+  }
+
+  if (doubt < doubtTarget) {
+    doubt++;
+  } else if (doubt > doubtTarget) {
+    doubt--;
+  }
+}
+
 //  Handle the events being triggered by key presses
 function keyPressed() {
   if (state === `title` && keyCode === 32) {
@@ -371,25 +389,32 @@ function keyPressed() {
       key = 0;
       moveTruman();
       rollForAlert();
-      funds += Math.floor(currentRating / 10);
+      fundsTarget += Math.floor(currentRating / 10);
     } else if (keyCode === 50 || keyCode === 98) {
       key = 1;
       moveTruman();
       rollForAlert();
-      funds += Math.floor((currentRating - 500) / 10);
+      fundsTarget += Math.floor((currentRating - 500) / 10);
+    } else if (keyCode === 70) {
+      fundsTarget -= alerts.length * ALERT_COST;
+      alerts = [];
+      if (fundsTarget < 0) {
+        fundsTarget = 0;
+        state = `ending`;
+      }
     }
 
     if (key === 0 || key === 1) {
       if (action[key].loss === "doubt") {
-        doubt += action[key].lossAmount;
-        if (doubt > 100) {
-          doubt = 100;
+        doubtTarget += action[key].lossAmount;
+        if (doubtTarget > 100) {
+          doubtTarget = 100;
           state = `ending`;
         }
       } else if (action[key].loss === `money`) {
-        funds -= action[key].lossAmount;
-        if (funds < 0) {
-          funds = 0;
+        fundsTarget -= action[key].lossAmount;
+        if (fundsTarget < 0) {
+          fundsTarget = 0;
           state = `ending`;
         }
       } else if (action[key].loss === `ratings`) {
@@ -403,12 +428,12 @@ function keyPressed() {
       }
 
       if (action[key].gain === `doubt`) {
-        doubt -= action[key].gainAmount;
-        if (doubt < 0) {
-          doubt = 0;
+        doubtTarget -= action[key].gainAmount;
+        if (doubtTarget < 0) {
+          doubtTarget = 0;
         }
       } else if (action[key].gain === `money`) {
-        funds += action[key].gainAmount;
+        fundsTarget += action[key].gainAmount;
       } else if (action[key].gain === `ratings`) {
         currentRating += action[key].gainAmount;
         if (currentRating > 1000) {
