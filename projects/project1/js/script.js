@@ -12,24 +12,28 @@ let data;
 let images = {
   map: undefined,
   marker: undefined,
+  alert: undefined,
 };
 
-let state = `simulation`; //  title, simulation, management, ending
+let state = `title`; //  title, simulation, ending
 const WORK_WINDOW_SIZE = {
   x: 1536,
   y: 754,
 };
 const TRAVEL_INCREMENT = 6;
 
-let currentRating = 0;
-let ratings = [500, 500, 500, 500, 500];
+let currentRating = 500;
+let refreshRatings;
+let ratings = [500, 500, 500, 500, 500, 500, 500, 500];
 let funds = 500;
 let doubt = 0;
 
 let currentLocation;
 let targetLocation;
 let travelledDistance;
-let movable = true;
+
+let alertLocation;
+let readInputs = true;
 let truman = {
   x: 0,
   y: 0,
@@ -40,10 +44,11 @@ let action = [];
 function preload() {
   pixelFont = loadFont("assets/fonts/04B_03__.TTF");
 
-  data = loadJSON("js/data/map.json");
+  data = loadJSON("js/data/data.json");
 
   images.map = loadImage("assets/images/map.png");
   images.marker = loadImage("assets/images/marker.png");
+  images.alert = loadImage("assets/images/alert.png");
 }
 
 function setup() {
@@ -63,24 +68,25 @@ function draw() {
     title();
   } else if (state === `simulation`) {
     simulation();
-  } else if (state === `management`) {
-    management();
   } else if (state === `ending`) {
     ending();
   }
 }
 
+function title() {}
+
 function simulation() {
   //  Draw the map
   push();
-  fill(0, 127, 127);
-  rectMode(CENTER);
-  rect(width / 2, height / 2, dyn(900, `x`), dyn(600, `y`));
   imageMode(CENTER);
   image(images.map, width / 2, height / 2, dyn(900, `x`), dyn(600, `y`));
   pop();
 
   drawTruman();
+
+  if (alertLocation !== undefined) {
+    drawAlert();
+  }
 
   //  Draw the game UI
   drawDoubtMeter();
@@ -88,6 +94,8 @@ function simulation() {
   drawCommandButtons();
   drawUIText();
 }
+
+function ending() {}
 
 //  Draws the doubt meter
 function drawDoubtMeter() {
@@ -108,7 +116,7 @@ function drawDoubtMeter() {
   let doubtRect = {
     x: (width - dyn(900, `x`)) / 4 - dyn(240, `x`) / 2 + 2,
     y: dyn(155, `y`) + 4,
-    width: map(doubt, 0, 100, 0, dyn(240, `x`) + 2),
+    width: map(doubt, 0, 100, 0, dyn(240, `x`) - 4),
     height: dyn(50, `y`) - 4,
   };
 
@@ -237,14 +245,12 @@ function drawTruman() {
 
 //  Moves the character from one region of town to another
 function moveTruman() {
-  movable = false;
+  readInputs = false;
   targetLocation = data.locations[random(currentLocation.destinations)];
 
   let travelX = dist(currentLocation.x, 0, targetLocation.x, 0);
   let travelY = dist(0, currentLocation.y, 0, targetLocation.y);
   travelledDistance = 0;
-
-  console.log(travelX + `, ` + travelY);
 
   let travelTime = setInterval(() => {
     if (travelledDistance < TRAVEL_INCREMENT) {
@@ -267,45 +273,90 @@ function moveTruman() {
       truman.y = currentLocation.y;
       action[0] = data.events[currentLocation.events[0]];
       action[1] = data.events[currentLocation.events[1]];
-      movable = true;
+      readInputs = true;
       clearInterval(travelTime);
     }
-  }, 150);
+  }, 200);
 }
 
-function mousePressed() {
-  if (movable) {
-    moveTruman();
+function rollForAlert() {
+  for (let i = 0; i < data.locations.length; i++) {
+    alertLocation = data.locations[i];
   }
 }
 
+function drawAlert() {
+  fill(255, 0, 255);
+  ellipse(alertLocation.x, alertLocation.y, 50);
+}
+
+//  Handle the events being triggered by key presses
 function keyPressed() {
-  let key;
+  if (state === `title` && keyCode === 32) {
+    state = `simulation`;
+    refreshRatings = setInterval(() => {
+      currentRating += random([10, -10]);
+      if (currentRating < 0) {
+        currentRating = 0;
+        state = `ending`;
+      } else if (currentRating > 1000) {
+        currentRating = 1000;
+      }
+      ratings.shift();
+      ratings.push(currentRating);
+    }, 200);
+  } else if (state === `simulation` && readInputs) {
+    let key;
 
-  if (keyCode === 49) {
-    key = 0;
-  } else if (keyCode === 50) {
-    key = 1;
-  }
-
-  if (action[key].gain === `doubt`) {
-    doubt -= action[key].gainAmount;
-  } else if (action[key].gain === `money`) {
-    funds += action[key].gainAmount;
-  } else if (action[key].gain === `ratings`) {
-    currentRating += action[key].gainAmount;
-  }
-
-  if (action[key].loss === "doubt") {
-    doubt += action[key].lossAmount;
-    if (doubt > 100) {
-      doubt = 100;
-      state = `ending`;
+    if (keyCode === 49 || keyCode === 97) {
+      key = 0;
+      moveTruman();
+      rollForAlert();
+      funds += Math.floor(currentRating / 10);
+    } else if (keyCode === 50 || keyCode === 98) {
+      key = 1;
+      moveTruman();
+      rollForAlert();
+      funds += Math.floor((currentRating - 500) / 10);
     }
-  } else if (action[key].loss === `money`) {
-    funds -= action[key].lossAmount;
-  } else if (action[key].loss === `ratings`) {
-    currentRating -= action[key].lossAmount;
+
+    if (action[key].loss === "doubt") {
+      doubt += action[key].lossAmount;
+      if (doubt > 100) {
+        doubt = 100;
+        state = `ending`;
+      }
+    } else if (action[key].loss === `money`) {
+      funds -= action[key].lossAmount;
+      if (funds < 0) {
+        funds = 0;
+        state = `ending`;
+      }
+    } else if (action[key].loss === `ratings`) {
+      currentRating -= action[key].lossAmount;
+      if (currentRating < 0) {
+        currentRating = 0;
+        state = `ending`;
+      }
+      ratings.shift();
+      ratings.push(currentRating);
+    }
+
+    if (action[key].gain === `doubt`) {
+      doubt -= action[key].gainAmount;
+      if (doubt < 0) {
+        doubt = 0;
+      }
+    } else if (action[key].gain === `money`) {
+      funds += action[key].gainAmount;
+    } else if (action[key].gain === `ratings`) {
+      currentRating += action[key].gainAmount;
+      if (currentRating > 1000) {
+        currentRating = 1000;
+      }
+      ratings.shift();
+      ratings.push(currentRating);
+    }
   }
 }
 

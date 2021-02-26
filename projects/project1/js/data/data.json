@@ -56,14 +56,14 @@
       "gain": "doubt",
       "gainAmount": 40,
       "loss": "ratings",
-      "lossAmount": 350
+      "lossAmount": 200
     },
     {
       "type": "dramatic\nevent",
       "gain": "ratings",
-      "gainAmount": 40,
+      "gainAmount": 250,
       "loss": "doubt",
-      "lossAmount": 150
+      "lossAmount": 15
     },
     {
       "type": "advertise",
@@ -82,7 +82,7 @@
     {
       "type": "install\ncamera",
       "gain": "ratings",
-      "gainAmount": 200,
+      "gainAmount": 125,
       "loss": "money",
       "lossAmount": 150
     }
