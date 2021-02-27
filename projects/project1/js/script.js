@@ -15,7 +15,7 @@ let images = {
   alert: undefined,
 };
 
-let state = `simulation`; //  title, simulation, ending
+let state = `title`; //  title, simulation, ending
 const WORK_WINDOW_SIZE = {
   x: 1536,
   y: 754,
@@ -24,6 +24,8 @@ const TRAVEL_INCREMENT = 6;
 
 let currentRating = 500;
 let refreshRatings;
+let ratingsTarget;
+let ratingsChange;
 let ratings = [500, 500, 500, 500, 500, 500, 500, 500];
 let funds = 500;
 let fundsTarget = funds;
@@ -57,7 +59,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  currentLocation = data.locations[2];
+  currentLocation = data.locations[0];
   truman.x = currentLocation.x;
   truman.y = currentLocation.y;
   action[0] = data.events[currentLocation.events[0]];
@@ -191,7 +193,12 @@ function drawCommandButtons() {
   text(`[1]`, ((width - dyn(900, `x`)) / 4) * 3 + dyn(780, `x`), dyn(420, `y`));
   text(`[2]`, ((width - dyn(900, `x`)) / 4) * 3 + dyn(780, `x`), dyn(580, `y`));
 
-  fill(255, 255, 0);
+  if (readInputs) {
+    fill(255, 255, 0);
+  } else {
+    fill(127, 127, 127);
+  }
+
   text(
     action[0].type.toUpperCase(),
     ((width - dyn(900, `x`)) / 4) * 3 + dyn(900, `x`),
@@ -355,7 +362,6 @@ function rollForAlert() {
   let alertLocation = random(data.locations);
   if (roll < 40 && alertLocation !== targetLocation) {
     alerts.push(alertLocation);
-    console.log(alerts);
   }
 }
 
@@ -381,6 +387,17 @@ function adjustValues() {
   } else if (doubt > doubtTarget) {
     doubt--;
   }
+
+  if (ratingsTarget !== undefined) {
+    if (currentRating < ratingsTarget) {
+      ratingsChange = 10;
+    } else if (currentRating > ratingsTarget) {
+      ratingsChange = -10;
+    } else if (currentRating === ratingsTarget) {
+      ratingsChange = 0;
+      ratingsTarget = undefined;
+    }
+  }
 }
 
 //  Handle the events being triggered by key presses
@@ -388,7 +405,13 @@ function keyPressed() {
   if (state === `title` && keyCode === 32) {
     state = `simulation`;
     refreshRatings = setInterval(() => {
-      currentRating += random([10, -10]);
+      if (ratingsTarget === undefined) {
+        currentRating += random([10, -10]);
+      }
+      if (ratingsTarget !== undefined) {
+        currentRating += ratingsChange;
+      }
+
       if (currentRating < 0) {
         currentRating = 0;
       } else if (currentRating > 1000) {
@@ -411,8 +434,8 @@ function keyPressed() {
       key = 1;
       moveTruman();
       rollForAlert();
-      fundsTarget += Math.floor((currentRating - 500) / 10);
-    } else if (keyCode === 70) {
+      fundsTarget += Math.floor(currentRating / 10);
+    } else if (keyCode === 70 && alerts.length >= 1) {
       //  Fix all alerts
       fundsTarget -= alerts.length * ALERT_COST;
       alerts = [];
@@ -433,10 +456,7 @@ function keyPressed() {
           fundsTarget = 0;
         }
       } else if (action[key].loss === `ratings`) {
-        currentRating -= action[key].lossAmount;
-        if (currentRating < 0) {
-          currentRating = 0;
-        }
+        ratingsTarget = currentRating - action[key].lossAmount;
         ratings.shift();
         ratings.push(currentRating);
       }
@@ -449,10 +469,7 @@ function keyPressed() {
       } else if (action[key].gain === `money`) {
         fundsTarget += action[key].gainAmount;
       } else if (action[key].gain === `ratings`) {
-        currentRating += action[key].gainAmount;
-        if (currentRating > 1000) {
-          currentRating = 1000;
-        }
+        ratingsTarget = currentRating + action[key].gainAmount;
         ratings.shift();
         ratings.push(currentRating);
       }
