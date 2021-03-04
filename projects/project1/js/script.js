@@ -37,6 +37,8 @@ let targetLocation;
 let travelledDistance;
 
 let alerts = [];
+let alertsPossibleLocations = [0, 1, 2, 3, 4, 5, 6];
+const ALERT_CHANCE = 40;
 const ALERT_COST = 150;
 
 let readInputs = true;
@@ -47,6 +49,7 @@ let truman = {
 
 let action = [];
 
+//  p5: Preloads necessary assets
 function preload() {
   pixelFont = loadFont("assets/fonts/04B_03__.TTF");
 
@@ -57,6 +60,7 @@ function preload() {
   images.alert = loadImage("assets/images/alert.png");
 }
 
+//  p5: Sets up the necessary variables
 function setup() {
   createCanvas(windowWidth, windowHeight);
   currentLocation = data.locations[0];
@@ -66,6 +70,7 @@ function setup() {
   action[1] = data.events[currentLocation.events[1]];
 }
 
+//  Handles the various game states
 function draw() {
   background(0);
   textFont(pixelFont);
@@ -79,8 +84,10 @@ function draw() {
   }
 }
 
+//  Displays the title screen
 function title() {}
 
+//  Displays the simulation
 function simulation() {
   //  Draw the map
   push();
@@ -112,6 +119,7 @@ function simulation() {
   }
 }
 
+//  Displays the ending screen
 function ending() {
   drawDoubtMeter();
   drawRatingsGraph();
@@ -208,6 +216,62 @@ function drawCommandButtons() {
     action[1].type.toUpperCase(),
     ((width - dyn(900, `x`)) / 4) * 3 + dyn(900, `x`),
     dyn(580, `y`)
+  );
+  pop();
+
+  //  Draw action details
+
+  let string = [];
+  let white = [255, 255, 255];
+  let green = [0, 255, 0];
+  let red = [255, 0, 0];
+  let gainSign = [];
+  let gainModifier = [];
+  let lossSign = [];
+  let lossModifier = [];
+
+  for (let i = 0; i < action.length; i++) {
+    if (action[i].gain === `money`) {
+      gainModifier[i] = `+`;
+      gainSign[i] = `$`;
+    } else if (action[i].gain === `ratings`) {
+      gainModifier[i] = `+`;
+      gainSign[i] = ` RTG`;
+    } else if (action[i].gain === `doubt`) {
+      gainModifier[i] = `-`;
+      gainSign[i] = `% DBT`;
+    }
+
+    if (action[i].loss === `money`) {
+      lossModifier[i] = `-`;
+      lossSign[i] = `$`;
+    } else if (action[i].loss === `ratings`) {
+      lossModifier[i] = `-`;
+      lossSign[i] = ` RTG`;
+    } else if (action[i].loss === `doubt`) {
+      lossModifier[i] = `+`;
+      lossSign[i] = `% DBT`;
+    }
+
+    string[i] = [
+      [`${gainModifier[i]}${action[i].gainAmount}${gainSign[i]}`, green],
+      [` / `, white],
+      [`${lossModifier[i]}${action[i].lossAmount}${lossSign[i]}`, red],
+    ];
+  }
+
+  push();
+  textAlign(LEFT);
+  textSize(24);
+  drawCompositeText(
+    ((width - dyn(900, `x`)) / 4) * 3 + dyn(900, `x`),
+    dyn(500, `y`),
+    string[0]
+  );
+  drawCompositeText(
+    ((width - dyn(900, `x`)) / 4) * 3 + dyn(900, `x`),
+    dyn(660, `y`),
+    string[1]
   );
   pop();
 }
@@ -357,14 +421,17 @@ function moveTruman() {
   }, 200);
 }
 
+//  Randomly rolls the chance of an alert
 function rollForAlert() {
   let roll = random(0, 100);
-  let alertLocation = random(data.locations);
-  if (roll < 40 && alertLocation !== targetLocation) {
+  let alertLocation = data.locations[random(alertsPossibleLocations)];
+  if (roll < ALERT_CHANCE && alertLocation !== targetLocation) {
     alerts.push(alertLocation);
+    alertsPossibleLocations.splice(alertLocation, 1);
   }
 }
 
+//  Displays the active alerts
 function drawAlerts() {
   for (let i = 0; i < alerts.length; i++) {
     image(
@@ -375,6 +442,7 @@ function drawAlerts() {
   }
 }
 
+//  Dynamically adjusts the doubt, funds and ratings values to their respective targets
 function adjustValues() {
   if (funds < fundsTarget) {
     funds++;
@@ -400,7 +468,7 @@ function adjustValues() {
   }
 }
 
-//  Handle the events being triggered by key presses
+//  p5: Handles the events being triggered by key presses
 function keyPressed() {
   if (state === `title` && keyCode === 32) {
     state = `simulation`;
@@ -439,6 +507,7 @@ function keyPressed() {
       //  Fix all alerts
       fundsTarget -= alerts.length * ALERT_COST;
       alerts = [];
+      alertsPossibleLocations = [0, 1, 2, 3, 4, 5, 6];
       if (fundsTarget < 0) {
         fundsTarget = 0;
       }
@@ -456,7 +525,15 @@ function keyPressed() {
           fundsTarget = 0;
         }
       } else if (action[key].loss === `ratings`) {
-        ratingsTarget = currentRating - action[key].lossAmount;
+        if (ratingsTarget === undefined) {
+          ratingsTarget = currentRating - action[key].gainAmount;
+        } else {
+          ratingsTarget -= action[key].gainAmount;
+        }
+
+        if (ratingsTarget < 0) {
+          ratingsTarget = 0;
+        }
         ratings.shift();
         ratings.push(currentRating);
       }
@@ -469,7 +546,15 @@ function keyPressed() {
       } else if (action[key].gain === `money`) {
         fundsTarget += action[key].gainAmount;
       } else if (action[key].gain === `ratings`) {
-        ratingsTarget = currentRating + action[key].gainAmount;
+        if (ratingsTarget === undefined) {
+          ratingsTarget = currentRating + action[key].gainAmount;
+        } else {
+          ratingsTarget += action[key].gainAmount;
+        }
+
+        if (ratingsTarget > 1000) {
+          ratingsTarget = 1000;
+        }
         ratings.shift();
         ratings.push(currentRating);
       }
