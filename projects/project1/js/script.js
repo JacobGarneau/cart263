@@ -13,9 +13,12 @@ let images = {
   map: undefined,
   marker: undefined,
   alert: undefined,
+  title: undefined,
 };
 
 let state = `title`; //  title, simulation, ending
+let frames = 0;
+let textVisible;
 const WORK_WINDOW_SIZE = {
   x: 1536,
   y: 754,
@@ -46,6 +49,7 @@ let truman = {
   x: 0,
   y: 0,
 };
+let day = 0;
 
 let action = [];
 
@@ -58,6 +62,7 @@ function preload() {
   images.map = loadImage("assets/images/map.png");
   images.marker = loadImage("assets/images/marker.png");
   images.alert = loadImage("assets/images/alert.png");
+  images.title = loadImage("assets/images/title.png");
 }
 
 //  p5: Sets up the necessary variables
@@ -85,7 +90,34 @@ function draw() {
 }
 
 //  Displays the title screen
-function title() {}
+function title() {
+  push();
+  imageMode(CENTER);
+  image(images.title, width / 2, height / 2);
+
+  fill(255);
+  textSize(60);
+  textAlign(CENTER, CENTER);
+  text(`THE TRUMAN GAME`, width / 2, height / 2);
+  pop();
+
+  frames++;
+
+  if (frames > 40 && !textVisible) {
+    textVisible = true;
+    frames = 0;
+  } else if (frames > 40 && textVisible) {
+    textVisible = false;
+    frames = 0;
+  }
+
+  if (textVisible) {
+    fill(255, 0, 255);
+    textSize(32);
+    textAlign(CENTER, CENTER);
+    text(`PRESS SPACERBAR TO START`, width / 2, height / 2 + dyn(300, `y`));
+  }
+}
 
 //  Displays the simulation
 function simulation() {
@@ -121,9 +153,62 @@ function simulation() {
 
 //  Displays the ending screen
 function ending() {
-  drawDoubtMeter();
-  drawRatingsGraph();
-  drawUIText();
+  clearInterval(refreshRatings);
+
+  push();
+  fill(255, 0, 0);
+  textSize(60);
+  textAlign(CENTER, CENTER);
+  text(`THE SHOW IS CANCELLED`, width / 2, height / 2 - dyn(180, `y`));
+
+  fill(255);
+  textSize(32);
+  textAlign(CENTER, TOP);
+  if (doubt >= 100) {
+    text(
+      `TRUMAN REALIZED THAT HIS ENTIRE LIFE WAS A LIE. HE ESCAPED.\n\n(DOUBT METER REACHED 100%)`,
+      width / 2,
+      height / 2 - dyn(80, `y`)
+    );
+  } else if (funds <= 0) {
+    text(
+      `THE PRODUCTION COMPANY WAS LOSING MONEY. THEY WENT BANKRUPT.\n\n(FUNDS REACHED 0$)`,
+      width / 2,
+      height / 2 - dyn(80, `y`)
+    );
+  } else if (currentRating <= 0) {
+    text(
+      `THE TV RATINGS WERE TERRIBLE. NO ONE WAS WATCHING IT.\n\n(RATINGS REACHED 0)`,
+      width / 2,
+      height / 2 - dyn(80, `y`)
+    );
+  }
+
+  fill(255, 255, 0);
+  textSize(60);
+  text(`YOU LASTED FOR: ${day} DAYS`, width / 2, height / 2 + dyn(120, `y`));
+  pop();
+
+  frames++;
+
+  if (frames > 40 && !textVisible) {
+    textVisible = true;
+    frames = 0;
+  } else if (frames > 40 && textVisible) {
+    textVisible = false;
+    frames = 0;
+  }
+
+  if (textVisible) {
+    fill(255, 0, 255);
+    textSize(32);
+    textAlign(CENTER, CENTER);
+    text(
+      `PRESS SPACERBAR TO RETURN TO THE MAIN MENU`,
+      width / 2,
+      height / 2 + dyn(300, `y`)
+    );
+  }
 }
 
 //  Draws the doubt meter
@@ -229,6 +314,10 @@ function drawCommandButtons() {
   let gainModifier = [];
   let lossSign = [];
   let lossModifier = [];
+
+  if (!readInputs) {
+    white = green = red = [127, 127, 127];
+  }
 
   for (let i = 0; i < action.length; i++) {
     if (action[i].gain === `money`) {
@@ -344,6 +433,11 @@ function drawUIText() {
   fill(0, 255, 0);
   text(funds + `$`, (width - dyn(900, `x`)) / 4, dyn(340, `y`));
 
+  if (readInputs) {
+    fill(0, 255, 0);
+  } else {
+    fill(127, 127, 127);
+  }
   textAlign(CENTER, TOP);
   text(
     currentLocation.description.toUpperCase(),
@@ -488,6 +582,9 @@ function keyPressed() {
       ratings.shift();
       ratings.push(currentRating);
     }, 200);
+  }
+  if (state === `ending` && keyCode === 32) {
+    state = `title`;
   } else if (state === `simulation` && readInputs) {
     let key;
 
@@ -496,13 +593,13 @@ function keyPressed() {
       key = 0;
       moveTruman();
       rollForAlert();
-      fundsTarget += Math.floor(currentRating / 10);
+      day++;
     } else if (keyCode === 50 || keyCode === 98) {
       //  Pick action 2
       key = 1;
       moveTruman();
       rollForAlert();
-      fundsTarget += Math.floor(currentRating / 10);
+      day++;
     } else if (keyCode === 70 && alerts.length >= 1) {
       //  Fix all alerts
       fundsTarget -= alerts.length * ALERT_COST;
@@ -526,9 +623,9 @@ function keyPressed() {
         }
       } else if (action[key].loss === `ratings`) {
         if (ratingsTarget === undefined) {
-          ratingsTarget = currentRating - action[key].gainAmount;
+          ratingsTarget = currentRating - action[key].lossAmount;
         } else {
-          ratingsTarget -= action[key].gainAmount;
+          ratingsTarget -= action[key].lossAmount;
         }
 
         if (ratingsTarget < 0) {
