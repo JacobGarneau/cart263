@@ -43,6 +43,7 @@ let alerts = [];
 let alertsPossibleLocations = [0, 1, 2, 3, 4, 5, 6];
 const ALERT_CHANCE = 40;
 const ALERT_COST = 150;
+const ALERT_PENALTY = 50;
 
 let readInputs = true;
 let truman = {
@@ -392,7 +393,7 @@ function drawUIText() {
   text(
     `LOCATION`,
     ((width - dyn(900, `x`)) / 4) * 3 + dyn(900, `x`),
-    dyn(120, `y`)
+    dyn(240, `y`)
   );
 
   textSize(48);
@@ -442,7 +443,15 @@ function drawUIText() {
   text(
     currentLocation.description.toUpperCase(),
     ((width - dyn(900, `x`)) / 4) * 3 + dyn(900, `x`),
-    dyn(160, `y`)
+    dyn(280, `y`)
+  );
+
+  fill(255, 255, 0);
+  textSize(60);
+  text(
+    `DAY ${day + 1}`,
+    ((width - dyn(900, `x`)) / 4) * 3 + dyn(900, `x`),
+    dyn(100, `y`)
   );
   pop();
 }
@@ -509,6 +518,13 @@ function moveTruman() {
       truman.y = currentLocation.y;
       action[0] = data.events[currentLocation.events[0]];
       action[1] = data.events[currentLocation.events[1]];
+
+      for (let i = 0; i < alerts.length; i++) {
+        if (alerts[i].description === currentLocation.description) {
+          doubtTarget += ALERT_PENALTY;
+        }
+      }
+
       readInputs = true;
       clearInterval(travelTime);
     }
