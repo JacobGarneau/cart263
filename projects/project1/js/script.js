@@ -15,6 +15,13 @@ let images = {
   alert: undefined,
   title: undefined,
 };
+let sounds = {
+  music: undefined,
+  alarm: undefined,
+  select: undefined,
+  gameOver: undefined,
+  action: undefined,
+};
 
 let state = `title`; //  title, simulation, ending
 let frames = 0;
@@ -64,6 +71,15 @@ function preload() {
   images.marker = loadImage("assets/images/marker.png");
   images.alert = loadImage("assets/images/alert.png");
   images.title = loadImage("assets/images/title.png");
+
+  soundFormats(`mp3`);
+  sounds.music = loadSound("assets/sounds/music");
+  sounds.select = loadSound("assets/sounds/select");
+
+  soundFormats(`wav`);
+  sounds.alert = loadSound("assets/sounds/alert");
+  sounds.gameOver = loadSound("assets/sounds/gameOver");
+  sounds.action = loadSound("assets/sounds/action");
 }
 
 //  p5: Sets up the necessary variables
@@ -74,6 +90,7 @@ function setup() {
   truman.y = currentLocation.y;
   action[0] = data.events[currentLocation.events[0]];
   action[1] = data.events[currentLocation.events[1]];
+  sounds.music.play();
 }
 
 //  Handles the various game states
@@ -141,14 +158,20 @@ function simulation() {
 
   if (currentRating <= 0) {
     state = `ending`;
+    sounds.music.stop();
+    sounds.gameOver.play();
   }
 
   if (funds <= 0) {
     state = `ending`;
+    sounds.music.stop();
+    sounds.gameOver.play();
   }
 
   if (doubt >= 100) {
     state = `ending`;
+    sounds.music.stop();
+    sounds.gameOver.play();
   }
 }
 
@@ -456,28 +479,6 @@ function drawUIText() {
   pop();
 }
 
-//  Draws text wth multiple colors in a single sentence
-function drawCompositeText(x, y, textArray) {
-  let totalWidth = 0;
-
-  for (let i = 0; i < textArray.length; i++) {
-    let part = textArray[i];
-    let textString = part[0];
-    totalWidth += textWidth(textString);
-  }
-
-  let posX = x;
-  for (let i = 0; i < textArray.length; i++) {
-    let part = textArray[i];
-    let textString = part[0];
-    let textColor = part[1];
-    let textW = textWidth(textString);
-    fill(textColor);
-    text(textString, posX - totalWidth / 2, y);
-    posX += textW;
-  }
-}
-
 //  Draws the main character
 function drawTruman() {
   imageMode(CENTER);
@@ -538,6 +539,7 @@ function rollForAlert() {
   if (roll < ALERT_CHANCE && alertLocation !== targetLocation) {
     alerts.push(alertLocation);
     alertsPossibleLocations.splice(alertLocation, 1);
+    sounds.alert.play();
   }
 }
 
@@ -578,6 +580,25 @@ function adjustValues() {
   }
 }
 
+//  Resets the game to its initial state
+function resetGame() {
+  currentRating = 500;
+  ratingsTarget = currentRating;
+  ratings = [500, 500, 500, 500, 500, 500, 500, 500];
+  funds = 500;
+  fundsTarget = funds;
+  doubt = 0;
+  doubtTarget = doubt;
+  alerts = [];
+  alertsPossibleLocations = [0, 1, 2, 3, 4, 5, 6];
+  currentLocation = data.locations[0];
+  truman.x = currentLocation.x;
+  truman.y = currentLocation.y;
+  action[0] = data.events[currentLocation.events[0]];
+  action[1] = data.events[currentLocation.events[1]];
+  day = 0;
+}
+
 //  p5: Handles the events being triggered by key presses
 function keyPressed() {
   if (state === `title` && keyCode === 32) {
@@ -598,9 +619,13 @@ function keyPressed() {
       ratings.shift();
       ratings.push(currentRating);
     }, 200);
+    sounds.select.play();
   }
   if (state === `ending` && keyCode === 32) {
     state = `title`;
+
+    sounds.select.play();
+    resetGame();
   } else if (state === `simulation` && readInputs) {
     let key;
 
@@ -609,12 +634,14 @@ function keyPressed() {
       key = 0;
       moveTruman();
       rollForAlert();
+      sounds.action.play();
       day++;
     } else if (keyCode === 50 || keyCode === 98) {
       //  Pick action 2
       key = 1;
       moveTruman();
       rollForAlert();
+      sounds.action.play();
       day++;
     } else if (keyCode === 70 && alerts.length >= 1) {
       //  Fix all alerts
@@ -624,6 +651,7 @@ function keyPressed() {
       if (fundsTarget < 0) {
         fundsTarget = 0;
       }
+      sounds.action.play();
     }
 
     if (key === 0 || key === 1) {
@@ -675,7 +703,29 @@ function keyPressed() {
   }
 }
 
-//  Converts the inputted numbers so that they fit to any screen
+//  Tool: Draws text wth multiple colors in a single sentence
+function drawCompositeText(x, y, textArray) {
+  let totalWidth = 0;
+
+  for (let i = 0; i < textArray.length; i++) {
+    let part = textArray[i];
+    let textString = part[0];
+    totalWidth += textWidth(textString);
+  }
+
+  let posX = x;
+  for (let i = 0; i < textArray.length; i++) {
+    let part = textArray[i];
+    let textString = part[0];
+    let textColor = part[1];
+    let textW = textWidth(textString);
+    fill(textColor);
+    text(textString, posX - totalWidth / 2, y);
+    posX += textW;
+  }
+}
+
+//  Tool: Converts the inputted numbers so that they fit to any screen
 function dyn(number, axis) {
   let result;
   if (axis === `x`) {
