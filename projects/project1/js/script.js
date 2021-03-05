@@ -26,6 +26,7 @@ let sounds = {
 let state = `title`; //  title, simulation, ending
 let frames = 0;
 let textVisible;
+let highScore;
 const WORK_WINDOW_SIZE = {
   x: 1536,
   y: 754,
@@ -90,7 +91,7 @@ function setup() {
   truman.y = currentLocation.y;
   action[0] = data.events[currentLocation.events[0]];
   action[1] = data.events[currentLocation.events[1]];
-  sounds.music.play();
+  highScore = localStorage.getItem("highScore");
 }
 
 //  Handles the various game states
@@ -111,12 +112,22 @@ function draw() {
 function title() {
   push();
   imageMode(CENTER);
-  image(images.title, width / 2, height / 2);
+  image(images.title, width / 2, height / 2 - dyn(120, `y`));
 
   fill(255);
   textSize(60);
   textAlign(CENTER, CENTER);
-  text(`THE TRUMAN GAME`, width / 2, height / 2);
+  text(`THE TRUMAN GAME`, width / 2, height / 2 - dyn(120, `y`));
+  fill(255, 255, 0);
+  textSize(48);
+  if (highScore === null) {
+    text(`HIGH SCORE: 0 DAYS`, width / 2, height / 2 + dyn(80, `y`));
+  } else if (highScore === 1) {
+    text(`HIGH SCORE: ${highScore} DAY`, width / 2, height / 2 + dyn(80, `y`));
+  } else {
+    text(`HIGH SCORE: ${highScore} DAYS`, width / 2, height / 2 + dyn(80, `y`));
+  }
+
   pop();
 
   frames++;
@@ -158,18 +169,21 @@ function simulation() {
 
   if (currentRating <= 0) {
     state = `ending`;
+    localStorage.setItem("highScore", day);
     sounds.music.stop();
     sounds.gameOver.play();
   }
 
   if (funds <= 0) {
     state = `ending`;
+    localStorage.setItem("highScore", day);
     sounds.music.stop();
     sounds.gameOver.play();
   }
 
   if (doubt >= 100) {
     state = `ending`;
+    localStorage.setItem("highScore", day);
     sounds.music.stop();
     sounds.gameOver.play();
   }
@@ -596,6 +610,7 @@ function resetGame() {
   truman.y = currentLocation.y;
   action[0] = data.events[currentLocation.events[0]];
   action[1] = data.events[currentLocation.events[1]];
+  highScore = localStorage.getItem("highScore");
   day = 0;
 }
 
@@ -619,11 +634,11 @@ function keyPressed() {
       ratings.shift();
       ratings.push(currentRating);
     }, 200);
+    sounds.music.play();
     sounds.select.play();
   }
   if (state === `ending` && keyCode === 32) {
     state = `title`;
-
     sounds.select.play();
     resetGame();
   } else if (state === `simulation` && readInputs) {
