@@ -126,3 +126,8 @@ section div p:nth-child(2) {
 section div p:nth-child(3) {
   color: #ac80f2;
 }
+
+::selection {
+  color: black;
+  background-color: rgba(255, 255, 255, 0.99);
+}
