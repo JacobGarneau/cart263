@@ -109,6 +109,11 @@ function fadeIn(element, opacity) {
   }
 }
 
+function readHaiku() {
+  let haiku = `${titleH1.innerText}.\n${line1P.innerText}.\n${line2P.innerText}.\n${line3P.innerText}.`;
+  responsiveVoice.speak(haiku, "UK English Male", {});
+}
+
 function alignText() {
   let body = document.querySelector("body");
   let section = document.querySelector("section");

@@ -57,6 +57,16 @@ section h1:hover {
   background-color: black;
 }
 
+section p.button {
+  margin-top: 60px;
+
+  color: white;
+  background-color: black;
+  border: 6px solid black;
+
+  cursor: pointer;
+}
+
 body.left {
   background-color: #fa995c;
 }
@@ -79,6 +89,18 @@ body.center section {
 
 body.right section {
   align-items: flex-end;
+}
+
+body.left section p.button:hover {
+  color: #fa995c;
+}
+
+body.center section p.button:hover {
+  color: #fc2c2c;
+}
+
+body.right section p.button:hover {
+  color: #ac80f2;
 }
 
 section div {
