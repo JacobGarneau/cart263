@@ -42,3 +42,20 @@ function random(array) {
   let index = Math.floor(Math.random() * array.length);
   return array[index];
 }
+
+function setNewLine(element) {
+  if (element === line1P) {
+    element.innerText = random(fiveSyllableLines);
+  } else if (element === line2P) {
+    element.innerText = random(sevenSyllableLines);
+  } else if (element === line3P) {
+    element.innerText = random(fiveSyllableLines);
+  }
+}
+
+function lineClicked() {
+  setNewLine(event.target);
+}
+
+//  Event listeners
+document.addEventListener(`click`, lineClicked);
