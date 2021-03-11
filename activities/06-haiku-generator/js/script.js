@@ -54,7 +54,22 @@ function setNewLine(element) {
 }
 
 function lineClicked() {
-  setNewLine(event.target);
+  if (
+    event.target === line1P ||
+    event.target === line2P ||
+    event.target === line3P
+  )
+    fadeOut(event.target, 1);
+}
+
+function fadeOut(element, opacity) {
+  opacity -= 0.01;
+  element.style.opacity = opacity;
+  if (opacity > 0) {
+    requestAnimationFrame(() => {
+      fadeOut(element, opacity);
+    });
+  }
 }
 
 //  Event listeners
