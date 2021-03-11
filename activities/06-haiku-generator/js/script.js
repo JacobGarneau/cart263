@@ -69,6 +69,19 @@ function fadeOut(element, opacity) {
     requestAnimationFrame(() => {
       fadeOut(element, opacity);
     });
+  } else {
+    setNewLine(element);
+    fadeIn(element, 0);
+  }
+}
+
+function fadeIn(element, opacity) {
+  opacity += 0.01;
+  element.style.opacity = opacity;
+  if (opacity < 1) {
+    requestAnimationFrame(() => {
+      fadeIn(element, opacity);
+    });
   }
 }
 
