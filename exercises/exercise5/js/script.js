@@ -105,9 +105,26 @@ function fadeIn(element, opacity) {
       fadeIn(element, opacity);
     });
   } else {
-    element.style.transition = "0.4s";
+    element.style.transition = "0.4s all";
+  }
+}
+
+function alignText() {
+  let body = document.querySelector("body");
+  let section = document.querySelector("section");
+
+  if (event.keyCode === 76) {
+    body.classList = "";
+    body.classList.add("left");
+  } else if (event.keyCode === 67) {
+    body.classList = "";
+    body.classList.add("center");
+  } else if (event.keyCode === 82) {
+    body.classList = "";
+    body.classList.add("right");
   }
 }
 
 //  Event listeners
 document.addEventListener(`click`, lineClicked);
+document.addEventListener(`keydown`, alignText);

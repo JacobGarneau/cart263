@@ -17,6 +17,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  transition: 0.4s all;
 }
 
 section {
@@ -29,6 +31,8 @@ section {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  transition: 0.4s all;
 }
 
 section p,
@@ -37,7 +41,7 @@ section h1 {
   margin: 16px;
 
   text-align: center;
-  transition: 0.4s;
+  transition: 0.4s all;
 
   color: black;
   background-color: white;
@@ -47,8 +51,56 @@ section h1 {
   margin-bottom: 60px;
 }
 
-section p:hover,
+section > p:hover,
 section h1:hover {
   color: white;
   background-color: black;
+}
+
+body.left {
+  background-color: #fa995c;
+}
+
+body.center {
+  background-color: #fc2c2c;
+}
+
+body.right {
+  background-color: #ac80f2;
+}
+
+body.left section {
+  align-items: flex-start;
+}
+
+body.center section {
+  align-items: center;
+}
+
+body.right section {
+  align-items: flex-end;
+}
+
+section div {
+  margin-top: 60px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+section div p {
+  background-color: black;
+}
+
+section div p:nth-child(1) {
+  color: #fa995c;
+}
+
+section div p:nth-child(2) {
+  color: #fc2c2c;
+}
+
+section div p:nth-child(3) {
+  color: #ac80f2;
 }
