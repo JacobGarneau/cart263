@@ -31,6 +31,24 @@ section {
   align-items: center;
 }
 
-section p {
+section p,
+section h1 {
+  padding: 4px 12px;
+  margin: 16px;
+
   text-align: center;
+  transition: 0.4s;
+
+  color: black;
+  background-color: white;
+}
+
+section h1 {
+  margin-bottom: 60px;
+}
+
+section p:hover,
+section h1:hover {
+  color: white;
+  background-color: black;
 }

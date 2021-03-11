@@ -24,16 +24,32 @@ let sevenSyllableLines = [
   "Nothing can satisfy you",
   "They will not come back again",
 ];
+let titles = [
+  "Dandelion-Colored Underwater Vehicle",
+  "I Am the Seal",
+  "Here Arrives the Star",
+  "With a Bit of Support from My Compatriots",
+  "The Day Before Today",
+  "Let It Exist",
+  "A Period of 24 Hours in Existence",
+  "Coin Street",
+  "All You Require Is Affection",
+  "Ellen Rugby",
+  "Lou In the Firmament With Precious Gemstones",
+];
 
 let line1 = random(fiveSyllableLines);
 let line2 = random(sevenSyllableLines);
 let line3 = random(fiveSyllableLines);
+let title = random(titles);
 
 let line1P = document.getElementById("line-1");
 let line2P = document.getElementById("line-2");
 let line3P = document.getElementById("line-3");
+let titleH1 = document.querySelector("h1");
 
 //  Program
+titleH1.innerText = title;
 line1P.innerText = line1;
 line2P.innerText = line2;
 line3P.innerText = line3;
@@ -51,6 +67,8 @@ function setNewLine(element) {
     element.innerText = random(sevenSyllableLines);
   } else if (element === line3P) {
     element.innerText = random(fiveSyllableLines);
+  } else if (element === titleH1) {
+    element.innerText = random(titles);
   }
 }
 
@@ -58,13 +76,16 @@ function lineClicked() {
   if (
     event.target === line1P ||
     event.target === line2P ||
-    event.target === line3P
-  )
+    event.target === line3P ||
+    event.target === titleH1
+  ) {
+    event.target.style.transition = "none";
     fadeOut(event.target, 1);
+  }
 }
 
 function fadeOut(element, opacity) {
-  opacity -= 0.01;
+  opacity -= 0.02;
   element.style.opacity = opacity;
   if (opacity > 0) {
     requestAnimationFrame(() => {
@@ -77,12 +98,14 @@ function fadeOut(element, opacity) {
 }
 
 function fadeIn(element, opacity) {
-  opacity += 0.01;
+  opacity += 0.02;
   element.style.opacity = opacity;
   if (opacity < 1) {
     requestAnimationFrame(() => {
       fadeIn(element, opacity);
     });
+  } else {
+    element.style.transition = "0.4s";
   }
 }
 
