@@ -1,0 +1,36 @@
+/*********************************************
+
+Here is a description of any special CSS used.
+By default that's nothing.
+
+**********************************************/
+
+body {
+  height: 100vh;
+  width: 100vw;
+  padding: 0;
+  margin: 0;
+
+  background-color: #fc2c2c;
+  color: white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+section {
+  padding: 40px;
+
+  font-family: "Courier Prime", monospace;
+  font-size: 24px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+section p {
+  text-align: center;
+}
