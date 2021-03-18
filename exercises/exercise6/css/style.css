@@ -8,6 +8,9 @@ By default that's nothing.
 body {
   background-color: red;
 
+  font-family: monospace;
+  font-size: 24px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,20 +19,18 @@ body {
   height: 100vh;
   width: 100vw;
 
+  margin: 0;
+
   overflow: hidden;
 }
 
 h2 {
-  font-family: monospace;
   font-size: 48px;
 
   color: gold;
 }
 
 #secret-document {
-  font-family: monospace;
-  font-size: 24px;
-
   display: flex;
   align-items: center;
 }
@@ -60,9 +61,6 @@ h2 {
 }
 
 #percentage {
-  font-family: monospace;
-  font-size: 24px;
-
   padding: 8px 16px;
 
   background-color: black;
@@ -71,6 +69,41 @@ h2 {
 
 #percentage span {
   color: gold;
+}
+
+#defeat {
+  height: 100vh;
+  width: 100vw;
+
+  padding-bottom: 120px;
+
+  background-color: black;
+  color: gold;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 48px;
+  text-align: center;
+}
+
+#defeat p:not(.russian) {
+  margin-bottom: 20px;
+  margin-top: 120px;
+}
+
+.russian {
+  font-size: 36px;
+
+  color: white;
+
+  margin: 0;
+}
+
+.hidden {
+  display: none !important;
 }
 
 ::selection {
