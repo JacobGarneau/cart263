@@ -2,7 +2,7 @@
 Raving Redactionist ++
 Jacob Garneau
 
-Protect the secrets of the motherland
+Protect the secrets of the motherland!
 */
 
 "use strict";
@@ -26,9 +26,20 @@ function attemptReveal() {
     $(this).removeClass(`redacted`);
     $(this).addClass(`revealed`);
   }
+
+  updateRedactionPrecent();
 }
 
 function redact() {
   $(this).removeClass(`revealed`);
   $(this).addClass(`redacted`);
+
+  updateRedactionPrecent();
+}
+
+function updateRedactionPrecent() {
+  let percentage = Math.floor(
+    ($(`.redacted`).length / $(`.top-secret`).length) * 100
+  );
+  $(`#percentage`).html(`Redaction percentage: <span>${percentage}%</span>`);
 }

@@ -58,3 +58,17 @@ h2 {
   color: gold;
   text-decoration: underline;
 }
+
+#percentage {
+  font-family: monospace;
+  font-size: 24px;
+
+  padding: 8px 16px;
+
+  background-color: black;
+  color: white;
+}
+
+#percentage span {
+  color: gold;
+}
