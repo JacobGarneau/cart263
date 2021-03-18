@@ -10,10 +10,11 @@ Protect the secrets of the motherland!
 // Code goes here
 const REVEAL_PROBABLILTY = 0.1;
 const REVELATION_INTERVAL = 500;
+let percentage = 100;
 
 $(`.top-secret`).on(`click`, redact);
 
-setInterval(revelation, REVELATION_INTERVAL);
+let revealText = setInterval(revelation, REVELATION_INTERVAL);
 
 function revelation() {
   $(`.redacted`).each(attemptReveal);
@@ -38,8 +39,15 @@ function redact() {
 }
 
 function updateRedactionPrecent() {
-  let percentage = Math.floor(
+  percentage = Math.floor(
     ($(`.redacted`).length / $(`.top-secret`).length) * 100
   );
-  $(`#percentage`).html(`Redaction percentage: <span>${percentage}%</span>`);
+
+  if (percentage > 0) {
+    $(`#percentage`).html(`Redaction percentage: <span>${percentage}%</span>`);
+  } else {
+    $(`#percentage`).html(`Redaction percentage: <span>REDACTED%</span>`);
+    clearInterval(revealText);
+    $(`.top-secret`).off(`click`);
+  }
 }
