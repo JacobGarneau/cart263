@@ -2,7 +2,7 @@
 Raving Redactionist ++
 Jacob Garneau
 
-Protect the secrets of the motherland!
+Protect the secrets of the motherland
 */
 
 "use strict";
