@@ -9,12 +9,12 @@ Crack the code and save the world!
 
 // Code goes here
 
-const VICTORY_SOUND = new Audio("assets/sounds/victory.wav");
+const VICTORY_SOUND = new Audio("assets/sounds/victory.mp3");
 
 $(`#solved-dialog`).dialog({
   autoOpen: false,
   buttons: {
-    "I know.": function () {
+    Gotcha: function () {
       $(this).dialog(`close`);
     },
   },
@@ -42,7 +42,7 @@ $(`#answer`).droppable({
     ui.draggable.draggable(`disable`);
     ui.draggable.removeClass(`found`);
 
-    if ($(this).text() === `Theremin`) {
+    if ($(this).text() === `rickroll`) {
       $(`#solved-dialog`).dialog(`open`);
       VICTORY_SOUND.play();
     }
