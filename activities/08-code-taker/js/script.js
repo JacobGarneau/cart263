@@ -10,6 +10,15 @@ author, and this description to match your project!
 
 // Code goes here
 
+$(`#solved-dialog`).dialog({
+  autoOpen: false,
+  buttons: {
+    "I know.": function () {
+      $(this).dialog(`close`);
+    },
+  },
+});
+
 $(`.secret`).on(`mouseover`, function (event) {
   $(this).addClass(`found`, 500);
 });
@@ -24,5 +33,9 @@ $(`#answer`).droppable({
 
     ui.draggable.draggable(`disable`);
     ui.draggable.removeClass(`found`);
+
+    if ($(this).text() === `Theremin`) {
+      $(`#solved-dialog`).dialog(`open`);
+    }
   },
 });
