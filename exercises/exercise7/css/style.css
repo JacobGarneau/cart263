@@ -14,3 +14,7 @@ By default that's nothing.
 .found {
   color: red;
 }
+
+.hidden {
+  color: rgba(0, 0, 0, 0.05);
+}

@@ -24,6 +24,13 @@ $(`.secret`).on(`mouseover`, function (event) {
   $(this).addClass(`found`, 500);
 });
 
+$(`body`).on(`keydown`, function (event) {
+  if (event.keyCode === 69) {
+    $(`section p, h2`).addClass(`hidden`, 500);
+    $(`.secret`).addClass(`found`, 500);
+  }
+});
+
 $(`.secret`).draggable({ helper: "clone" });
 
 $(`#answer`).droppable({
