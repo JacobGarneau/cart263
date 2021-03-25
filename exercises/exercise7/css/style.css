@@ -1,0 +1,16 @@
+/*********************************************
+
+Here is a description of any special CSS used.
+By default that's nothing.
+
+**********************************************/
+
+#answer {
+  height: 24px;
+  width: 240px;
+  border: solid 4px black;
+}
+
+.found {
+  color: red;
+}
