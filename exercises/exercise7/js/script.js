@@ -9,6 +9,8 @@ Crack the code and save the world!
 
 // Code goes here
 
+const VICTORY_SOUND = new Audio("assets/sounds/victory.wav");
+
 $(`#solved-dialog`).dialog({
   autoOpen: false,
   buttons: {
@@ -35,6 +37,7 @@ $(`#answer`).droppable({
 
     if ($(this).text() === `Theremin`) {
       $(`#solved-dialog`).dialog(`open`);
+      VICTORY_SOUND.play();
     }
   },
 });
