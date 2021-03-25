@@ -15,3 +15,14 @@ $(`.secret`).on(`mouseover`, function (event) {
 });
 
 $(`.secret`).draggable({ helper: "clone" });
+
+$(`#answer`).droppable({
+  drop: function (event, ui) {
+    let character = ui.draggable.text();
+
+    $(this).append(character);
+
+    ui.draggable.draggable(`disable`);
+    ui.draggable.removeClass(`found`);
+  },
+});
