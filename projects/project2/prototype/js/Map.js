@@ -15,6 +15,7 @@ class Map {
     }
   }
 
+  // display the map
   display() {
     for (let i = 0; i < MAP_WIDTH; i++) {
       for (let j = 0; j < MAP_HEIGHT; j++) {
@@ -38,7 +39,7 @@ class Map {
     }
   }
 
-  // chage the visible tile when the player exits the screen
+  // change the visible tile when the player exits the screen
   changeTile() {
     if (player.x <= 0) {
       // if player goes out of map, bring them back on the other side

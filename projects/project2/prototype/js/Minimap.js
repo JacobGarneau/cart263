@@ -1,6 +1,7 @@
 class Minimap {
   constructor() {}
 
+  // display the minimap
   display() {
     // draw the minimap
     for (let i = 0; i < MAP_WIDTH; i++) {

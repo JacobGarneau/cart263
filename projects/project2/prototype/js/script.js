@@ -14,20 +14,16 @@ const MAP_WIDTH = 10;
 const MAP_HEIGHT = 10;
 const BIOMES = [`lake`, `snow`, `snow`, `snow`, `mountains`, `mountains`];
 
-let map, player, minimap, ui;
-let playerData;
+let map, player, minimap, ui; // objects
+let playerData; // JSON data
 let shrines = [];
 
-/**
-Description of preload
-*/
+// p5: load JSON data
 function preload() {
   playerData = loadJSON("js/data/playerData.json");
 }
 
-/**
-Description of setup
-*/
+// p5: creates the canvas and the object instances
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
@@ -55,6 +51,7 @@ function draw() {
   }
 }
 
+// p5: handle mouse clicks
 function mouseClicked() {
   player.attack(playerData.attacks.peck);
 }

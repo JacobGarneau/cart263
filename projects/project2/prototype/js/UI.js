@@ -11,8 +11,20 @@ class UI {
         b: 0,
       },
     };
+    this.frostbiteBar = {
+      x: 20,
+      y: 48,
+      height: 16,
+      width: 3,
+      fill: {
+        r: 0,
+        g: 127,
+        b: 255,
+      },
+    };
   }
 
+  // display the UI
   display() {
     // draw health bar container
     fill(0);
@@ -30,6 +42,28 @@ class UI {
       this.healthBar.y,
       this.healthBar.width * player.health,
       this.healthBar.height
+    );
+
+    // draw frostbite bar container
+    fill(0);
+    rect(
+      this.frostbiteBar.x,
+      this.frostbiteBar.y,
+      this.frostbiteBar.width * player.maxHealth,
+      this.frostbiteBar.height
+    );
+
+    // draw frostbite bar fill
+    fill(
+      this.frostbiteBar.fill.r,
+      this.frostbiteBar.fill.g,
+      this.frostbiteBar.fill.b
+    );
+    rect(
+      this.frostbiteBar.x,
+      this.frostbiteBar.y,
+      this.frostbiteBar.width * player.health,
+      this.frostbiteBar.height
     );
   }
 }

@@ -8,7 +8,8 @@
       "posX": 0,
       "posY": 20,
       "size": 32,
-      "hitlag": 20,
+      "hitlag": 40,
+      "activeFrames": 8,
       "damage": 12
     }
   }
