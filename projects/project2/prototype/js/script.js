@@ -15,13 +15,14 @@ const MAP_HEIGHT = 10;
 const BIOMES = [`lake`, `snow`, `snow`, `snow`, `mountains`, `mountains`];
 
 let map, player, minimap, ui;
-let data;
+let playerData;
+let shrines = [];
 
 /**
 Description of preload
 */
 function preload() {
-  data = loadJSON("js/data/data.json");
+  playerData = loadJSON("js/data/playerData.json");
 }
 
 /**
@@ -43,17 +44,17 @@ function draw() {
 
   player.display();
   player.move();
+  player.handleActions();
 
   minimap.display();
 
   ui.display();
+
+  for (let i = 0; i < shrines.length; i++) {
+    shrines[i].display;
+  }
 }
 
 function mouseClicked() {
-  if (mouseButton === LEFT) {
-    console.log(`left`);
-  } else if (mouseButton === RIGHT) {
-    console.log(`right`);
-    rect(25, 25, 50, 50);
-  }
+  player.attack(playerData.attacks.peck);
 }

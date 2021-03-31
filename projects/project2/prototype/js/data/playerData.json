@@ -1,0 +1,15 @@
+{
+  "stats": {
+    "health": 60
+  },
+  "attacks": {
+    "peck": {
+      "name": "peck",
+      "posX": 0,
+      "posY": 20,
+      "size": 32,
+      "hitlag": 20,
+      "damage": 12
+    }
+  }
+}

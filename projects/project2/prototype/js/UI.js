@@ -14,6 +14,7 @@ class UI {
   }
 
   display() {
+    // draw health bar container
     fill(0);
     rect(
       this.healthBar.x,
@@ -21,6 +22,8 @@ class UI {
       this.healthBar.width * player.maxHealth,
       this.healthBar.height
     );
+
+    // draw health bar fill
     fill(this.healthBar.fill.r, this.healthBar.fill.g, this.healthBar.fill.b);
     rect(
       this.healthBar.x,
