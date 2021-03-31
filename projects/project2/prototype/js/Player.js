@@ -24,6 +24,14 @@ class Player {
     this.attackSize = 0; // size of the hitbox on an attack
     this.attackX = 0; // horizontal position of the attack hitbox
     this.attackY = 0; // vertical position of the attack hitbox
+
+    let staminaLoss = setInterval(() => {
+      this.stamina--;
+    }, 2000);
+
+    let frostbiteLoss = setInterval(() => {
+      this.frostbite--;
+    }, 3500);
   }
 
   // display the player icon
@@ -118,6 +126,28 @@ class Player {
       this.attackY = attack.posY;
       this.attackSize = attack.size;
       this.hitlag = attack.hitlag;
+      this.frostbite -= attack.frostbite;
+      this.stamina -= attack.stamina;
+    }
+  }
+
+  updateStats() {
+    if (this.health < this.targetHealth) {
+      this.health++;
+    } else if (this.health > this.targetHealth) {
+      this.health--;
+    }
+
+    if (this.frostbite < this.targetFrostbite) {
+      this.frostbite++;
+    } else if (this.frostbite > this.targetFrostbite) {
+      this.frostbite--;
+    }
+
+    if (this.stamina < this.targetStamina) {
+      this.stamina++;
+    } else if (this.stamina > this.targetStamina) {
+      this.stamina--;
     }
   }
 }

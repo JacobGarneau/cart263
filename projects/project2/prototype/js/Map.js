@@ -13,8 +13,17 @@ class Map {
       for (let j = 0; j < MAP_HEIGHT; j++) {
         let cell = {
           biome: random(BIOMES),
-          template: random(terrainData.snowTiles),
+          template: undefined,
         };
+
+        if (cell.biome === `sea`) {
+          cell.template = random(terrainData.seaTiles);
+        } else if (cell.biome === `snow`) {
+          cell.template = random(terrainData.snowTiles);
+        } else if (cell.biome === `mountains`) {
+          cell.template = random(terrainData.mountainTiles);
+        }
+
         row.push(cell); // fill the rows with cells
       }
 
@@ -22,12 +31,12 @@ class Map {
     }
   }
 
-  // display the map
-  display() {
+  // display the terrain and the biomes
+  displayTerrain() {
     for (let i = 0; i < MAP_WIDTH; i++) {
       for (let j = 0; j < MAP_HEIGHT; j++) {
         // set biome color
-        if (mapGrid[i][j].biome === `lake`) {
+        if (mapGrid[i][j].biome === `sea`) {
           fill(0, 150, 150);
         } else if (mapGrid[i][j].biome === `snow`) {
           fill(255);
@@ -39,15 +48,49 @@ class Map {
         let cellX = i * width - player.mapX * width;
         let cellY = j * height - player.mapY * height;
         rect(cellX, cellY, width, height);
+      }
+    }
+  }
 
-        // draw the contents of each cell
+  // display the contents of the map
+  displayContents() {
+    for (let i = 0; i < MAP_WIDTH; i++) {
+      for (let j = 0; j < MAP_HEIGHT; j++) {
+        let cellX = i * width - player.mapX * width;
+        let cellY = j * height - player.mapY * height;
+
+        // draw the glaciers
+        for (let k = 0; k < mapGrid[i][j].template.glaciers.length; k++) {
+          push();
+          fill(0, 70, 255);
+          ellipse(
+            cellX + mapGrid[i][j].template.glaciers[k].x,
+            cellY + mapGrid[i][j].template.glaciers[k].y,
+            mapGrid[i][j].template.glaciers[k].size
+          );
+          pop();
+        }
+        // draw the trees
         for (let k = 0; k < mapGrid[i][j].template.trees.length; k++) {
+          push();
           fill(150, 70, 0);
           ellipse(
             cellX + mapGrid[i][j].template.trees[k].x,
             cellY + mapGrid[i][j].template.trees[k].y,
             mapGrid[i][j].template.trees[k].size
           );
+          pop();
+        }
+        // draw the mountains
+        for (let k = 0; k < mapGrid[i][j].template.mountains.length; k++) {
+          push();
+          fill(200);
+          ellipse(
+            cellX + mapGrid[i][j].template.mountains[k].x,
+            cellY + mapGrid[i][j].template.mountains[k].y,
+            mapGrid[i][j].template.mountains[k].size
+          );
+          pop();
         }
       }
     }

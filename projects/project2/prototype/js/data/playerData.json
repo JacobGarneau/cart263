@@ -12,7 +12,9 @@
       "size": 32,
       "hitlag": 40,
       "activeFrames": 8,
-      "damage": 12
+      "damage": 12,
+      "frostbite": 0,
+      "stamina": 3
     }
   }
 }

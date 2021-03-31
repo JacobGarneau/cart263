@@ -12,7 +12,7 @@ let mapGrid = [];
 
 const MAP_WIDTH = 10;
 const MAP_HEIGHT = 10;
-const BIOMES = [`lake`, `snow`, `snow`, `snow`, `mountains`, `mountains`];
+const BIOMES = [`sea`, `snow`, `snow`, `snow`, `mountains`, `mountains`];
 
 let map, player, minimap, ui; // objects
 let playerData, terrainData; // JSON data
@@ -36,12 +36,14 @@ function setup() {
 
 // p5:
 function draw() {
-  map.display();
+  map.displayTerrain();
   map.changeTile();
 
   player.display();
   player.move();
   player.handleActions();
+
+  map.displayContents();
 
   minimap.display();
 
