@@ -14,7 +14,7 @@ const MAP_WIDTH = 10;
 const MAP_HEIGHT = 10;
 const BIOMES = [`lake`, `snow`, `snow`, `snow`, `mountains`, `mountains`];
 
-let map, player, minimap;
+let map, player, minimap, ui;
 
 /**
 Description of preload
@@ -30,6 +30,7 @@ function setup() {
   map = new Map();
   player = new Player();
   minimap = new Minimap();
+  ui = new UI();
 }
 
 // p5:
@@ -41,4 +42,6 @@ function draw() {
   player.move();
 
   minimap.display();
+
+  ui.display();
 }
