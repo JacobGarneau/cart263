@@ -10,8 +10,14 @@ class Player {
     this.mapX = 5; // horizontal position on the map tiles
     this.mapY = 5; // vertical position on the map tiles
     this.movable = true;
+
     this.maxHealth = playerData.stats.health;
     this.health = this.maxHealth;
+    this.maxFrostbite = playerData.stats.frostbite;
+    this.frostbite = this.maxFrostbite;
+    this.maxStamina = playerData.stats.stamina;
+    this.stamina = this.maxStamina;
+
     this.currentAction = undefined; // currently activated action
     this.hitlag = 0; // time before you can make another attack
     this.active = 0; // time during which the current action is active

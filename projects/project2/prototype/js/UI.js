@@ -22,6 +22,17 @@ class UI {
         b: 255,
       },
     };
+    this.staminaBar = {
+      x: 20,
+      y: 68,
+      height: 16,
+      width: 3,
+      fill: {
+        r: 0,
+        g: 255,
+        b: 127,
+      },
+    };
   }
 
   // display the UI
@@ -49,7 +60,7 @@ class UI {
     rect(
       this.frostbiteBar.x,
       this.frostbiteBar.y,
-      this.frostbiteBar.width * player.maxHealth,
+      this.frostbiteBar.width * player.maxFrostbite,
       this.frostbiteBar.height
     );
 
@@ -62,8 +73,30 @@ class UI {
     rect(
       this.frostbiteBar.x,
       this.frostbiteBar.y,
-      this.frostbiteBar.width * player.health,
+      this.frostbiteBar.width * player.frostbite,
       this.frostbiteBar.height
+    );
+
+    // draw stamina bar container
+    fill(0);
+    rect(
+      this.staminaBar.x,
+      this.staminaBar.y,
+      this.staminaBar.width * player.maxStamina,
+      this.staminaBar.height
+    );
+
+    // draw stamina bar fill
+    fill(
+      this.staminaBar.fill.r,
+      this.staminaBar.fill.g,
+      this.staminaBar.fill.b
+    );
+    rect(
+      this.staminaBar.x,
+      this.staminaBar.y,
+      this.staminaBar.width * player.stamina,
+      this.staminaBar.height
     );
   }
 }

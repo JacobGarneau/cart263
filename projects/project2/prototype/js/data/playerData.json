@@ -1,6 +1,8 @@
 {
   "stats": {
-    "health": 60
+    "health": 60,
+    "frostbite": 60,
+    "stamina": 60
   },
   "attacks": {
     "peck": {
