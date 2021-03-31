@@ -43,6 +43,7 @@ function draw() {
   drawMap();
   drawPlayer();
   movePlayer();
+  changeTile();
 }
 
 function setupPlayer() {
@@ -110,5 +111,43 @@ function movePlayer() {
     if (keyIsDown(68)) {
       player.x += player.speed;
     }
+  }
+}
+
+function changeTile() {
+  if (player.x <= 0) {
+    // if player goes out of map, bring them back on the other side
+    if (player.mapX === 0) {
+      player.mapX = MAP_WIDTH - 1;
+    } else {
+      player.mapX--;
+    }
+    player.x = width;
+  } else if (player.x >= width) {
+    // if player goes out of map, bring them back on the other side
+    if (player.mapX === MAP_HEIGHT - 1) {
+      player.mapX = 0;
+    } else {
+      player.mapX++;
+    }
+    // reset player position
+    player.x = 0;
+  } else if (player.y <= 0) {
+    // if player goes out of map, bring them back on the other side
+    if (player.mapY === 0) {
+      player.mapY = MAP_HEIGHT - 1;
+    } else {
+      player.mapY--;
+    }
+    player.y = height;
+  } else if (player.y >= height) {
+    // if player goes out of map, bring them back on the other side
+    if (player.mapY === MAP_HEIGHT - 1) {
+      player.mapY = 0;
+    } else {
+      player.mapY++;
+    }
+
+    player.y = 0;
   }
 }
