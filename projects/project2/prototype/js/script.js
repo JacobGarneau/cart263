@@ -15,11 +15,14 @@ const MAP_HEIGHT = 10;
 const BIOMES = [`lake`, `snow`, `snow`, `snow`, `mountains`, `mountains`];
 
 let map, player, minimap, ui;
+let data;
 
 /**
 Description of preload
 */
-function preload() {}
+function preload() {
+  data = loadJSON("js/data/data.json");
+}
 
 /**
 Description of setup
@@ -44,4 +47,13 @@ function draw() {
   minimap.display();
 
   ui.display();
+}
+
+function mouseClicked() {
+  if (mouseButton === LEFT) {
+    console.log(`left`);
+  } else if (mouseButton === RIGHT) {
+    console.log(`right`);
+    rect(25, 25, 50, 50);
+  }
 }

@@ -1,5 +1,6 @@
 class Map {
   constructor() {
+    // generate the grid
     for (let i = 0; i < MAP_WIDTH; i++) {
       let row = []; // create the rows
 
@@ -37,6 +38,7 @@ class Map {
     }
   }
 
+  // chage the visible tile when the player exits the screen
   changeTile() {
     if (player.x <= 0) {
       // if player goes out of map, bring them back on the other side

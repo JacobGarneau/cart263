@@ -3,8 +3,8 @@ class UI {
     this.healthBar = {
       x: 20,
       y: 20,
-      height: 40,
-      width: 360,
+      height: 24,
+      width: 4,
       fill: {
         r: 255,
         g: 0,
@@ -18,14 +18,14 @@ class UI {
     rect(
       this.healthBar.x,
       this.healthBar.y,
-      this.healthBar.width,
+      this.healthBar.width * player.maxHealth,
       this.healthBar.height
     );
     fill(this.healthBar.fill.r, this.healthBar.fill.g, this.healthBar.fill.b);
     rect(
       this.healthBar.x,
       this.healthBar.y,
-      (this.healthBar.width * player.health) / 100,
+      this.healthBar.width * player.health,
       this.healthBar.height
     );
   }

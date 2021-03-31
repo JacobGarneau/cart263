@@ -6,7 +6,8 @@ class Player {
     this.mapY = 5; // vertical position on the map tiles
     this.speed = 6;
     this.movable = true;
-    this.health = 100;
+    this.maxHealth = data.player.health;
+    this.health = this.maxHealth;
   }
 
   display() {
