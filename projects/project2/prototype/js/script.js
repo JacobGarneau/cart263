@@ -14,14 +14,7 @@ const MAP_WIDTH = 10;
 const MAP_HEIGHT = 10;
 const BIOMES = [`lake`, `snow`, `snow`, `snow`, `mountains`, `mountains`];
 
-let player = {
-  x: 0, // horizontal position on the screen
-  y: 0, // vertical position on the screen
-  mapX: 0, // horizontal position on the map tiles
-  mapY: 0, // vertical position on the map tiles
-  speed: 6,
-  movable: true,
-};
+let player, minimap;
 
 /**
 Description of preload
@@ -34,24 +27,17 @@ Description of setup
 function setup() {
   createCanvas(windowWidth, windowHeight);
   generateMap();
-  setupPlayer();
-  console.log(map);
+  player = new Player();
+  minimap = new Minimap();
 }
 
 // p5:
 function draw() {
   drawMap();
-  drawPlayer();
-  movePlayer();
+  player.display();
+  player.move();
   changeTile();
-  drawMiniMap();
-}
-
-function setupPlayer() {
-  player.x = width / 2;
-  player.y = height / 2;
-  player.mapX = 5;
-  player.mapY = 5;
+  minimap.display();
 }
 
 function generateMap() {
@@ -72,13 +58,12 @@ function generateMap() {
 function drawMap() {
   for (let i = 0; i < MAP_WIDTH; i++) {
     for (let j = 0; j < MAP_HEIGHT; j++) {
-      let currentTile = map[i][j];
-
-      if (currentTile.biome === `lake`) {
+      // set biome color
+      if (map[i][j].biome === `lake`) {
         fill(0, 150, 150);
-      } else if (currentTile.biome === `snow`) {
+      } else if (map[i][j].biome === `snow`) {
         fill(255);
-      } else if (currentTile.biome === `mountains`) {
+      } else if (map[i][j].biome === `mountains`) {
         fill(150);
       }
 
@@ -89,64 +74,6 @@ function drawMap() {
         width,
         height
       );
-    }
-  }
-}
-
-function drawMiniMap() {
-  // draw the minimap
-  for (let i = 0; i < MAP_WIDTH; i++) {
-    for (let j = 0; j < MAP_HEIGHT; j++) {
-      let currentTile = map[i][j];
-
-      if (currentTile.biome === `lake`) {
-        fill(0, 150, 150, 150);
-      } else if (currentTile.biome === `snow`) {
-        fill(255, 255, 255, 150);
-      } else if (currentTile.biome === `mountains`) {
-        fill(150, 150, 150, 150);
-      }
-
-      // draw the map cells
-      push();
-      rectMode(CENTER);
-      rect(
-        width - 320 + (i * width) / 40,
-        height - 210 + (j * height) / 40,
-        width / 40,
-        height / 40
-      );
-      pop();
-    }
-  }
-
-  // draw the player's icon
-  fill(255, 0, 0);
-  ellipse(
-    width - 320 + (player.mapX * width) / 40,
-    height - 210 + (player.mapY * height) / 40,
-    10
-  );
-}
-
-function drawPlayer() {
-  fill(255, 0, 0);
-  ellipse(player.x, player.y, 100);
-}
-
-function movePlayer() {
-  if (player.movable) {
-    if (keyIsDown(87)) {
-      player.y -= player.speed;
-    }
-    if (keyIsDown(83)) {
-      player.y += player.speed;
-    }
-    if (keyIsDown(65)) {
-      player.x -= player.speed;
-    }
-    if (keyIsDown(68)) {
-      player.x += player.speed;
     }
   }
 }
