@@ -6,11 +6,11 @@ class Minimap {
     for (let i = 0; i < MAP_WIDTH; i++) {
       for (let j = 0; j < MAP_HEIGHT; j++) {
         // set the appropriate biome color
-        if (map[i][j].biome === `lake`) {
+        if (mapGrid[i][j].biome === `lake`) {
           fill(0, 150, 150, 150);
-        } else if (map[i][j].biome === `snow`) {
+        } else if (mapGrid[i][j].biome === `snow`) {
           fill(255, 255, 255, 150);
-        } else if (map[i][j].biome === `mountains`) {
+        } else if (mapGrid[i][j].biome === `mountains`) {
           fill(150, 150, 150, 150);
         }
 
