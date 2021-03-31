@@ -15,12 +15,13 @@ const MAP_HEIGHT = 10;
 const BIOMES = [`lake`, `snow`, `snow`, `snow`, `mountains`, `mountains`];
 
 let map, player, minimap, ui; // objects
-let playerData; // JSON data
+let playerData, terrainData; // JSON data
 let shrines = [];
 
 // p5: load JSON data
 function preload() {
   playerData = loadJSON("js/data/playerData.json");
+  terrainData = loadJSON("js/data/terrainData.json");
 }
 
 // p5: creates the canvas and the object instances

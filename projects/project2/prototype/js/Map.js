@@ -13,6 +13,7 @@ class Map {
       for (let j = 0; j < MAP_HEIGHT; j++) {
         let cell = {
           biome: random(BIOMES),
+          template: random(terrainData.snowTiles),
         };
         row.push(cell); // fill the rows with cells
       }
@@ -35,12 +36,19 @@ class Map {
         }
 
         // draw the map cells
-        rect(
-          i * width - player.mapX * width,
-          j * height - player.mapY * height,
-          width,
-          height
-        );
+        let cellX = i * width - player.mapX * width;
+        let cellY = j * height - player.mapY * height;
+        rect(cellX, cellY, width, height);
+
+        // draw the contents of each cell
+        for (let k = 0; k < mapGrid[i][j].template.trees.length; k++) {
+          fill(150, 70, 0);
+          ellipse(
+            cellX + mapGrid[i][j].template.trees[k].x,
+            cellY + mapGrid[i][j].template.trees[k].y,
+            mapGrid[i][j].template.trees[k].size
+          );
+        }
       }
     }
   }
