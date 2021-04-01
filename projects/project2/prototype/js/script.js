@@ -17,6 +17,7 @@ const BIOMES = [`sea`, `snow`, `snow`, `snow`, `mountains`, `mountains`];
 let map, player, minimap, ui; // objects
 let playerData, terrainData; // JSON data
 let shrines = [];
+let entities = [];
 
 // p5: load JSON data
 function preload() {
@@ -32,12 +33,26 @@ function setup() {
   player = new Player();
   minimap = new Minimap();
   ui = new UI();
+
+  // add the entities on each tile of the map
+  for (let i = 0; i < MAP_WIDTH; i++) {
+    for (let j = 0; j < MAP_HEIGHT; j++) {
+      for (let k = 0; k < Math.floor(random(2, 6)); k++) {
+        let game = new Game();
+      }
+    }
+  }
 }
 
 // p5:
 function draw() {
   map.displayTerrain();
   map.changeTile();
+
+  for (let i = 0; i < entities.length; i++) {
+    entities[i].display();
+    entities[i].move();
+  }
 
   player.display();
   player.move();
@@ -51,7 +66,7 @@ function draw() {
   ui.display();
 
   for (let i = 0; i < shrines.length; i++) {
-    shrines[i].display;
+    shrines[i].display();
   }
 }
 

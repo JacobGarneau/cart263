@@ -27,6 +27,7 @@ class Player {
     this.attackSize = 0; // size of the hitbox on an attack
     this.attackX = 0; // horizontal position of the attack hitbox
     this.attackY = 0; // vertical position of the attack hitbox
+    this.damage = 0;
 
     let staminaLoss = setInterval(() => {
       this.staminaTarget--;
@@ -113,6 +114,7 @@ class Player {
     } else {
       this.currentAction = undefined;
       this.attackSize = undefined;
+      this.damage = 0;
     }
 
     if (this.currentAction === `peck`) {
@@ -121,8 +123,35 @@ class Player {
       translate(this.x, this.y);
       angleMode(DEGREES);
       rotate(this.rotation);
-      ellipse(0, 32, this.attackSize);
+      // ellipse(this.attackX, this.attackY, this.attackSize);
       pop();
+
+      for (let i = 0; i < entities.length; i++) {
+        let hitboxX;
+        let hitboxY;
+        if (this.rotation === 0) {
+          hitboxX = this.x + this.attackX;
+          hitboxY = this.y + this.attackY;
+        } else if (this.rotation === 90) {
+          hitboxX = this.x - this.attackY;
+          hitboxY = this.y + this.attackX;
+        } else if (this.rotation === 180) {
+          hitboxX = this.x - this.attackX;
+          hitboxY = this.y - this.attackY;
+        } else if (this.rotation === 270) {
+          hitboxX = this.x + this.attackY;
+          hitboxY = this.y - this.attackX;
+        }
+        ellipse(hitboxX, hitboxY, this.attackSize);
+        if (
+          dist(hitboxX, hitboxY, entities[i].x, entities[i].y) <=
+            this.attackSize / 2 + entities[i].size / 2 &&
+          this.mapX === entities[i].mapX &&
+          this.mapY === entities[i].mapY
+        ) {
+          entities[i].takeDamage(this.damage, this.active);
+        }
+      }
     }
   }
 
@@ -135,13 +164,12 @@ class Player {
       this.attackY = attack.posY;
       this.attackSize = attack.size;
       this.hitlag = attack.hitlag;
+      this.damage = attack.damage;
 
       this.staminaTarget -= attack.stamina;
       if (this.staminaTarget < 0) {
         this.staminaTarget = 0;
       }
-
-      console.log(this.staminaTarget);
 
       this.frostbiteTarget -= attack.frostbite;
       if (this.frostbiteTarget < 0) {
