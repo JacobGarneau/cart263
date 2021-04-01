@@ -42,6 +42,7 @@ function draw() {
   player.display();
   player.move();
   player.handleActions();
+  player.updateStats();
 
   map.displayContents();
 
