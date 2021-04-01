@@ -30,10 +30,8 @@ class Player {
     this.damage = 0;
 
     let staminaLoss = setInterval(() => {
-      this.staminaTarget--;
-      if (this.staminaTarget < 0) {
-        this.staminaTarget = 0;
-      }
+      this.staminaTarget++;
+      this.staminaTarget = constrain(this.staminaTarget, 0, this.maxStamina);
     }, 2000);
 
     let frostbiteLoss = setInterval(() => {
@@ -157,7 +155,7 @@ class Player {
 
   // perform attacks
   attack(attack) {
-    if (this.hitlag === 0) {
+    if (this.hitlag === 0 && this.stamina >= attack.stamina) {
       this.currentAction = attack.name;
       this.active = attack.activeFrames;
       this.attackX = attack.posX;
@@ -167,14 +165,14 @@ class Player {
       this.damage = attack.damage;
 
       this.staminaTarget -= attack.stamina;
-      if (this.staminaTarget < 0) {
-        this.staminaTarget = 0;
-      }
+      this.staminaTarget = constrain(this.staminaTarget, 0, this.maxStamina);
 
       this.frostbiteTarget -= attack.frostbite;
-      if (this.frostbiteTarget < 0) {
-        this.frostbiteTarget = 0;
-      }
+      this.frostbiteTarget = constrain(
+        this.frostbiteTarget,
+        0,
+        this.maxFrostbite
+      );
     }
   }
 
