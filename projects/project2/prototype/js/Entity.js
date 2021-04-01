@@ -17,9 +17,11 @@ class Entity {
   display() {
     push();
     fill(0, 255, 0);
-    ellipse(
+    image(
+      images.fish,
       this.mapX * width + this.x - player.mapX * width,
       this.mapY * height + this.y - player.mapY * height,
+      this.size,
       this.size
     );
     pop();

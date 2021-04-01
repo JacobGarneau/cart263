@@ -19,10 +19,28 @@ let playerData, terrainData; // JSON data
 let shrines = [];
 let entities = [];
 
-// p5: load JSON data
+let images = {
+  mountain: undefined,
+  tree: undefined,
+  glacier: undefined,
+  fish: undefined,
+  shrine: undefined,
+  ghost: undefined,
+  feather: undefined,
+};
+
+// p5: load JSON data and images
 function preload() {
   playerData = loadJSON("js/data/playerData.json");
   terrainData = loadJSON("js/data/terrainData.json");
+
+  images.mountain = loadImage("assets/images/mountain.svg");
+  images.tree = loadImage("assets/images/tree.svg");
+  images.glacier = loadImage("assets/images/glacier.svg");
+  images.fish = loadImage("assets/images/fish.svg");
+  images.shrine = loadImage("assets/images/shrine.svg");
+  images.ghost = loadImage("assets/images/ghost.svg");
+  images.feather = loadImage("assets/images/feather.svg");
 }
 
 // p5: creates the canvas and the object instances

@@ -61,36 +61,33 @@ class Map {
 
         // draw the glaciers
         for (let k = 0; k < mapGrid[i][j].template.glaciers.length; k++) {
-          push();
-          fill(0, 70, 255);
-          ellipse(
+          image(
+            images.glacier,
             cellX + mapGrid[i][j].template.glaciers[k].x,
             cellY + mapGrid[i][j].template.glaciers[k].y,
+            mapGrid[i][j].template.glaciers[k].size,
             mapGrid[i][j].template.glaciers[k].size
           );
-          pop();
         }
         // draw the trees
         for (let k = 0; k < mapGrid[i][j].template.trees.length; k++) {
-          push();
-          fill(150, 70, 0);
-          ellipse(
+          image(
+            images.tree,
             cellX + mapGrid[i][j].template.trees[k].x,
             cellY + mapGrid[i][j].template.trees[k].y,
+            mapGrid[i][j].template.trees[k].size,
             mapGrid[i][j].template.trees[k].size
           );
-          pop();
         }
         // draw the mountains
         for (let k = 0; k < mapGrid[i][j].template.mountains.length; k++) {
-          push();
-          fill(200);
-          ellipse(
+          image(
+            images.mountain,
             cellX + mapGrid[i][j].template.mountains[k].x,
             cellY + mapGrid[i][j].template.mountains[k].y,
+            mapGrid[i][j].template.mountains[k].size,
             mapGrid[i][j].template.mountains[k].size
           );
-          pop();
         }
       }
     }
