@@ -140,7 +140,7 @@ class Player {
           hitboxX = this.x + this.attackY;
           hitboxY = this.y - this.attackX;
         }
-        ellipse(hitboxX, hitboxY, this.attackSize);
+        ellipse(hitboxX, hitboxY, this.attackSize); // display the peck attack's hitbox
         if (
           dist(hitboxX, hitboxY, entities[i].x, entities[i].y) <=
             this.attackSize / 2 + entities[i].size / 2 &&

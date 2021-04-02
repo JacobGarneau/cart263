@@ -15,24 +15,13 @@ class Entity {
 
   // display the entity
   display() {
-    push();
-    fill(0, 255, 0);
-    image(
-      images.fish,
-      this.mapX * width + this.x - player.mapX * width,
-      this.mapY * height + this.y - player.mapY * height,
-      this.size,
-      this.size
-    );
-    pop();
-
     this.updateStats();
 
     push();
     fill(0);
     rect(
       this.mapX * width + this.x - this.size / 2 - player.mapX * width,
-      this.mapY * height + this.y - 36 - player.mapY * height,
+      this.mapY * height + this.y - 16 - player.mapY * height,
       this.size,
       6
     );
@@ -41,7 +30,7 @@ class Entity {
     let healthBarSize = (this.size / this.maxHealth) * this.health;
     rect(
       this.mapX * width + this.x - this.size / 2 - player.mapX * width,
-      this.mapY * height + this.y - 36 - player.mapY * height,
+      this.mapY * height + this.y - 16 - player.mapY * height,
       healthBarSize,
       6
     );
