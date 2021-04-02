@@ -1,0 +1,20 @@
+{
+  "stats": {
+    "health": 60,
+    "frostbite": 60,
+    "stamina": 60
+  },
+  "attacks": {
+    "peck": {
+      "name": "peck",
+      "posX": 0,
+      "posY": 20,
+      "size": 32,
+      "hitlag": 40,
+      "activeFrames": 8,
+      "damage": 12,
+      "frostbite": 0,
+      "stamina": 10
+    }
+  }
+}
