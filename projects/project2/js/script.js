@@ -101,6 +101,14 @@ function mouseClicked() {
   player.attack(playerData.attacks.peck);
 }
 
+// p5: handle keyboard inputs
+function keyPressed() {
+  if (keyCode === 77) {
+    // press M to open the minimap
+    minimap.toggle();
+  }
+}
+
 // dynamically converts position values to adapt to current screen size
 function dyn(value, axis) {
   let result;

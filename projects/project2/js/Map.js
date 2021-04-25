@@ -74,9 +74,7 @@ class Map {
           image(
             images.tree,
             cellX + dyn(mapGrid[i][j].template.trees[k].x, `x`),
-            cellY + dyn(mapGrid[i][j].template.trees[k].y, `y`),
-            mapGrid[i][j].template.trees[k].size,
-            mapGrid[i][j].template.trees[k].size
+            cellY + dyn(mapGrid[i][j].template.trees[k].y, `y`)
           );
         }
         // draw the mountains

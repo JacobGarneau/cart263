@@ -111,7 +111,6 @@ class Player {
     for (let i = 0; i < player.abilities.length; i++) {
       if (player.abilities[i].currentRecharge > 0) {
         player.abilities[i].currentRecharge--;
-        console.log(player.abilities[i].currentRecharge);
       }
     }
 

@@ -12,7 +12,7 @@
       "size": 32,
       "hitlag": 40,
       "activeFrames": 8,
-      "recharge": 40,
+      "recharge": 60,
       "damage": 12,
       "frostbite": 0,
       "stamina": 0,
