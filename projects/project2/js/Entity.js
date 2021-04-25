@@ -11,6 +11,14 @@ class Entity {
     this.mapX = Math.round(random(0, 9));
     this.mapY = Math.round(random(0, 9));
     this.iFrames = 0; // frames of intangibility, often used to avoid taking the same attack multiple times
+
+    for (let i = 0; i < MAP_WIDTH; i++) {
+      for (let j = 0; j < MAP_HEIGHT; j++) {
+        if (i === this.mapX && j === this.mapY) {
+          this.biome = mapGrid[i][j].biome;
+        }
+      }
+    }
   }
 
   // display the entity
@@ -67,6 +75,7 @@ class Entity {
   }
 
   die() {
+    console.log(this.biome);
     player.healthTarget += this.healthGain;
     player.healthTarget = constrain(player.healthTarget, 0, player.maxHealth);
     entities.splice(entities.indexOf(this), 1);

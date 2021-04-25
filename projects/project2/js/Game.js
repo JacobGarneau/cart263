@@ -6,6 +6,12 @@ class Game extends Entity {
     this.healthTarget = this.health;
     this.healthGain = 15;
 
+    if (this.biome === `sea`) {
+      this.icon = images.fish;
+    } else {
+      this.icon = images.rabbit;
+    }
+
     entities.push(this);
   }
 
@@ -14,7 +20,7 @@ class Game extends Entity {
     push();
     fill(0, 255, 0);
     image(
-      images.fish,
+      this.icon,
       this.mapX * width + this.x - player.mapX * width - 20,
       this.mapY * height + this.y - player.mapY * height,
       this.size,

@@ -43,6 +43,7 @@ function preload() {
   images.tree = loadImage("assets/images/tree.svg");
   images.glacier = loadImage("assets/images/glacier.svg");
   images.fish = loadImage("assets/images/fish.svg");
+  images.rabbit = loadImage("assets/images/rabbit.svg");
   images.shrine = loadImage("assets/images/shrine.svg");
   images.ghost = loadImage("assets/images/ghost.svg");
   images.feather = loadImage("assets/images/feather.svg");
