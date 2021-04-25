@@ -48,6 +48,7 @@ function preload() {
   images.ghost = loadImage("assets/images/ghost.svg");
   images.feather = loadImage("assets/images/feather.svg");
   images.attack = loadImage("assets/images/attack.svg");
+  images.sun = loadImage("assets/images/sun.svg");
 
   icons.push(images.attack);
 }
@@ -67,6 +68,7 @@ function setup() {
       for (let k = 0; k < Math.floor(random(2, 6)); k++) {
         let game = new Game();
       }
+      let spirit = new Spirit();
     }
   }
 }

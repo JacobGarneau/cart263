@@ -47,7 +47,10 @@ class Map {
         // draw the map cells
         let cellX = i * width - player.mapX * width;
         let cellY = j * height - player.mapY * height;
+        push();
+        noStroke();
         rect(cellX, cellY, width, height);
+        pop();
       }
     }
   }

@@ -26,6 +26,7 @@ class Entity {
     this.updateStats();
 
     push();
+    noStroke();
     fill(0);
     rect(
       this.mapX * width + this.x - this.size / 2 - player.mapX * width,
@@ -75,7 +76,6 @@ class Entity {
   }
 
   die() {
-    console.log(this.biome);
     player.healthTarget += this.healthGain;
     player.healthTarget = constrain(player.healthTarget, 0, player.maxHealth);
     entities.splice(entities.indexOf(this), 1);

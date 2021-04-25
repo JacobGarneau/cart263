@@ -17,20 +17,9 @@ class UI {
       height: 16,
       width: 3,
       fill: {
-        r: 0,
-        g: 127,
-        b: 255,
-      },
-    };
-    this.staminaBar = {
-      x: 20,
-      y: 68,
-      height: 16,
-      width: 3,
-      fill: {
-        r: 0,
-        g: 255,
-        b: 127,
+        r: 255,
+        g: 143,
+        b: 81,
       },
     };
     this.abilities = {
@@ -58,6 +47,8 @@ class UI {
 
   drawGauges() {
     // draw health bar container
+    push();
+    noStroke();
     fill(0);
     rect(
       this.healthBar.x,
@@ -97,27 +88,12 @@ class UI {
       this.frostbiteBar.height
     );
 
-    // draw stamina bar container
+    // draw sun sun points
+    image(images.sun, 20, 66, 30, 30);
     fill(0);
-    rect(
-      this.staminaBar.x,
-      this.staminaBar.y,
-      this.staminaBar.width * player.maxStamina,
-      this.staminaBar.height
-    );
-
-    // draw stamina bar fill
-    fill(
-      this.staminaBar.fill.r,
-      this.staminaBar.fill.g,
-      this.staminaBar.fill.b
-    );
-    rect(
-      this.staminaBar.x,
-      this.staminaBar.y,
-      this.staminaBar.width * player.stamina,
-      this.staminaBar.height
-    );
+    textSize(24);
+    text(player.sunPoints, 60, 88);
+    pop();
   }
 
   drawAbilities() {

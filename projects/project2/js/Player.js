@@ -11,6 +11,7 @@ class Player {
     this.mapY = 5; // vertical position on the map tiles
     this.movable = true;
     this.abilities = [playerData.attacks.peck];
+    this.sunPoints = 0;
 
     this.maxHealth = playerData.stats.health;
     this.health = this.maxHealth;
