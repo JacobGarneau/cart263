@@ -63,8 +63,8 @@ class Map {
         for (let k = 0; k < mapGrid[i][j].template.glaciers.length; k++) {
           image(
             images.glacier,
-            cellX + mapGrid[i][j].template.glaciers[k].x,
-            cellY + mapGrid[i][j].template.glaciers[k].y,
+            cellX + dyn(mapGrid[i][j].template.glaciers[k].x, `x`),
+            cellY + dyn(mapGrid[i][j].template.glaciers[k].y, `y`),
             mapGrid[i][j].template.glaciers[k].size,
             mapGrid[i][j].template.glaciers[k].size
           );
@@ -73,8 +73,8 @@ class Map {
         for (let k = 0; k < mapGrid[i][j].template.trees.length; k++) {
           image(
             images.tree,
-            cellX + mapGrid[i][j].template.trees[k].x,
-            cellY + mapGrid[i][j].template.trees[k].y,
+            cellX + dyn(mapGrid[i][j].template.trees[k].x, `x`),
+            cellY + dyn(mapGrid[i][j].template.trees[k].y, `y`),
             mapGrid[i][j].template.trees[k].size,
             mapGrid[i][j].template.trees[k].size
           );

@@ -7,6 +7,11 @@ Jacob Garneau
 Find your way in the Arctic and survive the cold!
 */
 
+const WORK_WINDOW_SIZE = {
+  x: 1536,
+  y: 754,
+};
+
 let mapGrid = [];
 
 const MAP_WIDTH = 10;
@@ -90,4 +95,15 @@ function draw() {
 // p5: handle mouse clicks
 function mouseClicked() {
   player.attack(playerData.attacks.peck);
+}
+
+// dynamically converts position values to adapt to current screen size
+function dyn(value, axis) {
+  let result;
+  if (axis === `x`) {
+    result = (value / WORK_WINDOW_SIZE.x) * width;
+  } else if (axis === `y`) {
+    result = (value / WORK_WINDOW_SIZE.y) * height;
+  }
+  return result;
 }

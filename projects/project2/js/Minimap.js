@@ -1,7 +1,7 @@
 class Minimap {
   constructor() {
-    this.x = width - 400;
-    this.y = height - 210;
+    this.x = width - dyn(400, `x`);
+    this.y = height - dyn(210, `y`);
   }
 
   // display the minimap
