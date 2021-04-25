@@ -37,11 +37,11 @@ class Map {
       for (let j = 0; j < MAP_HEIGHT; j++) {
         // set biome color
         if (mapGrid[i][j].biome === `sea`) {
-          fill(0, 150, 150);
+          fill(165, 233, 255);
         } else if (mapGrid[i][j].biome === `snow`) {
-          fill(255);
+          fill(243, 253, 255);
         } else if (mapGrid[i][j].biome === `mountains`) {
-          fill(150);
+          fill(196);
         }
 
         // draw the map cells

@@ -109,8 +109,9 @@ class Player {
     }
 
     for (let i = 0; i < player.abilities.length; i++) {
-      if (player.abilities[i].currentHitlag > 0) {
-        player.abilities[i].currentHitlag--;
+      if (player.abilities[i].currentRecharge > 0) {
+        player.abilities[i].currentRecharge--;
+        console.log(player.abilities[i].currentRecharge);
       }
     }
 
@@ -163,29 +164,36 @@ class Player {
   // perform attacks
   attack(attack) {
     if (this.hitlag === 0 && this.stamina >= attack.stamina) {
-      this.currentAction = attack.name;
-      this.active = attack.activeFrames;
-      this.attackX = attack.posX;
-      this.attackY = attack.posY;
-      this.attackSize = attack.size;
-      // this.hitlag = attack.hitlag;
-      this.damage = attack.damage;
-
       for (let i = 0; i < player.abilities.length; i++) {
-        if (player.abilities[i].name === `peck`) {
-          player.abilities[i].currentHitlag = attack.hitlag;
+        if (
+          player.abilities[i].name === attack.name &&
+          player.abilities[i].currentRecharge === 0
+        ) {
+          this.currentAction = attack.name;
+          this.active = attack.activeFrames;
+          this.attackX = attack.posX;
+          this.attackY = attack.posY;
+          this.attackSize = attack.size;
+          this.hitlag = attack.hitlag;
+          this.damage = attack.damage;
+
+          player.abilities[i].currentRecharge = attack.recharge;
+
+          this.staminaTarget -= attack.stamina;
+          this.staminaTarget = constrain(
+            this.staminaTarget,
+            0,
+            this.maxStamina
+          );
+
+          this.frostbiteTarget -= attack.frostbite;
+          this.frostbiteTarget = constrain(
+            this.frostbiteTarget,
+            0,
+            this.maxFrostbite
+          );
         }
       }
-
-      this.staminaTarget -= attack.stamina;
-      this.staminaTarget = constrain(this.staminaTarget, 0, this.maxStamina);
-
-      this.frostbiteTarget -= attack.frostbite;
-      this.frostbiteTarget = constrain(
-        this.frostbiteTarget,
-        0,
-        this.maxFrostbite
-      );
     }
   }
 

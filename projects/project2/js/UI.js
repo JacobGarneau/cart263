@@ -133,13 +133,18 @@ class UI {
         this.abilities.size,
         this.abilities.size,
         -90,
-        (360 / player.abilities[i].hitlag) *
-          -player.abilities[i].currentHitlag -
+        (360 / player.abilities[i].recharge) *
+          -player.abilities[i].currentRecharge -
           90
       );
 
-      if (player.abilities[i].currentHitlag > 0) {
-        fill(187);
+      if (player.abilities[i].currentRecharge > 0) {
+        if (player.hitlag > 0) {
+          fill(100);
+        } else {
+          fill(187);
+        }
+
         ellipse(
           this.abilities.x,
           this.abilities.y - i * (this.abilities.size + this.abilities.spacing),
