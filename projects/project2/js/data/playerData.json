@@ -10,11 +10,28 @@
       "posX": 0,
       "posY": 20,
       "size": 32,
-      "hitlag": 40,
+      "hitlag": 400,
       "activeFrames": 8,
       "damage": 12,
       "frostbite": 0,
-      "stamina": 10
+      "stamina": 0,
+      "command": "LMB",
+      "icon": 0,
+      "currentHitlag": 0
+    },
+    "wingAttack": {
+      "name": "peck",
+      "posX": 0,
+      "posY": 20,
+      "size": 32,
+      "hitlag": 400,
+      "activeFrames": 8,
+      "damage": 12,
+      "frostbite": 0,
+      "stamina": 0,
+      "command": "LMB",
+      "icon": 0,
+      "currentHitlag": 0
     }
   }
 }

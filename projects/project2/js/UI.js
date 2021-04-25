@@ -33,10 +33,30 @@ class UI {
         b: 127,
       },
     };
+    this.abilities = {
+      x: 80,
+      y: height - 80,
+      size: 100,
+      borderSize: 6,
+      spacing: 20,
+      commandShift: 38,
+      commandSize: 32,
+      commandBorderRadius: 6,
+      fill: {
+        r: 246,
+        g: 122,
+        b: 51,
+      },
+    };
   }
 
   // display the UI
   display() {
+    this.drawGauges();
+    this.drawAbilities();
+  }
+
+  drawGauges() {
     // draw health bar container
     fill(0);
     rect(
@@ -98,5 +118,76 @@ class UI {
       this.staminaBar.width * player.stamina,
       this.staminaBar.height
     );
+  }
+
+  drawAbilities() {
+    // draw abilities
+    for (let i = 0; i < player.abilities.length; i++) {
+      // draw the icon
+      push();
+      noStroke();
+      fill(this.abilities.fill.r, this.abilities.fill.g, this.abilities.fill.b);
+      arc(
+        this.abilities.x,
+        this.abilities.y - i * (this.abilities.size + this.abilities.spacing),
+        this.abilities.size,
+        this.abilities.size,
+        -90,
+        (360 / player.abilities[i].hitlag) *
+          -player.abilities[i].currentHitlag -
+          90
+      );
+
+      if (player.abilities[i].currentHitlag > 0) {
+        fill(187);
+        ellipse(
+          this.abilities.x,
+          this.abilities.y - i * (this.abilities.size + this.abilities.spacing),
+          this.abilities.size - this.abilities.borderSize * 2
+        );
+      } else {
+        ellipse(
+          this.abilities.x,
+          this.abilities.y - i * (this.abilities.size + this.abilities.spacing),
+          this.abilities.size
+        );
+      }
+
+      imageMode(CENTER);
+      image(
+        icons[player.abilities[i].icon],
+        this.abilities.x,
+        this.abilities.y - i * (this.abilities.size + this.abilities.spacing)
+      );
+      pop();
+
+      // draw the command indication
+      push();
+      fill(0);
+      rectMode(CENTER);
+      rect(
+        this.abilities.x + this.abilities.commandShift,
+        this.abilities.y +
+          this.abilities.commandShift -
+          i * (this.abilities.size + this.abilities.spacing),
+        this.abilities.commandSize,
+        this.abilities.commandSize,
+        this.abilities.commandBorderRadius,
+        this.abilities.commandBorderRadius,
+        this.abilities.commandBorderRadius,
+        this.abilities.commandBorderRadius
+      );
+
+      fill(255);
+      textAlign(CENTER, CENTER);
+      text(
+        player.abilities[i].command,
+        this.abilities.x + this.abilities.commandShift,
+        this.abilities.y +
+          this.abilities.commandShift -
+          i * (this.abilities.size + this.abilities.spacing)
+      );
+      pop();
+    }
   }
 }

@@ -10,6 +10,7 @@ class Player {
     this.mapX = 5; // horizontal position on the map tiles
     this.mapY = 5; // vertical position on the map tiles
     this.movable = true;
+    this.abilities = [playerData.attacks.peck];
 
     this.maxHealth = playerData.stats.health;
     this.health = this.maxHealth;
@@ -107,6 +108,12 @@ class Player {
       this.hitlag--;
     }
 
+    for (let i = 0; i < player.abilities.length; i++) {
+      if (player.abilities[i].currentHitlag > 0) {
+        player.abilities[i].currentHitlag--;
+      }
+    }
+
     if (this.active > 0) {
       this.active--;
     } else {
@@ -161,8 +168,14 @@ class Player {
       this.attackX = attack.posX;
       this.attackY = attack.posY;
       this.attackSize = attack.size;
-      this.hitlag = attack.hitlag;
+      // this.hitlag = attack.hitlag;
       this.damage = attack.damage;
+
+      for (let i = 0; i < player.abilities.length; i++) {
+        if (player.abilities[i].name === `peck`) {
+          player.abilities[i].currentHitlag = attack.hitlag;
+        }
+      }
 
       this.staminaTarget -= attack.stamina;
       this.staminaTarget = constrain(this.staminaTarget, 0, this.maxStamina);

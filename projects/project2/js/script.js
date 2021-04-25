@@ -32,6 +32,7 @@ let images = {
   ghost: undefined,
   feather: undefined,
 };
+let icons = [];
 
 // p5: load JSON data and images
 function preload() {
@@ -45,6 +46,9 @@ function preload() {
   images.shrine = loadImage("assets/images/shrine.svg");
   images.ghost = loadImage("assets/images/ghost.svg");
   images.feather = loadImage("assets/images/feather.svg");
+  images.attack = loadImage("assets/images/attack.svg");
+
+  icons.push(images.attack);
 }
 
 // p5: creates the canvas and the object instances
