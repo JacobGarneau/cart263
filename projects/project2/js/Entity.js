@@ -1,5 +1,5 @@
 class Entity {
-  constructor() {
+  constructor(mapX, mapY) {
     this.x = random(0, width);
     this.y = random(0, height);
     this.size = 40;
@@ -48,8 +48,10 @@ class Entity {
 
   // randomly move the entity
   move() {
-    this.x += random(-2, 2);
-    this.y += random(-2, 2);
+    this.x += this.vx;
+    this.y += this.vy;
+    this.x = constrain(this.x, this.size / 2, width - this.size / 2);
+    this.y = constrain(this.y, this.size / 2, height - this.size / 2);
   }
 
   takeDamage(amount, frames) {

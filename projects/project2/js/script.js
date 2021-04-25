@@ -1,7 +1,7 @@
 "use strict";
 
 /**
-Arctic Phoenix
+Phoenix of the Arctic
 Jacob Garneau
 
 Find your way in the Arctic and survive the cold!
@@ -66,14 +66,14 @@ function setup() {
   for (let i = 0; i < MAP_WIDTH; i++) {
     for (let j = 0; j < MAP_HEIGHT; j++) {
       for (let k = 0; k < Math.floor(random(2, 6)); k++) {
-        let game = new Game();
+        let game = new Game(i, j);
       }
-      let spirit = new Spirit();
+      let spirit = new Spirit(i, j);
     }
   }
 }
 
-// p5:
+// p5: draw the game elements on the canvas
 function draw() {
   map.displayTerrain();
   map.changeTile();
@@ -91,7 +91,6 @@ function draw() {
   map.displayContents();
 
   minimap.display();
-
   ui.display();
 
   for (let i = 0; i < shrines.length; i++) {

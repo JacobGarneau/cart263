@@ -1,6 +1,6 @@
 class Spirit extends Entity {
-  constructor() {
-    super();
+  constructor(mapX, mapY) {
+    super(mapX, mapY);
     this.maxHealth = 150;
     this.health = this.maxHealth;
     this.healthTarget = this.health;
@@ -65,8 +65,7 @@ class Spirit extends Entity {
       }
     }
 
-    this.x += this.vx;
-    this.y += this.vy;
+    super.move();
   }
 
   die() {
