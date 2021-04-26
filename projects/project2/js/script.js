@@ -51,6 +51,7 @@ function preload() {
   images.feather = loadImage("assets/images/feather.svg");
   images.attack = loadImage("assets/images/attack.svg");
   images.sun = loadImage("assets/images/sun.svg");
+  images.sun2 = loadImage("assets/images/sun2.svg");
   images.flame = loadImage("assets/images/flame.svg");
   images.fireball = loadImage("assets/images/fireball.svg");
   images.bird = loadImage("assets/images/bird.svg");
@@ -134,7 +135,7 @@ function mouseClicked() {
 
 // p5: handle keyboard inputs
 function keyPressed() {
-  if (keyCode === 77) {
+  if (keyCode === 77 && player.minimap && player.movable) {
     // press M to open the minimap
     minimap.toggle();
   } else if (keyCode === 81) {

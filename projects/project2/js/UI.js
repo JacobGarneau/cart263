@@ -96,6 +96,7 @@ class UI {
     image(images.sun, 20, 66, 30, 30);
     fill(0);
     textSize(24);
+    textStyle(BOLD);
     text(player.sunPoints, 60, 88);
     pop();
   }
@@ -174,6 +175,7 @@ class UI {
 
       fill(255);
       textAlign(CENTER, CENTER);
+      textStyle(BOLD);
       text(
         player.abilities[i].command,
         this.abilities.x + this.abilities.commandShift,
@@ -205,8 +207,19 @@ class UI {
 
   drawMenu() {
     push();
+    noStroke();
     fill(0, 0, 0, 150);
     rect(0, 0, width, height);
+
+    fill(199, 66, 66);
+    rectMode(CENTER);
+    rect(width / 2, height / 2, dyn(900, `x`), dyn(600, `y`));
+
+    fill(255);
+    textAlign(CENTER, CENTER);
+    textSize(64);
+    textStyle(BOLD);
+    text(`ABILITIES`, width / 2, dyn(160, `y`));
     pop();
   }
 }

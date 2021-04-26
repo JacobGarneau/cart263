@@ -6,6 +6,18 @@ class Shrine extends Structure {
     shrines.push(this);
   }
 
+  display() {
+    super.display();
+    push();
+    imageMode(CENTER);
+    image(
+      images.sun2,
+      this.mapX * width - player.mapX * width + this.x,
+      this.mapY * height - player.mapY * height + this.y + 40
+    );
+    pop();
+  }
+
   interact() {
     let d = dist(
       this.mapX * width - player.mapX * width + this.x,

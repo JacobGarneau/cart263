@@ -10,11 +10,9 @@ class Player {
     this.mapX = 5; // horizontal position on the map tiles
     this.mapY = 5; // vertical position on the map tiles
     this.movable = true;
-    this.abilities = [
-      playerData.attacks.peck,
-      playerData.attacks.wingAttack,
-      playerData.attacks.fireBreath,
-    ];
+    this.abilities = [playerData.attacks.peck];
+    this.minimap = true;
+
     this.sunPoints = 0;
     this.currentSunPoints = 0;
     this.nearShrine = false;
@@ -111,17 +109,17 @@ class Player {
 
   // handle the player's actions and attacks
   handleActions() {
-    if (this.hitlag > 0) {
+    if (this.hitlag > 0 && this.movable) {
       this.hitlag--;
     }
 
     for (let i = 0; i < player.abilities.length; i++) {
-      if (player.abilities[i].currentRecharge > 0) {
+      if (player.abilities[i].currentRecharge > 0 && this.movable) {
         player.abilities[i].currentRecharge--;
       }
     }
 
-    if (this.active > 0) {
+    if (this.active > 0 && this.movable) {
       this.active--;
     } else {
       this.currentAction = undefined;
