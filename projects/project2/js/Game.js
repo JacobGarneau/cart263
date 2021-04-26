@@ -38,39 +38,41 @@ class Game extends Entity {
   }
 
   move() {
-    let distance = dist(
-      this.mapX * width + this.x - player.mapX * width,
-      this.mapY * height + this.y - player.mapY * height,
-      player.x,
-      player.y
-    );
+    if (this.movable) {
+      let distance = dist(
+        this.mapX * width + this.x - player.mapX * width,
+        this.mapY * height + this.y - player.mapY * height,
+        player.x,
+        player.y
+      );
 
-    if (this.mapX === player.mapX && this.mapY === player.mapY) {
-      if (this.x > player.x && distance <= this.detectionDistance) {
-        this.vx += this.ax;
-      } else if (this.x < player.x && distance <= this.detectionDistance) {
-        this.vx -= this.ax;
-      } else if (distance > this.detectionDistance) {
-        if (this.vx > 0) {
-          this.vx -= this.ax;
-        } else if (this.vx < 0) {
+      if (this.mapX === player.mapX && this.mapY === player.mapY) {
+        if (this.x > player.x && distance <= this.detectionDistance) {
           this.vx += this.ax;
+        } else if (this.x < player.x && distance <= this.detectionDistance) {
+          this.vx -= this.ax;
+        } else if (distance > this.detectionDistance) {
+          if (this.vx > 0) {
+            this.vx -= this.ax;
+          } else if (this.vx < 0) {
+            this.vx += this.ax;
+          }
         }
-      }
-      this.vx = constrain(this.vx, -this.maxSpeed, this.maxSpeed);
+        this.vx = constrain(this.vx, -this.maxSpeed, this.maxSpeed);
 
-      if (this.y > player.y && distance <= this.detectionDistance) {
-        this.vy += this.ay / 2;
-      } else if (this.y < player.y && distance <= this.detectionDistance) {
-        this.vy -= this.ay;
-      } else if (distance > this.detectionDistance) {
-        if (this.vy > 0) {
+        if (this.y > player.y && distance <= this.detectionDistance) {
+          this.vy += this.ay / 2;
+        } else if (this.y < player.y && distance <= this.detectionDistance) {
           this.vy -= this.ay;
-        } else if (this.vy < 0) {
-          this.vy += this.ay;
+        } else if (distance > this.detectionDistance) {
+          if (this.vy > 0) {
+            this.vy -= this.ay;
+          } else if (this.vy < 0) {
+            this.vy += this.ay;
+          }
         }
+        this.vy = constrain(this.vy, -this.maxSpeed, this.maxSpeed);
       }
-      this.vy = constrain(this.vy, -this.maxSpeed, this.maxSpeed);
     }
 
     super.move();

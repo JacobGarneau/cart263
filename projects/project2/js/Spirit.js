@@ -31,37 +31,39 @@ class Spirit extends Entity {
   }
 
   move() {
-    if (this.mapX === player.mapX && this.mapY === player.mapY) {
-      if (this.x < player.x) {
-        this.vx += this.ax;
-        this.vx = constrain(this.vx, -this.maxSpeed, this.maxSpeed);
-      } else if (this.x > player.x) {
-        this.vx -= this.ax;
-        this.vx = constrain(this.vx, -this.maxSpeed, this.maxSpeed);
-      }
+    if (this.movable) {
+      if (this.mapX === player.mapX && this.mapY === player.mapY) {
+        if (this.x < player.x) {
+          this.vx += this.ax;
+          this.vx = constrain(this.vx, -this.maxSpeed, this.maxSpeed);
+        } else if (this.x > player.x) {
+          this.vx -= this.ax;
+          this.vx = constrain(this.vx, -this.maxSpeed, this.maxSpeed);
+        }
 
-      if (this.y < player.y) {
-        this.vy += this.ay;
-        this.vy = constrain(this.vy, -this.maxSpeed, this.maxSpeed);
-      } else if (this.y > player.y) {
-        this.vy -= this.ay;
-        this.vy = constrain(this.vy, -this.maxSpeed, this.maxSpeed);
-      }
-    } else {
-      if (this.x < width / 2) {
-        this.vx += this.ax;
-        this.vx = constrain(this.vx, -this.maxSpeed, this.maxSpeed);
-      } else if (this.x > width / 2) {
-        this.vx -= this.ax;
-        this.vx = constrain(this.vx, -this.maxSpeed, this.maxSpeed);
-      }
+        if (this.y < player.y) {
+          this.vy += this.ay;
+          this.vy = constrain(this.vy, -this.maxSpeed, this.maxSpeed);
+        } else if (this.y > player.y) {
+          this.vy -= this.ay;
+          this.vy = constrain(this.vy, -this.maxSpeed, this.maxSpeed);
+        }
+      } else {
+        if (this.x < width / 2) {
+          this.vx += this.ax;
+          this.vx = constrain(this.vx, -this.maxSpeed, this.maxSpeed);
+        } else if (this.x > width / 2) {
+          this.vx -= this.ax;
+          this.vx = constrain(this.vx, -this.maxSpeed, this.maxSpeed);
+        }
 
-      if (this.y < height / 2) {
-        this.vy += this.ay;
-        this.vy = constrain(this.vy, -this.maxSpeed, this.maxSpeed);
-      } else if (this.y > height / 2) {
-        this.vy -= this.ay;
-        this.vy = constrain(this.vy, -this.maxSpeed, this.maxSpeed);
+        if (this.y < height / 2) {
+          this.vy += this.ay;
+          this.vy = constrain(this.vy, -this.maxSpeed, this.maxSpeed);
+        } else if (this.y > height / 2) {
+          this.vy -= this.ay;
+          this.vy = constrain(this.vy, -this.maxSpeed, this.maxSpeed);
+        }
       }
     }
 

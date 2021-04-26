@@ -13,6 +13,7 @@ class Entity {
     this.healthGain = 0;
     this.mapX = mapX;
     this.mapY = mapY;
+    this.movable = true;
     this.iFrames = 0; // frames of intangibility, often used to avoid taking the same attack multiple times
 
     for (let i = 0; i < MAP_WIDTH; i++) {
@@ -51,10 +52,12 @@ class Entity {
 
   // randomly move the entity
   move() {
-    this.x += this.vx;
-    this.y += this.vy;
-    this.x = constrain(this.x, this.size / 2, width - this.size / 2);
-    this.y = constrain(this.y, this.size / 2, height - this.size / 2);
+    if (this.movable) {
+      this.x += this.vx;
+      this.y += this.vy;
+      this.x = constrain(this.x, this.size / 2, width - this.size / 2);
+      this.y = constrain(this.y, this.size / 2, height - this.size / 2);
+    }
   }
 
   takeDamage(amount, frames) {

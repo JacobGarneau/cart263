@@ -43,6 +43,10 @@ class UI {
   display() {
     this.drawGauges();
     this.drawAbilities();
+
+    if (this.menuOpen) {
+      this.drawMenu();
+    }
   }
 
   drawGauges() {
@@ -179,5 +183,30 @@ class UI {
       );
       pop();
     }
+  }
+
+  toggleMenu() {
+    if (this.menuOpen) {
+      this.menuOpen = false;
+      player.movable = true;
+
+      for (let i = 0; i < entities.length; i++) {
+        entities[i].movable = true;
+      }
+    } else {
+      this.menuOpen = true;
+      player.movable = false;
+
+      for (let i = 0; i < entities.length; i++) {
+        entities[i].movable = false;
+      }
+    }
+  }
+
+  drawMenu() {
+    push();
+    fill(0, 0, 0, 150);
+    rect(0, 0, width, height);
+    pop();
   }
 }

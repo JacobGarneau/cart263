@@ -72,6 +72,7 @@ function setup() {
         let game = new Game(i, j);
       }
       let spirit = new Spirit(i, j);
+      let shrine = new Shrine(i, j, width / 2, height / 2, images.shrine);
     }
   }
 }
@@ -99,11 +100,26 @@ function draw() {
   map.displayContents();
 
   minimap.display();
-  ui.display();
 
   for (let i = 0; i < shrines.length; i++) {
     shrines[i].display();
+    shrines[i].interact();
+
+    let d = dist(
+      shrines[i].mapX * width - player.mapX * width + shrines[i].x,
+      shrines[i].mapY * height - player.mapY * height + shrines[i].y,
+      player.x,
+      player.y
+    );
+    if (d < shrines[i].interactionRange) {
+      player.nearShrine = true;
+      break;
+    } else {
+      player.nearShrine = false;
+    }
   }
+
+  ui.display();
 }
 
 // p5: handle mouse clicks
@@ -122,6 +138,9 @@ function keyPressed() {
   } else if (keyCode === 69) {
     // press E to shoot a fireball
     player.attack(playerData.attacks.fireBreath);
+  } else if (keyCode === 32 && player.nearShrine) {
+    // press SPACEBAR to interact with a shrine
+    ui.toggleMenu();
   }
 }
 

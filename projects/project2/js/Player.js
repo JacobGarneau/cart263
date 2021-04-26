@@ -17,6 +17,7 @@ class Player {
     ];
     this.sunPoints = 0;
     this.currentSunPoints = 0;
+    this.nearShrine = false;
 
     this.maxHealth = playerData.stats.health;
     this.health = this.maxHealth;
@@ -34,9 +35,11 @@ class Player {
     this.damage = 0;
 
     let frostbiteLoss = setInterval(() => {
-      this.frostbiteTarget--;
-      if (this.frostbiteTarget < 0) {
-        this.frostbiteTarget = 0;
+      if (this.movable) {
+        this.frostbiteTarget--;
+        if (this.frostbiteTarget < 0) {
+          this.frostbiteTarget = 0;
+        }
       }
     }, 3500);
   }
@@ -80,24 +83,24 @@ class Player {
         this.vxTarget = this.speed;
         this.rotation = 270;
       }
-    }
 
-    // gradually adjust horizontal speed
-    if (this.vxTarget > this.vx) {
-      this.vx += this.acceleration;
-    } else if (this.vxTarget < this.vx) {
-      this.vx -= this.acceleration;
-    }
-    // gradually adjust vertical speed
-    if (this.vyTarget > this.vy) {
-      this.vy += this.acceleration;
-    } else if (this.vyTarget < this.vy) {
-      this.vy -= this.acceleration;
-    }
+      // gradually adjust horizontal speed
+      if (this.vxTarget > this.vx) {
+        this.vx += this.acceleration;
+      } else if (this.vxTarget < this.vx) {
+        this.vx -= this.acceleration;
+      }
+      // gradually adjust vertical speed
+      if (this.vyTarget > this.vy) {
+        this.vy += this.acceleration;
+      } else if (this.vyTarget < this.vy) {
+        this.vy -= this.acceleration;
+      }
 
-    // move the player
-    this.x += this.vx;
-    this.y += this.vy;
+      // move the player
+      this.x += this.vx;
+      this.y += this.vy;
+    }
   }
 
   // handle the player's actions and attacks
@@ -164,7 +167,7 @@ class Player {
 
   // perform attacks
   attack(attack) {
-    if (this.hitlag === 0) {
+    if (this.hitlag === 0 && this.movable) {
       for (let i = 0; i < player.abilities.length; i++) {
         if (
           player.abilities[i].name === attack.name &&
@@ -175,26 +178,26 @@ class Player {
           this.hitlag = attack.hitlag;
           this.attackSize = attack.size;
           this.damage = attack.damage;
+
+          this.frostbiteTarget -= attack.frostbite;
+          this.frostbiteTarget = constrain(
+            this.frostbiteTarget,
+            0,
+            this.maxFrostbite
+          );
+
           if (this.currentAction === `fireBreath`) {
             this.attackX = [];
             this.attackY = [];
 
             let fireball = new Projectile(this.rotation);
             projectiles.push(fireball);
-            console.log(this.rotation);
           } else {
             this.attackX = attack.posX;
             this.attackY = attack.posY;
             this.attackSize = attack.size;
 
             player.abilities[i].currentRecharge = attack.recharge;
-
-            this.frostbiteTarget -= attack.frostbite;
-            this.frostbiteTarget = constrain(
-              this.frostbiteTarget,
-              0,
-              this.maxFrostbite
-            );
           }
         }
       }

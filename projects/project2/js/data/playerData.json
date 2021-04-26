@@ -41,7 +41,7 @@
       "hitlag": 40,
       "activeFrames": 40,
       "recharge": 40,
-      "damage": 200,
+      "damage": 30,
       "frostbite": 12,
       "command": "E",
       "icon": 2,
