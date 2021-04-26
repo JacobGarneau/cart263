@@ -33,6 +33,7 @@ class Player {
     this.attackX = 0; // horizontal position of the attack hitbox
     this.attackY = 0; // vertical position of the attack hitbox
     this.damage = 0;
+    this.attackFX;
 
     let frostbiteLoss = setInterval(() => {
       if (this.movable) {
@@ -51,8 +52,13 @@ class Player {
     translate(this.x, this.y);
     angleMode(DEGREES);
     rotate(this.rotation);
-    triangle(0, 24, 24, -16, -24, -16);
-    triangle(0, 24, 12, 4, -12, 4);
+
+    if (this.rotation === 90) {
+      scale(-1, 1);
+    }
+
+    imageMode(CENTER);
+    image(images.bird, 0, 0);
     pop();
   }
 
@@ -142,7 +148,7 @@ class Player {
           hitboxY = this.y + this.attackY[i];
         } else if (this.rotation === 90) {
           hitboxX = this.x - this.attackY[i];
-          hitboxY = this.y + this.attackX[i];
+          hitboxY = this.y - this.attackX[i];
         } else if (this.rotation === 180) {
           hitboxX = this.x - this.attackX[i];
           hitboxY = this.y - this.attackY[i];
@@ -150,7 +156,20 @@ class Player {
           hitboxX = this.x + this.attackY[i];
           hitboxY = this.y - this.attackX[i];
         }
-        ellipse(hitboxX, hitboxY, this.attackSize[i]); // display the peck attack's hitbox
+        // ellipse(hitboxX, hitboxY, this.attackSize[i]); // display the peck attack's hitbox
+
+        push();
+        translate(hitboxX, hitboxY);
+        angleMode(DEGREES);
+        if (i === 0) {
+          rotate(this.rotation);
+        } else if (i === 1) {
+          rotate(this.rotation + 180);
+        }
+        imageMode(CENTER);
+        image(this.attackFX, 0, 0, this.attackSize[i], this.attackSize[i]);
+        pop();
+
         for (let j = 0; j < entities.length; j++) {
           if (
             dist(hitboxX, hitboxY, entities[j].x, entities[j].y) <=
@@ -196,6 +215,7 @@ class Player {
             this.attackX = attack.posX;
             this.attackY = attack.posY;
             this.attackSize = attack.size;
+            this.attackFX = attackFX[attack.attackFX];
 
             player.abilities[i].currentRecharge = attack.recharge;
           }

@@ -34,6 +34,7 @@ let images = {
   feather: undefined,
 };
 let icons = [];
+let attackFX = [];
 
 // p5: load JSON data and images
 function preload() {
@@ -52,8 +53,12 @@ function preload() {
   images.sun = loadImage("assets/images/sun.svg");
   images.flame = loadImage("assets/images/flame.svg");
   images.fireball = loadImage("assets/images/fireball.svg");
+  images.bird = loadImage("assets/images/bird.svg");
+  images.wind = loadImage("assets/images/wind.svg");
+  images.strike = loadImage("assets/images/strike.svg");
 
   icons = [images.attack, images.feather, images.flame];
+  attackFX = [images.strike, images.wind, images.fireball];
 }
 
 // p5: creates the canvas and the object instances
@@ -92,10 +97,10 @@ function draw() {
     projectiles[i].display();
   }
 
-  player.display();
   player.move();
   player.handleActions();
   player.updateStats();
+  player.display();
 
   map.displayContents();
 

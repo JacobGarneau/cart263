@@ -7,8 +7,8 @@
   "attacks": {
     "peck": {
       "name": "peck",
-      "posX": [0],
-      "posY": [20],
+      "posX": [-4],
+      "posY": [24],
       "size": [32],
       "hitlag": 40,
       "activeFrames": 8,
@@ -17,6 +17,7 @@
       "frostbite": 0,
       "command": "LMB",
       "icon": 0,
+      "attackFX": 0,
       "currentRecharge": 0
     },
     "wingAttack": {
@@ -31,6 +32,7 @@
       "frostbite": 0,
       "command": "Q",
       "icon": 1,
+      "attackFX": 1,
       "currentRecharge": 0
     },
     "fireBreath": {
@@ -45,6 +47,7 @@
       "frostbite": 12,
       "command": "E",
       "icon": 2,
+      "attackFX": 2,
       "currentRecharge": 0
     }
   }

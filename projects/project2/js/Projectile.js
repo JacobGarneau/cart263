@@ -22,6 +22,10 @@ class Projectile {
     rotate(this.direction);
     imageMode(CENTER);
     image(images.fireball, 0, this.progress);
+
+    noStroke();
+    fill(255, 200, 0);
+    ellipse(0, this.progress + 6, 32);
     pop();
   }
 
