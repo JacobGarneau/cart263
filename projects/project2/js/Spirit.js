@@ -81,6 +81,8 @@ class Spirit extends Entity {
       player.maxFrostbite
     );
 
+    this.cell.spiritDefeated = true;
+
     for (let i = 0; i < entities.length; i++) {
       if (entities[i] instanceof Spirit) {
         entities[i].maxHealth += this.healthIncrease;

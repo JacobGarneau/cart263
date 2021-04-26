@@ -19,7 +19,7 @@ class Entity {
     for (let i = 0; i < MAP_WIDTH; i++) {
       for (let j = 0; j < MAP_HEIGHT; j++) {
         if (i === this.mapX && j === this.mapY) {
-          this.biome = mapGrid[i][j].biome;
+          this.cell = mapGrid[i][j];
         }
       }
     }

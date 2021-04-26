@@ -14,6 +14,7 @@ class Map {
         let cell = {
           biome: random(BIOMES),
           template: undefined,
+          spiritDefeated: false,
         };
 
         if (cell.biome === `sea`) {

@@ -219,7 +219,7 @@ class UI {
     textAlign(CENTER, CENTER);
     textSize(64);
     textStyle(BOLD);
-    text(`abilities.attacks`, width / 2, dyn(160, `y`));
+    text(`ABILITIES`, width / 2, dyn(160, `y`));
     pop();
   }
 }

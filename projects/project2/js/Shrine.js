@@ -8,14 +8,17 @@ class Shrine extends Structure {
 
   display() {
     super.display();
-    push();
-    imageMode(CENTER);
-    image(
-      images.sun2,
-      this.mapX * width - player.mapX * width + this.x,
-      this.mapY * height - player.mapY * height + this.y + 40
-    );
-    pop();
+
+    if (this.cell.spiritDefeated) {
+      push();
+      imageMode(CENTER);
+      image(
+        images.sun2,
+        this.mapX * width - player.mapX * width + this.x,
+        this.mapY * height - player.mapY * height + this.y + 40
+      );
+      pop();
+    }
   }
 
   interact() {
@@ -25,7 +28,7 @@ class Shrine extends Structure {
       player.x,
       player.y
     );
-    if (d < this.interactionRange) {
+    if (d < this.interactionRange && this.cell.spiritDefeated) {
       // draw command prompt
       push();
       fill(0);

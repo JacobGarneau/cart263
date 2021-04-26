@@ -14,7 +14,7 @@ class Game extends Entity {
 
     this.maxSpeed = 1;
 
-    if (this.biome === `sea`) {
+    if (this.cell.biome === `sea`) {
       this.icon = images.fish;
     } else {
       this.icon = images.rabbit;

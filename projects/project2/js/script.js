@@ -117,7 +117,7 @@ function draw() {
       player.x,
       player.y
     );
-    if (d < shrines[i].interactionRange) {
+    if (d < shrines[i].interactionRange && shrines[i].cell.spiritDefeated) {
       player.nearShrine = true;
       break;
     } else {
