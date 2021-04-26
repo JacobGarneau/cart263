@@ -103,7 +103,7 @@ class UI {
 
   drawAbilities() {
     // draw abilities
-    for (let i = 0; i < player.abilities.length; i++) {
+    for (let i = 0; i < player.abilities.attacks.length; i++) {
       // draw the icon
       push();
       noStroke();
@@ -114,12 +114,12 @@ class UI {
         this.abilities.size,
         this.abilities.size,
         -90,
-        (360 / player.abilities[i].recharge) *
-          -player.abilities[i].currentRecharge -
+        (360 / player.abilities.attacks[i].recharge) *
+          -player.abilities.attacks[i].currentRecharge -
           90
       );
 
-      if (player.abilities[i].currentRecharge > 0) {
+      if (player.abilities.attacks[i].currentRecharge > 0) {
         if (player.hitlag > 0) {
           fill(100);
         } else {
@@ -150,7 +150,7 @@ class UI {
 
       imageMode(CENTER);
       image(
-        icons[player.abilities[i].icon],
+        icons[player.abilities.attacks[i].icon],
         this.abilities.x,
         this.abilities.y - i * (this.abilities.size + this.abilities.spacing)
       );
@@ -177,7 +177,7 @@ class UI {
       textAlign(CENTER, CENTER);
       textStyle(BOLD);
       text(
-        player.abilities[i].command,
+        player.abilities.attacks[i].command,
         this.abilities.x + this.abilities.commandShift,
         this.abilities.y +
           this.abilities.commandShift -
@@ -219,7 +219,7 @@ class UI {
     textAlign(CENTER, CENTER);
     textSize(64);
     textStyle(BOLD);
-    text(`ABILITIES`, width / 2, dyn(160, `y`));
+    text(`abilities.attacks`, width / 2, dyn(160, `y`));
     pop();
   }
 }

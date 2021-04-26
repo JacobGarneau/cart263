@@ -1,10 +1,11 @@
 class Spirit extends Entity {
   constructor(mapX, mapY) {
     super(mapX, mapY);
-    this.maxHealth = 150;
+    this.maxHealth = 50;
     this.health = this.maxHealth;
     this.healthTarget = this.health;
     this.healthGain = 15;
+    this.healthIncrease = 25;
 
     this.vx = 0;
     this.vy = 0;
@@ -79,6 +80,15 @@ class Spirit extends Entity {
       0,
       player.maxFrostbite
     );
+
+    for (let i = 0; i < entities.length; i++) {
+      if (entities[i] instanceof Spirit) {
+        entities[i].maxHealth += this.healthIncrease;
+        entities[i].health += this.healthIncrease;
+        entities[i].healthTarget += this.healthIncrease;
+      }
+    }
+
     super.die();
   }
 }

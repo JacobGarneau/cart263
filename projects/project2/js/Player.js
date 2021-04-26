@@ -10,8 +10,11 @@ class Player {
     this.mapX = 5; // horizontal position on the map tiles
     this.mapY = 5; // vertical position on the map tiles
     this.movable = true;
-    this.abilities = [playerData.attacks.peck];
-    this.minimap = true;
+
+    this.abilities = {
+      attacks: [playerData.attacks.peck],
+      minimap: false,
+    };
 
     this.sunPoints = 0;
     this.currentSunPoints = 0;
@@ -113,9 +116,9 @@ class Player {
       this.hitlag--;
     }
 
-    for (let i = 0; i < player.abilities.length; i++) {
-      if (player.abilities[i].currentRecharge > 0 && this.movable) {
-        player.abilities[i].currentRecharge--;
+    for (let i = 0; i < player.abilities.attacks.length; i++) {
+      if (player.abilities.attacks[i].currentRecharge > 0 && this.movable) {
+        player.abilities.attacks[i].currentRecharge--;
       }
     }
 
@@ -185,10 +188,10 @@ class Player {
   // perform attacks
   attack(attack) {
     if (this.hitlag === 0 && this.movable) {
-      for (let i = 0; i < player.abilities.length; i++) {
+      for (let i = 0; i < player.abilities.attacks.length; i++) {
         if (
-          player.abilities[i].name === attack.name &&
-          player.abilities[i].currentRecharge === 0
+          player.abilities.attacks[i].name === attack.name &&
+          player.abilities.attacks[i].currentRecharge === 0
         ) {
           this.currentAction = attack.name;
           this.active = attack.activeFrames;
@@ -215,7 +218,7 @@ class Player {
             this.attackSize = attack.size;
             this.attackFX = attackFX[attack.attackFX];
 
-            player.abilities[i].currentRecharge = attack.recharge;
+            player.abilities.attacks[i].currentRecharge = attack.recharge;
           }
         }
       }

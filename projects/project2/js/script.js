@@ -135,7 +135,7 @@ function mouseClicked() {
 
 // p5: handle keyboard inputs
 function keyPressed() {
-  if (keyCode === 77 && player.minimap && player.movable) {
+  if (keyCode === 77 && player.abilities.minimap && player.movable) {
     // press M to open the minimap
     minimap.toggle();
   } else if (keyCode === 81) {
