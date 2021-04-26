@@ -1,5 +1,8 @@
 class Entity {
-  constructor(mapX, mapY) {
+  constructor(
+    mapX = Math.round(random(0, 9)),
+    mapY = Math.round(random(0, 9))
+  ) {
     this.x = random(0, width);
     this.y = random(0, height);
     this.size = 40;
@@ -8,8 +11,8 @@ class Entity {
     this.health = this.maxHealth;
     this.healthTarget = this.health;
     this.healthGain = 0;
-    this.mapX = Math.round(random(0, 9));
-    this.mapY = Math.round(random(0, 9));
+    this.mapX = mapX;
+    this.mapY = mapY;
     this.iFrames = 0; // frames of intangibility, often used to avoid taking the same attack multiple times
 
     for (let i = 0; i < MAP_WIDTH; i++) {

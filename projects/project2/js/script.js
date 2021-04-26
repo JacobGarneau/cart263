@@ -14,8 +14,8 @@ const WORK_WINDOW_SIZE = {
 
 let mapGrid = [];
 
-const MAP_WIDTH = 10;
-const MAP_HEIGHT = 10;
+const MAP_WIDTH = 11;
+const MAP_HEIGHT = 11;
 const BIOMES = [`sea`, `snow`, `snow`, `snow`, `mountains`, `mountains`];
 
 let map, player, minimap, ui; // objects
@@ -50,7 +50,7 @@ function preload() {
   images.attack = loadImage("assets/images/attack.svg");
   images.sun = loadImage("assets/images/sun.svg");
 
-  icons.push(images.attack);
+  icons = [images.attack, images.feather];
 }
 
 // p5: creates the canvas and the object instances
@@ -108,6 +108,9 @@ function keyPressed() {
   if (keyCode === 77) {
     // press M to open the minimap
     minimap.toggle();
+  } else if (keyCode === 81) {
+    // press Q to perform a wing attack
+    player.attack(playerData.attacks.wingAttack);
   }
 }
 

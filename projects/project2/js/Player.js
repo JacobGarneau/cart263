@@ -10,7 +10,7 @@ class Player {
     this.mapX = 5; // horizontal position on the map tiles
     this.mapY = 5; // vertical position on the map tiles
     this.movable = true;
-    this.abilities = [playerData.attacks.peck];
+    this.abilities = [playerData.attacks.peck, playerData.attacks.wingAttack];
     this.sunPoints = 0;
 
     this.maxHealth = playerData.stats.health;
@@ -123,39 +123,41 @@ class Player {
       this.damage = 0;
     }
 
-    if (this.currentAction === `peck`) {
+    if (this.currentAction !== undefined) {
       push();
       fill(255, 255, 0);
       translate(this.x, this.y);
       angleMode(DEGREES);
       rotate(this.rotation);
-      // ellipse(this.attackX, this.attackY, this.attackSize);
+      // ellipse(this.attackX[0], this.attackY[0], this.attackSize[0]);
       pop();
 
-      for (let i = 0; i < entities.length; i++) {
+      for (let i = 0; i < this.attackX.length; i++) {
         let hitboxX;
         let hitboxY;
         if (this.rotation === 0) {
-          hitboxX = this.x + this.attackX;
-          hitboxY = this.y + this.attackY;
+          hitboxX = this.x + this.attackX[i];
+          hitboxY = this.y + this.attackY[i];
         } else if (this.rotation === 90) {
-          hitboxX = this.x - this.attackY;
-          hitboxY = this.y + this.attackX;
+          hitboxX = this.x - this.attackY[i];
+          hitboxY = this.y + this.attackX[i];
         } else if (this.rotation === 180) {
-          hitboxX = this.x - this.attackX;
-          hitboxY = this.y - this.attackY;
+          hitboxX = this.x - this.attackX[i];
+          hitboxY = this.y - this.attackY[i];
         } else if (this.rotation === 270) {
-          hitboxX = this.x + this.attackY;
-          hitboxY = this.y - this.attackX;
+          hitboxX = this.x + this.attackY[i];
+          hitboxY = this.y - this.attackX[i];
         }
-        ellipse(hitboxX, hitboxY, this.attackSize); // display the peck attack's hitbox
-        if (
-          dist(hitboxX, hitboxY, entities[i].x, entities[i].y) <=
-            this.attackSize / 2 + entities[i].size / 2 &&
-          this.mapX === entities[i].mapX &&
-          this.mapY === entities[i].mapY
-        ) {
-          entities[i].takeDamage(this.damage, this.active);
+        ellipse(hitboxX, hitboxY, this.attackSize[i]); // display the peck attack's dhitbox
+        for (let j = 0; j < entities.length; j++) {
+          if (
+            dist(hitboxX, hitboxY, entities[j].x, entities[j].y) <=
+              this.attackSize[i] / 2 + entities[j].size / 2 &&
+            this.mapX === entities[j].mapX &&
+            this.mapY === entities[j].mapY
+          ) {
+            entities[j].takeDamage(this.damage, this.active);
+          }
         }
       }
     }
@@ -163,7 +165,7 @@ class Player {
 
   // perform attacks
   attack(attack) {
-    if (this.hitlag === 0 && this.stamina >= attack.stamina) {
+    if (this.hitlag === 0) {
       for (let i = 0; i < player.abilities.length; i++) {
         if (
           player.abilities[i].name === attack.name &&

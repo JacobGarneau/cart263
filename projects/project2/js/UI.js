@@ -127,6 +127,15 @@ class UI {
           this.abilities.size - this.abilities.borderSize * 2
         );
       } else {
+        if (player.hitlag > 0) {
+          fill(100);
+        } else {
+          fill(
+            this.abilities.fill.r,
+            this.abilities.fill.g,
+            this.abilities.fill.b
+          );
+        }
         ellipse(
           this.abilities.x,
           this.abilities.y - i * (this.abilities.size + this.abilities.spacing),
