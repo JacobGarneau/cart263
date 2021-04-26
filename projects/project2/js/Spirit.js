@@ -70,6 +70,7 @@ class Spirit extends Entity {
 
   die() {
     player.sunPoints++;
+    player.currentSunPoints++;
     player.frostbiteTarget += 20;
     player.frostbiteTarget = constrain(
       player.frostbiteTarget,

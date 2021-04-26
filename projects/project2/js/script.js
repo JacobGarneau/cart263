@@ -22,6 +22,7 @@ let map, player, minimap, ui; // objects
 let playerData, terrainData; // JSON data
 let shrines = [];
 let entities = [];
+let projectiles = [];
 
 let images = {
   mountain: undefined,
@@ -49,8 +50,10 @@ function preload() {
   images.feather = loadImage("assets/images/feather.svg");
   images.attack = loadImage("assets/images/attack.svg");
   images.sun = loadImage("assets/images/sun.svg");
+  images.flame = loadImage("assets/images/flame.svg");
+  images.fireball = loadImage("assets/images/fireball.svg");
 
-  icons = [images.attack, images.feather];
+  icons = [images.attack, images.feather, images.flame];
 }
 
 // p5: creates the canvas and the object instances
@@ -79,8 +82,13 @@ function draw() {
   map.changeTile();
 
   for (let i = 0; i < entities.length; i++) {
-    entities[i].display();
     entities[i].move();
+    entities[i].display();
+  }
+
+  for (let i = 0; i < projectiles.length; i++) {
+    projectiles[i].move();
+    projectiles[i].display();
   }
 
   player.display();
@@ -111,6 +119,9 @@ function keyPressed() {
   } else if (keyCode === 81) {
     // press Q to perform a wing attack
     player.attack(playerData.attacks.wingAttack);
+  } else if (keyCode === 69) {
+    // press E to shoot a fireball
+    player.attack(playerData.attacks.fireBreath);
   }
 }
 

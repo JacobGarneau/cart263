@@ -25,12 +25,26 @@
       "posY": [0, 0],
       "size": [48, 48],
       "hitlag": 80,
-      "activeFrames": 8,
+      "activeFrames": 20,
       "recharge": 260,
       "damage": 30,
       "frostbite": 0,
       "command": "Q",
       "icon": 1,
+      "currentRecharge": 0
+    },
+    "fireBreath": {
+      "name": "fireBreath",
+      "posX": [0],
+      "posY": [20],
+      "size": [36],
+      "hitlag": 40,
+      "activeFrames": 40,
+      "recharge": 40,
+      "damage": 200,
+      "frostbite": 12,
+      "command": "E",
+      "icon": 2,
       "currentRecharge": 0
     }
   }

@@ -10,8 +10,13 @@ class Player {
     this.mapX = 5; // horizontal position on the map tiles
     this.mapY = 5; // vertical position on the map tiles
     this.movable = true;
-    this.abilities = [playerData.attacks.peck, playerData.attacks.wingAttack];
+    this.abilities = [
+      playerData.attacks.peck,
+      playerData.attacks.wingAttack,
+      playerData.attacks.fireBreath,
+    ];
     this.sunPoints = 0;
+    this.currentSunPoints = 0;
 
     this.maxHealth = playerData.stats.health;
     this.health = this.maxHealth;
@@ -19,9 +24,6 @@ class Player {
     this.maxFrostbite = playerData.stats.frostbite;
     this.frostbite = this.maxFrostbite;
     this.frostbiteTarget = this.frostbite;
-    this.maxStamina = playerData.stats.stamina;
-    this.stamina = this.maxStamina;
-    this.staminaTarget = this.stamina;
 
     this.currentAction = undefined; // currently activated action
     this.hitlag = 0; // time before you can make another attack
@@ -30,11 +32,6 @@ class Player {
     this.attackX = 0; // horizontal position of the attack hitbox
     this.attackY = 0; // vertical position of the attack hitbox
     this.damage = 0;
-
-    let staminaLoss = setInterval(() => {
-      this.staminaTarget++;
-      this.staminaTarget = constrain(this.staminaTarget, 0, this.maxStamina);
-    }, 2000);
 
     let frostbiteLoss = setInterval(() => {
       this.frostbiteTarget--;
@@ -120,6 +117,8 @@ class Player {
     } else {
       this.currentAction = undefined;
       this.attackSize = undefined;
+      this.attackX = undefined;
+      this.attackY = undefined;
       this.damage = 0;
     }
 
@@ -148,7 +147,7 @@ class Player {
           hitboxX = this.x + this.attackY[i];
           hitboxY = this.y - this.attackX[i];
         }
-        ellipse(hitboxX, hitboxY, this.attackSize[i]); // display the peck attack's dhitbox
+        ellipse(hitboxX, hitboxY, this.attackSize[i]); // display the peck attack's hitbox
         for (let j = 0; j < entities.length; j++) {
           if (
             dist(hitboxX, hitboxY, entities[j].x, entities[j].y) <=
@@ -173,27 +172,30 @@ class Player {
         ) {
           this.currentAction = attack.name;
           this.active = attack.activeFrames;
-          this.attackX = attack.posX;
-          this.attackY = attack.posY;
-          this.attackSize = attack.size;
           this.hitlag = attack.hitlag;
+          this.attackSize = attack.size;
           this.damage = attack.damage;
+          if (this.currentAction === `fireBreath`) {
+            this.attackX = [];
+            this.attackY = [];
 
-          player.abilities[i].currentRecharge = attack.recharge;
+            let fireball = new Projectile(this.rotation);
+            projectiles.push(fireball);
+            console.log(this.rotation);
+          } else {
+            this.attackX = attack.posX;
+            this.attackY = attack.posY;
+            this.attackSize = attack.size;
 
-          this.staminaTarget -= attack.stamina;
-          this.staminaTarget = constrain(
-            this.staminaTarget,
-            0,
-            this.maxStamina
-          );
+            player.abilities[i].currentRecharge = attack.recharge;
 
-          this.frostbiteTarget -= attack.frostbite;
-          this.frostbiteTarget = constrain(
-            this.frostbiteTarget,
-            0,
-            this.maxFrostbite
-          );
+            this.frostbiteTarget -= attack.frostbite;
+            this.frostbiteTarget = constrain(
+              this.frostbiteTarget,
+              0,
+              this.maxFrostbite
+            );
+          }
         }
       }
     }
@@ -210,12 +212,6 @@ class Player {
       this.frostbite++;
     } else if (this.frostbite > this.frostbiteTarget) {
       this.frostbite--;
-    }
-
-    if (this.stamina < this.staminaTarget) {
-      this.stamina++;
-    } else if (this.stamina > this.staminaTarget) {
-      this.stamina--;
     }
   }
 }
