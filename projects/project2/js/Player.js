@@ -1,31 +1,28 @@
 class Player {
-  constructor() {
+  constructor(attributes) {
     this.x = width / 2; // horizontal position on the screen
-    this.y = height / 2; // vertical position on the screen
+    this.y = height / 2 + dyn(32, `y`); // vertical position on the screen
     this.speed = 6;
     this.vx = 0;
-    this.vy = -this.speed;
+    this.vy = 0;
     this.acceleration = 0.1;
-    this.rotation = 180;
-    this.mapX = 5; // horizontal position on the map tiles
-    this.mapY = 5; // vertical position on the map tiles
+    this.rotation = 270;
+    this.mapX = attributes.mapX; // horizontal position on the map tiles
+    this.mapY = attributes.mapY; // vertical position on the map tiles
     this.movable = true;
 
-    this.abilities = {
-      attacks: [playerData.attacks.peck],
-      minimap: false,
-    };
+    this.abilities = attributes.abilities;
 
-    this.sunPoints = 500;
-    this.currentSunPoints = 500;
+    this.sunPoints = attributes.sunPoints;
+    this.currentSunPoints = attributes.currentSunPoints;
     this.nearShrine = false;
 
-    this.maxHealth = playerData.stats.health;
-    this.health = this.maxHealth;
-    this.healthTarget = this.health;
-    this.maxFrostbite = playerData.stats.frostbite;
-    this.frostbite = this.maxFrostbite;
-    this.frostbiteTarget = this.frostbite;
+    this.maxHealth = attributes.maxHealth;
+    this.health = attributes.health;
+    this.healthTarget = attributes.healthTarget;
+    this.maxFrostbite = attributes.maxFrostbite;
+    this.frostbite = attributes.frostbite;
+    this.frostbiteTarget = attributes.frostbiteTarget;
 
     this.currentAction = undefined; // currently activated action
     this.hitlag = 0; // time before you can make another attack

@@ -18,9 +18,13 @@ const MAP_WIDTH = 11;
 const MAP_HEIGHT = 11;
 const BIOMES = [`sea`, `snow`, `snow`, `snow`, `mountains`, `mountains`];
 
+let playerSaved;
 let map, player, minimap, ui; // objects
+let dataSaved;
 let playerData, terrainData, abilityData; // JSON data
+let shrineCount;
 let shrines = [];
+let entityCount;
 let entities = [];
 let projectiles = [];
 
@@ -38,9 +42,15 @@ let attackFX = [];
 
 // p5: load JSON data and images
 function preload() {
+  dataSaved = localStorage.getItem("dataSaved");
+  if (dataSaved) {
+    abilityData = JSON.parse(localStorage.getItem("abilityData"));
+  } else {
+    abilityData = loadJSON("js/data/abilityData.json");
+  }
+
   playerData = loadJSON("js/data/playerData.json");
   terrainData = loadJSON("js/data/terrainData.json");
-  abilityData = loadJSON("js/data/abilityData.json");
 
   images.mountain = loadImage("assets/images/mountain.svg");
   images.tree = loadImage("assets/images/tree.svg");
@@ -76,58 +86,117 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
+  mapGrid = JSON.parse(localStorage.getItem("mapGrid"));
+
+  if (mapGrid === null) {
+    console.log(`mapGrid null`);
+    mapGrid = [];
+  }
+
   map = new Map();
-  player = new Player();
+
+  playerSaved = localStorage.getItem("playerSaved");
+  if (playerSaved) {
+    let playerData = JSON.parse(localStorage.getItem("player"));
+    player = new Player(playerData);
+  } else {
+    console.log(`player null`);
+    player = new Player({
+      mapX: 5,
+      mapY: 5,
+      maxHealth: playerData.stats.health,
+      health: playerData.stats.health,
+      healthTarget: playerData.stats.health,
+      maxFrostbite: playerData.stats.frostbite,
+      frostbite: playerData.stats.frostbite,
+      frostbiteTarget: playerData.stats.frostbite,
+      abilities: {
+        attacks: [playerData.attacks.peck],
+        minimap: false,
+      },
+      sunPoints: 0,
+      currentSunPoints: 0,
+    });
+  }
+
   minimap = new Minimap();
   ui = new UI();
 
   // place the shrines on the map
-  let shrine = new Shrine(5, 5, width / 2, height / 2, images.shrine);
-  shrine = new Shrine(
-    random([1, 2, 3]),
-    random([1, 2, 3]),
-    width / 2,
-    height / 2,
-    images.shrine
-  );
-  shrine = new Shrine(
-    random([1, 2, 3]),
-    random([7, 8, 9]),
-    width / 2,
-    height / 2,
-    images.shrine
-  );
-  shrine = new Shrine(
-    random([7, 8, 9]),
-    random([1, 2, 3]),
-    width / 2,
-    height / 2,
-    images.shrine
-  );
-  shrine = new Shrine(
-    random([7, 8, 9]),
-    random([7, 8, 9]),
-    width / 2,
-    height / 2,
-    images.shrine
-  );
+  shrineCount = localStorage.getItem("shrineCount");
+
+  if (shrineCount === null) {
+    console.log(`shrines null`);
+    let shrine = new Shrine({
+      mapX: 5,
+      mapY: 5,
+    });
+    shrine = new Shrine({
+      mapX: random([1, 2, 3]),
+      mapY: random([1, 2, 3]),
+    });
+    shrine = new Shrine({
+      mapX: random([1, 2, 3]),
+      mapY: random([7, 8, 9]),
+    });
+    shrine = new Shrine({
+      mapX: random([7, 8, 9]),
+      mapY: random([1, 2, 3]),
+    });
+    shrine = new Shrine({
+      mapX: random([7, 8, 9]),
+      mapY: random([7, 8, 9]),
+    });
+  } else {
+    for (let i = 0; i < shrineCount; i++) {
+      let shrineData = JSON.parse(localStorage.getItem("shrine" + i));
+      let shrine = new Shrine(shrineData);
+    }
+  }
 
   // add the entities on each tile of the map
-  for (let i = 0; i < MAP_WIDTH; i++) {
-    for (let j = 0; j < MAP_HEIGHT; j++) {
-      for (let k = 0; k < random([2, 5]); k++) {
-        let game = new Game(i, j);
-      }
+  entityCount = localStorage.getItem("entityCount");
 
-      let spiritRoll = random([0, 1, 1]);
-      if (spiritRoll === 1) {
-        let spirit = new Spirit(i, j);
+  if (entityCount === null) {
+    console.log(`entities null`);
+    for (let i = 0; i < MAP_WIDTH; i++) {
+      for (let j = 0; j < MAP_HEIGHT; j++) {
+        for (let k = 0; k < random([2, 5]); k++) {
+          let game = new Game({
+            mapX: i,
+            mapY: j,
+            maxHealth: 15,
+            health: 15,
+            healthTarget: 15,
+          });
+        }
 
-        for (let k = 0; k < shrines.length; k++) {
-          if (i === shrines[k].mapX && j === shrines[k].mapY) {
-            entities.splice(entities.indexOf(spirit), 1);
+        let spiritRoll = random([0, 1, 1]);
+        if (spiritRoll === 1) {
+          let spirit = new Spirit({
+            mapX: i,
+            mapY: j,
+            maxHealth: 50,
+            health: 50,
+            healthTarget: 50,
+          });
+
+          for (let k = 0; k < shrines.length; k++) {
+            if (i === shrines[k].mapX && j === shrines[k].mapY) {
+              entities.splice(entities.indexOf(spirit), 1);
+            }
           }
         }
+      }
+    }
+  } else {
+    for (let i = 0; i < entityCount; i++) {
+      let entityData = JSON.parse(localStorage.getItem("entity" + i));
+      if (entityData.type === `game`) {
+        let entity = new Game(entityData);
+      } else if (entityData.type === `spirit`) {
+        let entity = new Spirit(entityData);
+        console.log(`spirit`);
       }
     }
   }
@@ -147,11 +216,6 @@ function draw() {
     projectiles[i].move();
     projectiles[i].display();
   }
-
-  player.move();
-  player.handleActions();
-  player.updateStats();
-  player.display();
 
   map.displayContents();
 
@@ -175,17 +239,82 @@ function draw() {
     }
   }
 
+  player.move();
+  player.handleActions();
+  player.updateStats();
+  player.display();
+
   ui.display();
+}
+
+function saveGame() {
+  localStorage.setItem("mapGrid", JSON.stringify(mapGrid));
+
+  localStorage.setItem("dataSaved", true);
+  localStorage.setItem("abilityData", JSON.stringify(abilityData));
+
+  localStorage.setItem("playerSaved", true);
+  localStorage.setItem(
+    "player",
+    JSON.stringify({
+      mapX: player.mapX,
+      mapY: player.mapY,
+      maxHealth: player.maxHealth,
+      health: player.health,
+      healthTarget: player.healthTarget,
+      maxFrostbite: player.maxFrostbite,
+      frostbite: player.frostbite,
+      frostbiteTarget: player.frostbiteTarget,
+      abilities: player.abilities,
+      sunPoints: player.sunPoints,
+      currentSunPoints: player.currentSunPoints,
+    })
+  );
+
+  localStorage.setItem("shrineCount", shrines.length);
+  for (let i = 0; i < shrines.length; i++) {
+    localStorage.setItem(
+      "shrine" + i,
+      JSON.stringify({
+        mapX: shrines[i].mapX,
+        mapY: shrines[i].mapY,
+      })
+    );
+  }
+
+  localStorage.setItem("entityCount", entities.length);
+  for (let i = 0; i < entities.length; i++) {
+    localStorage.setItem(
+      "entity" + i,
+      JSON.stringify({
+        mapX: entities[i].mapX,
+        mapY: entities[i].mapY,
+        maxHealth: entities[i].maxHealth,
+        health: entities[i].health,
+        healthTarget: entities[i].healthTarget,
+        type: entities[i].type,
+      })
+    );
+  }
 }
 
 // p5: handle mouse clicks
 function mouseClicked() {
-  player.attack(playerData.attacks.peck);
+  for (let i = 0; i < player.abilities.attacks.length; i++) {
+    if (player.abilities.attacks[i].command === `LMB`) {
+      if (player.abilities.attacks[i].upgrade) {
+        player.attack(playerData.attacks.improvedPeck);
+      } else {
+        player.attack(playerData.attacks.peck);
+      }
+    }
+  }
 
   if (ui.menuOpen) {
     for (let i = 0; i < abilityData.abilities.length; i++) {
       if (abilityData.abilities[i].hover) {
         ui.buyAbility(abilityData.abilities[i]);
+        saveGame();
       }
     }
   }
@@ -224,6 +353,10 @@ function keyPressed() {
   } else if (keyCode === 32 && player.nearShrine) {
     // press SPACEBAR to interact with a shrine
     ui.toggleMenu();
+    saveGame();
+  } else if (keyCode === 27 && ui.menuOpen) {
+    ui.toggleMenu();
+    saveGame();
   }
 }
 

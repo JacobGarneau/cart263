@@ -1,9 +1,18 @@
 class Shrine extends Structure {
-  constructor(mapX, mapY, x, y, icon) {
-    super(mapX, mapY, x, y, icon);
+  constructor(attributes) {
+    super(attributes);
     this.interactionRange = 200;
-    let spirit = new Spirit(this.mapX, this.mapY);
-    this.cell.spiritDefeated = true;
+    this.icon = images.shrine;
+
+    if (!this.cell.spiritDefeated) {
+      let spirit = new Spirit({
+        mapX: this.mapX,
+        mapY: this.mapY,
+        maxHealth: 50,
+        health: 50,
+        healthTarget: 50,
+      });
+    }
 
     shrines.push(this);
   }

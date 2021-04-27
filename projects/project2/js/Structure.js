@@ -1,15 +1,14 @@
 class Structure {
-  constructor(mapX, mapY, x, y, icon) {
-    this.mapX = mapX;
-    this.mapY = mapY;
-    this.x = x;
-    this.y = y;
+  constructor(attributes) {
+    this.mapX = attributes.mapX;
+    this.mapY = attributes.mapY;
+    this.x = width / 2;
+    this.y = height / 2;
     this.fill = {
       r: 150,
       g: 150,
       b: 0,
     };
-    this.icon = icon;
 
     for (let i = 0; i < MAP_WIDTH; i++) {
       for (let j = 0; j < MAP_HEIGHT; j++) {

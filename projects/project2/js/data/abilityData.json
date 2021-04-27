@@ -107,7 +107,7 @@
     {
       "name": "emberNova",
       "displayName": "Ember Nova",
-      "description": "Allows you to conjure a hurricane of fire that stays around you and deals damage to nearby creatures.",
+      "description": "Allows you to conjure a hurricane of fire that stays around you and deals damage to nearby creatures. Costs Warmth.",
       "x": 260,
       "y": 40,
       "cost": 5,

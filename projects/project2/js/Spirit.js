@@ -1,11 +1,12 @@
 class Spirit extends Entity {
-  constructor(mapX, mapY) {
-    super(mapX, mapY);
-    this.maxHealth = 50;
-    this.health = this.maxHealth;
-    this.healthTarget = this.health;
+  constructor(attributes) {
+    super(attributes);
+    this.maxHealth = attributes.maxHealth;
+    this.health = attributes.health;
+    this.healthTarget = attributes.healthTarget;
     this.healthGain = 15;
     this.healthIncrease = 25;
+    this.type = `spirit`;
 
     this.vx = 0;
     this.vy = 0;
@@ -14,7 +15,9 @@ class Spirit extends Entity {
 
     this.maxSpeed = 2;
 
-    entities.push(this);
+    if (this.health > 0) {
+      entities.push(this);
+    }
   }
 
   display() {

@@ -1,11 +1,12 @@
 class Game extends Entity {
-  constructor(mapX, mapY) {
-    super(mapX, mapY);
-    this.maxHealth = 15;
-    this.health = this.maxHealth;
-    this.healthTarget = this.health;
+  constructor(attributes) {
+    super(attributes);
+    this.maxHealth = attributes.maxHealth;
+    this.health = attributes.health;
+    this.healthTarget = attributes.healthTarget;
     this.healthGain = 15;
     this.detectionDistance = 200;
+    this.type = `game`;
 
     this.vx = 0;
     this.vy = 0;
@@ -20,7 +21,9 @@ class Game extends Entity {
       this.icon = images.rabbit;
     }
 
-    entities.push(this);
+    if (this.health > 0) {
+      entities.push(this);
+    }
   }
 
   display() {
