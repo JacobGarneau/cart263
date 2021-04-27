@@ -19,7 +19,7 @@ const MAP_HEIGHT = 11;
 const BIOMES = [`sea`, `snow`, `snow`, `snow`, `mountains`, `mountains`];
 
 let map, player, minimap, ui; // objects
-let playerData, terrainData; // JSON data
+let playerData, terrainData, abilityData; // JSON data
 let shrines = [];
 let entities = [];
 let projectiles = [];
@@ -40,6 +40,7 @@ let attackFX = [];
 function preload() {
   playerData = loadJSON("js/data/playerData.json");
   terrainData = loadJSON("js/data/terrainData.json");
+  abilityData = loadJSON("js/data/abilityData.json");
 
   images.mountain = loadImage("assets/images/mountain.svg");
   images.tree = loadImage("assets/images/tree.svg");
@@ -57,8 +58,16 @@ function preload() {
   images.bird = loadImage("assets/images/bird.svg");
   images.wind = loadImage("assets/images/wind.svg");
   images.strike = loadImage("assets/images/strike.svg");
+  images.map = loadImage("assets/images/map.svg");
+  images.nova = loadImage("assets/images/nova.svg");
 
-  icons = [images.attack, images.feather, images.flame];
+  icons = [
+    images.attack,
+    images.feather,
+    images.flame,
+    images.map,
+    images.nova,
+  ];
   attackFX = [images.strike, images.wind, images.fireball];
 }
 
@@ -71,14 +80,54 @@ function setup() {
   minimap = new Minimap();
   ui = new UI();
 
+  // place the shrines on the map
+  let shrine = new Shrine(5, 5, width / 2, height / 2, images.shrine);
+  shrine = new Shrine(
+    random([1, 2, 3]),
+    random([1, 2, 3]),
+    width / 2,
+    height / 2,
+    images.shrine
+  );
+  shrine = new Shrine(
+    random([1, 2, 3]),
+    random([7, 8, 9]),
+    width / 2,
+    height / 2,
+    images.shrine
+  );
+  shrine = new Shrine(
+    random([7, 8, 9]),
+    random([1, 2, 3]),
+    width / 2,
+    height / 2,
+    images.shrine
+  );
+  shrine = new Shrine(
+    random([7, 8, 9]),
+    random([7, 8, 9]),
+    width / 2,
+    height / 2,
+    images.shrine
+  );
+
   // add the entities on each tile of the map
   for (let i = 0; i < MAP_WIDTH; i++) {
     for (let j = 0; j < MAP_HEIGHT; j++) {
-      for (let k = 0; k < Math.floor(random(2, 6)); k++) {
+      for (let k = 0; k < random([2, 5]); k++) {
         let game = new Game(i, j);
       }
-      let spirit = new Spirit(i, j);
-      let shrine = new Shrine(i, j, width / 2, height / 2, images.shrine);
+
+      let spiritRoll = random([0, 1, 1]);
+      if (spiritRoll === 1) {
+        let spirit = new Spirit(i, j);
+
+        for (let k = 0; k < shrines.length; k++) {
+          if (i === shrines[k].mapX && j === shrines[k].mapY) {
+            entities.splice(entities.indexOf(spirit), 1);
+          }
+        }
+      }
     }
   }
 }

@@ -7,7 +7,7 @@ class Minimap {
 
   // display the minimap
   display() {
-    if (player.minimap) {
+    if (player.abilities.minimap) {
       if (this.open) {
         // draw the minimap
         for (let i = 0; i < MAP_WIDTH; i++) {

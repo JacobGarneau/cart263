@@ -221,5 +221,105 @@ class UI {
     textStyle(BOLD);
     text(`ABILITIES`, width / 2, dyn(160, `y`));
     pop();
+
+    push();
+    stroke(255);
+    strokeWeight(2);
+    line(
+      width / 2 + dyn(abilityData.abilities[1].x, `x`),
+      height / 2 + dyn(abilityData.abilities[1].y, `y`),
+      width / 2 + dyn(abilityData.abilities[2].x, `x`),
+      height / 2 + dyn(abilityData.abilities[2].y, `y`)
+    );
+    line(
+      width / 2 + dyn(abilityData.abilities[0].x, `x`),
+      height / 2 + dyn(abilityData.abilities[0].y, `y`),
+      width / 2 + dyn(abilityData.abilities[3].x, `x`),
+      height / 2 + dyn(abilityData.abilities[3].y, `y`)
+    );
+    line(
+      width / 2 + dyn(abilityData.abilities[4].x, `x`),
+      height / 2 + dyn(abilityData.abilities[4].y, `y`),
+      width / 2 + dyn(abilityData.abilities[6].x, `x`),
+      height / 2 + dyn(abilityData.abilities[6].y, `y`)
+    );
+    line(
+      width / 2 + dyn(abilityData.abilities[4].x, `x`),
+      height / 2 + dyn(abilityData.abilities[4].y, `y`),
+      width / 2 + dyn(abilityData.abilities[5].x, `x`),
+      height / 2 + dyn(abilityData.abilities[5].y, `y`)
+    );
+    line(
+      width / 2 + dyn(abilityData.abilities[6].x, `x`),
+      height / 2 + dyn(abilityData.abilities[6].y, `y`),
+      width / 2 + dyn(abilityData.abilities[7].x, `x`),
+      height / 2 + dyn(abilityData.abilities[7].y, `y`)
+    );
+    line(
+      width / 2 + dyn(abilityData.abilities[5].x, `x`),
+      height / 2 + dyn(abilityData.abilities[5].y, `y`),
+      width / 2 + dyn(abilityData.abilities[7].x, `x`),
+      height / 2 + dyn(abilityData.abilities[7].y, `y`)
+    );
+    pop();
+
+    // draw the ability icons
+    for (let i = 0; i < abilityData.abilities.length; i++) {
+      push();
+      if (abilityData.abilities[i].hover) {
+        stroke(255);
+        strokeWeight(6);
+      } else {
+        noStroke();
+      }
+
+      if (abilityData.abilities[i].status === `unlocked`) {
+        fill(
+          this.abilities.fill.r,
+          this.abilities.fill.g,
+          this.abilities.fill.b
+        );
+      } else if (abilityData.abilities[i].status === `unlockable`) {
+        fill(150);
+      } else {
+        fill(100);
+      }
+
+      ellipse(
+        width / 2 + dyn(abilityData.abilities[i].x, `x`),
+        height / 2 + dyn(abilityData.abilities[i].y, `y`),
+        100
+      );
+      imageMode(CENTER);
+      image(
+        icons[abilityData.abilities[i].icon],
+        width / 2 + dyn(abilityData.abilities[i].x, `x`),
+        height / 2 + dyn(abilityData.abilities[i].y, `y`)
+      );
+
+      if (
+        abilityData.abilities[i].status === `unlockable` ||
+        abilityData.abilities[i].status === `locked`
+      ) {
+        imageMode(CENTER);
+        image(
+          images.sun,
+          width / 2 + dyn(abilityData.abilities[i].x, `x`) + 40,
+          height / 2 + dyn(abilityData.abilities[i].y, `y`) + 40
+        );
+
+        fill(0);
+        textStyle(BOLD);
+        textSize(20);
+        textAlign(CENTER, CENTER);
+        text(
+          abilityData.abilities[i].cost,
+          width / 2 + dyn(abilityData.abilities[i].x, `x`) + 39,
+          height / 2 + dyn(abilityData.abilities[i].y, `y`) + 41
+        );
+      }
+
+      pop();
+    }
   }
 }

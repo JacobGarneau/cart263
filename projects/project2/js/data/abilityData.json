@@ -1,0 +1,94 @@
+{
+  "abilities": [
+    {
+      "name": "Peck Attack",
+      "description": "A basic attack that deals low damage.",
+      "x": -260,
+      "y": 40,
+      "cost": 0,
+      "icon": 0,
+      "upgrade": false,
+      "status": "unlocked"
+    },
+    {
+      "name": "Minimap2",
+      "description": "Provides you with a minimap that will allow you to know your location in the world at all times.",
+      "x": -260,
+      "y": -100,
+      "cost": 1,
+      "icon": 3,
+      "upgrade": false,
+      "status": "unlockable"
+    },
+    {
+      "name": "Minimap",
+      "description": "Provides you with a minimap that will allow you to know your location in the world at all times.",
+      "x": -260,
+      "y": 180,
+      "cost": 1,
+      "icon": 3,
+      "upgrade": false,
+      "status": "unlockable"
+    },
+    {
+      "name": "Improved Peck Attack",
+      "description": "Increases the size and damage of your Peck Attack.",
+      "x": 0,
+      "y": 40,
+      "cost": 1,
+      "icon": 0,
+      "upgrade": true,
+      "status": "unlockable"
+    },
+    {
+      "name": "Wing Attack",
+      "description": "Allows you to perform a wing attack that hits on both sides in a large area of effect.",
+      "x": 0,
+      "y": -100,
+      "cost": 1,
+      "icon": 1,
+      "upgrade": false,
+      "status": "locked"
+    },
+    {
+      "name": "Improved Wing Attack",
+      "description": "Increases the area of effect and damage of your Wing Attack.",
+      "x": 260,
+      "y": -100,
+      "cost": 1,
+      "icon": 1,
+      "upgrade": true,
+      "status": "locked"
+    },
+    {
+      "name": "Flame Breath",
+      "description": "Allows you to shoot a fireball that deals heavy damage but costs Warmth.",
+      "x": 0,
+      "y": 180,
+      "cost": 1,
+      "icon": 2,
+      "upgrade": false,
+      "status": "locked"
+    },
+    {
+      "name": "Improved Flame Breath",
+      "description": "Increases the range and damage of your Flame Breath.",
+      "x": 260,
+      "y": 180,
+      "cost": 1,
+      "icon": 2,
+      "upgrade": true,
+      "status": "locked"
+    },
+    {
+      "name": "Ember Nova",
+      "description": "Allows you to conjure a hurricane of fire that stays around you and deals damage to nearby creatures.",
+      "x": 260,
+      "y": 40,
+      "cost": 1,
+      "icon": 4,
+      "upgrade": false,
+      "status": "locked"
+    }
+  ]
+}

@@ -2,6 +2,8 @@ class Shrine extends Structure {
   constructor(mapX, mapY, x, y, icon) {
     super(mapX, mapY, x, y, icon);
     this.interactionRange = 200;
+    let spirit = new Spirit(this.mapX, this.mapY);
+    this.cell.spiritDefeated = true;
 
     shrines.push(this);
   }

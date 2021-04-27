@@ -12,8 +12,8 @@ class Player {
     this.movable = true;
 
     this.abilities = {
-      attacks: [playerData.attacks.peck],
-      minimap: false,
+      attacks: [playerData.attacks.peck, playerData.attacks.emberNova],
+      minimap: true,
     };
 
     this.sunPoints = 0;
