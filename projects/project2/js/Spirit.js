@@ -85,6 +85,7 @@ class Spirit extends Entity {
     );
 
     this.cell.spiritDefeated = true;
+    player.mapMovable = true;
 
     for (let i = 0; i < entities.length; i++) {
       if (entities[i] instanceof Spirit) {

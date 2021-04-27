@@ -41,12 +41,13 @@ class UI {
 
   // display the UI
   display() {
-    this.drawGauges();
     this.drawAbilities();
 
     if (this.menuOpen) {
       this.drawMenu();
     }
+
+    this.drawGauges();
   }
 
   drawGauges() {
@@ -70,6 +71,19 @@ class UI {
       this.healthBar.height
     );
 
+    // draw health bar text
+    push();
+    fill(255);
+    textAlign(CENTER, CENTER);
+    textStyle(BOLD);
+    textSize(16);
+    text(
+      player.health + ` / ` + player.maxHealth,
+      this.healthBar.x + (this.healthBar.width * player.maxHealth) / 2,
+      this.healthBar.y + this.healthBar.height / 2 + 1
+    );
+    pop();
+
     // draw frostbite bar container
     fill(0);
     rect(
@@ -92,12 +106,82 @@ class UI {
       this.frostbiteBar.height
     );
 
-    // draw sun sun points
-    image(images.sun, 20, 66, 30, 30);
-    fill(0);
-    textSize(24);
+    // draw frostbite bar text
+    push();
+    fill(255);
+    textAlign(CENTER, CENTER);
     textStyle(BOLD);
-    text(player.currentSunPoints, 60, 88);
+    textSize(14);
+    text(
+      player.frostbite + ` / ` + player.maxFrostbite,
+      this.frostbiteBar.x + (this.frostbiteBar.width * player.maxFrostbite) / 2,
+      this.frostbiteBar.y + this.frostbiteBar.height / 2 + 1
+    );
+    pop();
+
+    // draw Flame Breath and Ember Nova cost markers
+    push();
+    stroke(255);
+    strokeWeight(2);
+    imageMode(CENTER);
+    for (let i = 0; i < player.abilities.attacks.length; i++) {
+      if (
+        player.abilities.attacks[i].command ===
+        playerData.attacks.fireBreath.command
+      ) {
+        line(
+          this.frostbiteBar.x +
+            this.frostbiteBar.width * playerData.attacks.fireBreath.frostbite,
+          this.frostbiteBar.y + 1,
+          this.frostbiteBar.x +
+            this.frostbiteBar.width * playerData.attacks.fireBreath.frostbite,
+          this.frostbiteBar.y + this.frostbiteBar.height - 1
+        );
+
+        image(
+          images.fireball,
+          this.frostbiteBar.x +
+            this.frostbiteBar.width * playerData.attacks.fireBreath.frostbite,
+          this.frostbiteBar.y + 30,
+          16,
+          16
+        );
+      } else if (
+        player.abilities.attacks[i].command ===
+        playerData.attacks.emberNova.command
+      ) {
+        line(
+          this.frostbiteBar.x +
+            this.frostbiteBar.width * playerData.attacks.emberNova.frostbite,
+          this.frostbiteBar.y + 1,
+          this.frostbiteBar.x +
+            this.frostbiteBar.width * playerData.attacks.emberNova.frostbite,
+          this.frostbiteBar.y + this.frostbiteBar.height - 1
+        );
+        image(
+          images.nova2,
+          this.frostbiteBar.x +
+            this.frostbiteBar.width * playerData.attacks.emberNova.frostbite,
+          this.frostbiteBar.y + 30,
+          16,
+          16
+        );
+      }
+    }
+    pop();
+
+    // draw sun points
+    image(images.sun, width - 50, 16, 30, 30);
+    if (this.menuOpen) {
+      fill(255);
+    } else {
+      fill(0);
+    }
+
+    textSize(24);
+    textAlign(RIGHT);
+    textStyle(BOLD);
+    text(player.currentSunPoints, width - 60, 40);
     pop();
   }
 
@@ -237,13 +321,13 @@ class UI {
 
     fill(199, 66, 66);
     rectMode(CENTER);
-    rect(width / 2, height / 2, dyn(900, `x`), dyn(600, `y`));
+    rect(width / 2, height / 2, dyn(900, `x`), dyn(700, `y`));
 
     fill(255);
     textAlign(CENTER, CENTER);
     textSize(64);
     textStyle(BOLD);
-    text(`ABILITIES`, width / 2, dyn(160, `y`));
+    text(`ABILITIES`, width / 2, dyn(120, `y`));
     pop();
 
     push();
@@ -293,6 +377,18 @@ class UI {
       if (abilityData.abilities[i].hover) {
         stroke(255);
         strokeWeight(6);
+
+        // draw ability name and description in menu
+        push();
+        fill(255);
+        noStroke();
+        textAlign(CENTER, TOP);
+        textStyle(BOLD);
+        textSize(24);
+        text(abilityData.abilities[i].displayName, width / 2, dyn(610, `y`));
+        textStyle(NORMAL);
+        text(abilityData.abilities[i].description, width / 2, dyn(650, `y`));
+        pop();
       } else {
         noStroke();
       }

@@ -10,6 +10,7 @@ class Player {
     this.mapX = attributes.mapX; // horizontal position on the map tiles
     this.mapY = attributes.mapY; // vertical position on the map tiles
     this.movable = true;
+    this.mapMovable = attributes.mapMovable;
 
     this.abilities = attributes.abilities;
 

@@ -70,7 +70,9 @@ function preload() {
   images.strike = loadImage("assets/images/strike.svg");
   images.map = loadImage("assets/images/map.svg");
   images.nova = loadImage("assets/images/nova.svg");
+  images.nova2 = loadImage("assets/images/nova2.svg");
   images.upgrade = loadImage("assets/images/upgrade.svg");
+  images.speed = loadImage("assets/images/speed.svg");
 
   icons = [
     images.attack,
@@ -78,6 +80,7 @@ function preload() {
     images.flame,
     images.map,
     images.nova,
+    images.speed,
   ];
   attackFX = [images.strike, images.wind, images.fireball];
 }
@@ -89,7 +92,6 @@ function setup() {
   mapGrid = JSON.parse(localStorage.getItem("mapGrid"));
 
   if (mapGrid === null) {
-    console.log(`mapGrid null`);
     mapGrid = [];
   }
 
@@ -100,7 +102,6 @@ function setup() {
     let playerData = JSON.parse(localStorage.getItem("player"));
     player = new Player(playerData);
   } else {
-    console.log(`player null`);
     player = new Player({
       mapX: 5,
       mapY: 5,
@@ -116,6 +117,7 @@ function setup() {
       },
       sunPoints: 0,
       currentSunPoints: 0,
+      mapMovable: false,
     });
   }
 
@@ -126,7 +128,6 @@ function setup() {
   shrineCount = localStorage.getItem("shrineCount");
 
   if (shrineCount === null) {
-    console.log(`shrines null`);
     let shrine = new Shrine({
       mapX: 5,
       mapY: 5,
@@ -158,7 +159,6 @@ function setup() {
   entityCount = localStorage.getItem("entityCount");
 
   if (entityCount === null) {
-    console.log(`entities null`);
     for (let i = 0; i < MAP_WIDTH; i++) {
       for (let j = 0; j < MAP_HEIGHT; j++) {
         for (let k = 0; k < random([2, 5]); k++) {
@@ -196,7 +196,6 @@ function setup() {
         let entity = new Game(entityData);
       } else if (entityData.type === `spirit`) {
         let entity = new Spirit(entityData);
-        console.log(`spirit`);
       }
     }
   }
@@ -268,6 +267,7 @@ function saveGame() {
       abilities: player.abilities,
       sunPoints: player.sunPoints,
       currentSunPoints: player.currentSunPoints,
+      mapMovable: player.mapMovable,
     })
   );
 
@@ -301,7 +301,9 @@ function saveGame() {
 // p5: handle mouse clicks
 function mouseClicked() {
   for (let i = 0; i < player.abilities.attacks.length; i++) {
-    if (player.abilities.attacks[i].command === `LMB`) {
+    if (
+      player.abilities.attacks[i].command === playerData.attacks.peck.command
+    ) {
       if (player.abilities.attacks[i].upgrade) {
         player.attack(playerData.attacks.improvedPeck);
       } else {

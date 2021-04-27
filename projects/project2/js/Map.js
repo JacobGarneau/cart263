@@ -97,46 +97,67 @@ class Map {
 
   // change the visible tile when the player exits the screen
   changeTile() {
-    if (player.x <= 0) {
-      // if player goes out of map, bring them back on the other side
-      if (player.mapX === 0) {
-        player.mapX = MAP_WIDTH - 1;
-        this.mapTargetX = player.mapX;
-      } else {
-        this.mapTargetX = player.mapX - 1;
+    if (player.mapMovable) {
+      if (player.x <= 0) {
+        player.mapMovable = false;
+        // if player goes out of map, bring them back on the other side
+        if (player.mapX === 0) {
+          player.mapX = MAP_WIDTH - 1;
+          this.mapTargetX = player.mapX;
+        } else {
+          this.mapTargetX = player.mapX - 1;
+        }
+        player.x = width; // reset player position
+        this.transitionX = 1 / this.mapScrollSpeed; // set map scroll delay
+      } else if (player.x >= width) {
+        player.mapMovable = false;
+        // if player goes out of map, bring them back on the other side
+        if (player.mapX === MAP_HEIGHT - 1) {
+          player.mapX = 0;
+          this.mapTargetX = player.mapX;
+        } else {
+          this.mapTargetX = player.mapX + 1;
+        }
+        player.x = 0; // reset player position
+        this.transitionX = 1 / this.mapScrollSpeed; // set map scroll delay
+      } else if (player.y <= 0) {
+        player.mapMovable = false;
+        // if player goes out of map, bring them back on the other side
+        if (player.mapY === 0) {
+          player.mapY = MAP_HEIGHT - 1;
+          this.mapTargetY = player.mapY;
+        } else {
+          this.mapTargetY = player.mapY - 1;
+        }
+        player.y = height; // reset player position
+        this.transitionY = 1 / this.mapScrollSpeed; // set map scroll delay
+      } else if (player.y >= height) {
+        player.mapMovable = false;
+        // if player goes out of map, bring them back on the other side
+        if (player.mapY === MAP_HEIGHT - 1) {
+          player.mapY = 0;
+          this.mapTargetY = player.mapY;
+        } else {
+          this.mapTargetY = player.mapY + 1;
+        }
+        player.y = 0; // reset player position
+        this.transitionY = 1 / this.mapScrollSpeed; // set map scroll delay
       }
-      player.x = width; // reset player position
-      this.transitionX = 1 / this.mapScrollSpeed; // set map scroll delay
-    } else if (player.x >= width) {
-      // if player goes out of map, bring them back on the other side
-      if (player.mapX === MAP_HEIGHT - 1) {
-        player.mapX = 0;
-        this.mapTargetX = player.mapX;
-      } else {
-        this.mapTargetX = player.mapX + 1;
+    } else {
+      if (player.x <= 0) {
+        player.x = 0;
+        player.vx *= -1;
+      } else if (player.x >= width) {
+        player.x = width;
+        player.vx *= -1;
       }
-      player.x = 0; // reset player position
-      this.transitionX = 1 / this.mapScrollSpeed; // set map scroll delay
-    } else if (player.y <= 0) {
-      // if player goes out of map, bring them back on the other side
-      if (player.mapY === 0) {
-        player.mapY = MAP_HEIGHT - 1;
-        this.mapTargetY = player.mapY;
-      } else {
-        this.mapTargetY = player.mapY - 1;
+      if (player.y <= 0) {
+        player.y = 0;
+        player.vy *= -1;
+      } else if (player.y >= height) {
+        player.y = height;
+        player.vy *= -1;
       }
-      player.y = height; // reset player position
-      this.transitionY = 1 / this.mapScrollSpeed; // set map scroll delay
-    } else if (player.y >= height) {
-      // if player goes out of map, bring them back on the other side
-      if (player.mapY === MAP_HEIGHT - 1) {
-        player.mapY = 0;
-        this.mapTargetY = player.mapY;
-      } else {
-        this.mapTargetY = player.mapY + 1;
-      }
-      player.y = 0; // reset player position
-      this.transitionY = 1 / this.mapScrollSpeed; // set map scroll delay
     }
 
     // gradually adjust horizontal position
@@ -159,8 +180,34 @@ class Map {
     // snap to map position
     if (this.transitionX === 0) {
       player.mapX = this.mapTargetX;
+      // check if tile is an undefeated shrine tile
+      for (let i = 0; i < shrines.length; i++) {
+        if (
+          player.mapX === shrines[i].mapX &&
+          player.mapY === shrines[i].mapY &&
+          !shrines[i].cell.spiritDefeated
+        ) {
+          player.mapMovable = false;
+          break;
+        } else {
+          player.mapMovable = true;
+        }
+      }
     } else if (this.transitionY === 0) {
       player.mapY = this.mapTargetY;
+      // check if tile is an undefeated shrine tile
+      for (let i = 0; i < shrines.length; i++) {
+        if (
+          player.mapX === shrines[i].mapX &&
+          player.mapY === shrines[i].mapY &&
+          !shrines[i].cell.spiritDefeated
+        ) {
+          player.mapMovable = false;
+          break;
+        } else {
+          player.mapMovable = true;
+        }
+      }
     }
   }
 }

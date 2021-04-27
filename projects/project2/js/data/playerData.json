@@ -62,7 +62,7 @@
       "activeFrames": 360,
       "recharge": 1200,
       "damage": 50,
-      "frostbite": 30,
+      "frostbite": 40,
       "command": "R",
       "icon": 4,
       "attackFX": 2,
