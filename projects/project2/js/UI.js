@@ -293,6 +293,58 @@ class UI {
       );
       pop();
     }
+
+    // draw the Dash icon
+    if (player.abilities.dash) {
+      push();
+      if (player.dashing) {
+        fill(100);
+      } else {
+        fill(
+          this.abilities.fill.r,
+          this.abilities.fill.g,
+          this.abilities.fill.b
+        );
+      }
+
+      noStroke();
+      rectMode(CENTER);
+      ellipse(
+        this.abilities.x + this.abilities.size + this.abilities.spacing,
+        this.abilities.y,
+        this.abilities.size
+      );
+      imageMode(CENTER);
+      image(
+        images.dash,
+        this.abilities.x + this.abilities.size + this.abilities.spacing,
+        this.abilities.y
+      );
+      fill(0);
+      rectMode(CENTER);
+      rect(
+        this.abilities.x +
+          this.abilities.size +
+          this.abilities.spacing +
+          this.abilities.commandShift,
+        this.abilities.y + this.abilities.commandShift,
+        this.abilities.commandSize,
+        this.abilities.commandSize,
+        this.abilities.commandBorderRadius,
+        this.abilities.commandBorderRadius,
+        this.abilities.commandBorderRadius,
+        this.abilities.commandBorderRadius
+      );
+      image(
+        images.shift,
+        this.abilities.x +
+          this.abilities.size +
+          this.abilities.spacing +
+          this.abilities.commandShift,
+        this.abilities.y + this.abilities.commandShift
+      );
+      pop();
+    }
   }
 
   toggleMenu() {
@@ -478,8 +530,8 @@ class UI {
 
         if (ability.name === `minimap`) {
           player.abilities.minimap = true;
-        } else if (ability.name === `minimap2`) {
-          player.abilities.minimap2 = true;
+        } else if (ability.name === `dash`) {
+          player.abilities.dash = true;
         } else if (ability.name === `wingAttack`) {
           player.abilities.attacks.push(playerData.attacks.wingAttack);
         } else if (ability.name === `fireBreath`) {

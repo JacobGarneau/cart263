@@ -72,7 +72,8 @@ function preload() {
   images.nova = loadImage("assets/images/nova.svg");
   images.nova2 = loadImage("assets/images/nova2.svg");
   images.upgrade = loadImage("assets/images/upgrade.svg");
-  images.speed = loadImage("assets/images/speed.svg");
+  images.dash = loadImage("assets/images/dash.svg");
+  images.shift = loadImage("assets/images/shift.svg");
 
   icons = [
     images.attack,
@@ -114,6 +115,7 @@ function setup() {
       abilities: {
         attacks: [playerData.attacks.peck],
         minimap: false,
+        dash: false,
       },
       sunPoints: 0,
       currentSunPoints: 0,
@@ -359,6 +361,8 @@ function keyPressed() {
   } else if (keyCode === 27 && ui.menuOpen) {
     ui.toggleMenu();
     saveGame();
+  } else if (keyCode === 16) {
+    player.dash();
   }
 }
 

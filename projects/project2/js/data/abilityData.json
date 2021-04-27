@@ -16,7 +16,7 @@
     {
       "name": "dash",
       "displayName": "Dash",
-      "description": "Allows you to gain a short burst of speed by pressing SHIFT.",
+      "description": "Allows you to gain a burst of speed by pressing SHIFT.",
       "x": -260,
       "y": -140,
       "cost": 2,

@@ -6,6 +6,7 @@ class Player {
     this.vx = 0;
     this.vy = 0;
     this.acceleration = 0.1;
+    this.dashing = false;
     this.rotation = 270;
     this.mapX = attributes.mapX; // horizontal position on the map tiles
     this.mapY = attributes.mapY; // vertical position on the map tiles
@@ -186,10 +187,10 @@ class Player {
   // perform attacks
   attack(attack) {
     if (this.hitlag === 0 && this.movable) {
-      for (let i = 0; i < player.abilities.attacks.length; i++) {
+      for (let i = 0; i < this.abilities.attacks.length; i++) {
         if (
-          player.abilities.attacks[i].name === attack.name &&
-          player.abilities.attacks[i].currentRecharge === 0
+          this.abilities.attacks[i].name === attack.name &&
+          this.abilities.attacks[i].currentRecharge === 0
         ) {
           this.currentAction = attack.name;
           this.active = attack.activeFrames;
@@ -216,10 +217,50 @@ class Player {
             this.attackSize = attack.size;
             this.attackFX = attackFX[attack.attackFX];
 
-            player.abilities.attacks[i].currentRecharge = attack.recharge;
+            this.abilities.attacks[i].currentRecharge = attack.recharge;
           }
         }
       }
+    }
+  }
+
+  dash() {
+    if (this.abilities.dash && !this.dashing) {
+      let speedFactor = 1.5;
+      this.dashing = true;
+      if (this.rotation === 0) {
+        this.speed *= speedFactor;
+        this.vy = this.speed;
+      } else if (this.rotation === 90) {
+        this.speed *= speedFactor;
+        this.vx = -this.speed;
+      } else if (this.rotation === 180) {
+        this.speed *= speedFactor;
+        this.vy = -this.speed;
+      } else if (this.rotation === 270) {
+        this.speed *= speedFactor;
+        this.vx = this.speed;
+      }
+
+      setTimeout(function (e) {
+        setTimeout(function (e) {
+          player.dashing = false;
+        }, 1000);
+        player.speed /= speedFactor;
+        if (this.rotation === 0) {
+          this.speed *= speedFactor;
+          this.vy = this.speed;
+        } else if (this.rotation === 90) {
+          this.speed *= speedFactor;
+          this.vx = -this.speed;
+        } else if (this.rotation === 180) {
+          this.speed *= speedFactor;
+          this.vy = -this.speed;
+        } else if (this.rotation === 270) {
+          this.speed *= speedFactor;
+          this.vx = this.speed;
+        }
+      }, 500);
     }
   }
 

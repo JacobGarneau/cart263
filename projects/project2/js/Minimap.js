@@ -50,24 +50,15 @@ class Minimap {
         noStroke();
         fill(0);
         rectMode(CENTER);
-        rect(
-          this.x + dyn(320, `x`),
-          this.y + dyn(190, `y`),
-          100,
-          100,
-          18,
-          18,
-          18,
-          18
-        );
+        rect(this.x + dyn(320, `x`), ui.abilities.y, 100, 100, 18, 18, 18, 18);
 
         fill(255);
         textAlign(CENTER, CENTER);
         textStyle(BOLD);
         textSize(36);
-        text(`M`, this.x + dyn(320, `x`), this.y + dyn(180, `y`));
+        text(`M`, this.x + dyn(320, `x`), ui.abilities.y - 10);
         textSize(16);
-        text(`Minimap`, this.x + dyn(320, `x`), this.y + dyn(212, `y`));
+        text(`Minimap`, this.x + dyn(320, `x`), ui.abilities.y + 22);
         pop();
       }
     }
