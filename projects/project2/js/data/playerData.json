@@ -18,7 +18,8 @@
       "command": "LMB",
       "icon": 0,
       "attackFX": 0,
-      "currentRecharge": 0
+      "currentRecharge": 0,
+      "upgrade": false
     },
     "wingAttack": {
       "name": "wingAttack",
@@ -33,7 +34,8 @@
       "command": "Q",
       "icon": 1,
       "attackFX": 1,
-      "currentRecharge": 0
+      "currentRecharge": 0,
+      "upgrade": false
     },
     "fireBreath": {
       "name": "fireBreath",
@@ -48,7 +50,8 @@
       "command": "E",
       "icon": 2,
       "attackFX": 2,
-      "currentRecharge": 0
+      "currentRecharge": 0,
+      "upgrade": false
     },
     "emberNova": {
       "name": "emberNova",
@@ -63,7 +66,56 @@
       "command": "R",
       "icon": 4,
       "attackFX": 2,
-      "currentRecharge": 0
+      "currentRecharge": 0,
+      "upgrade": false
+    },
+    "improvedPeck": {
+      "name": "peck",
+      "posX": [-4],
+      "posY": [24],
+      "size": [32],
+      "hitlag": 40,
+      "activeFrames": 16,
+      "recharge": 60,
+      "damage": 12,
+      "frostbite": 0,
+      "command": "LMB",
+      "icon": 0,
+      "attackFX": 0,
+      "currentRecharge": 0,
+      "upgrade": true
+    },
+    "improvedWingAttack": {
+      "name": "wingAttack",
+      "posX": [40, -40],
+      "posY": [0, 0],
+      "size": [48, 48],
+      "hitlag": 80,
+      "activeFrames": 20,
+      "recharge": 260,
+      "damage": 30,
+      "frostbite": 0,
+      "command": "Q",
+      "icon": 1,
+      "attackFX": 1,
+      "currentRecharge": 0,
+      "upgrade": true
+    },
+    "improvedFireBreath": {
+      "name": "fireBreath",
+      "posX": [0],
+      "posY": [20],
+      "size": [36],
+      "hitlag": 40,
+      "activeFrames": 40,
+      "recharge": 40,
+      "damage": 30,
+      "frostbite": 12,
+      "command": "E",
+      "icon": 2,
+      "attackFX": 2,
+      "currentRecharge": 0,
+      "upgrade": true
     }
   }
 }

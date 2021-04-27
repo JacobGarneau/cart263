@@ -13,7 +13,7 @@ class Player {
 
     this.abilities = {
       attacks: [playerData.attacks.peck, playerData.attacks.emberNova],
-      minimap: true,
+      minimap: false,
     };
 
     this.sunPoints = 0;

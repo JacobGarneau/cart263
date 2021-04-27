@@ -60,6 +60,7 @@ function preload() {
   images.strike = loadImage("assets/images/strike.svg");
   images.map = loadImage("assets/images/map.svg");
   images.nova = loadImage("assets/images/nova.svg");
+  images.upgrade = loadImage("assets/images/upgrade.svg");
 
   icons = [
     images.attack,
@@ -180,6 +181,33 @@ function draw() {
 // p5: handle mouse clicks
 function mouseClicked() {
   player.attack(playerData.attacks.peck);
+
+  if (ui.menuOpen) {
+    for (let i = 0; i < abilityData.abilities.length; i++) {
+      if (abilityData.abilities[i].hover) {
+        ui.buyAbility(abilityData.abilities[i]);
+      }
+    }
+  }
+}
+
+// p5: handles mouse movement
+function mouseMoved() {
+  if (ui.menuOpen) {
+    for (let i = 0; i < abilityData.abilities.length; i++) {
+      let d = dist(
+        width / 2 + dyn(abilityData.abilities[i].x, `x`),
+        height / 2 + dyn(abilityData.abilities[i].y, `y`),
+        mouseX,
+        mouseY
+      );
+      if (d < 50) {
+        abilityData.abilities[i].hover = true;
+      } else {
+        abilityData.abilities[i].hover = false;
+      }
+    }
+  }
 }
 
 // p5: handle keyboard inputs

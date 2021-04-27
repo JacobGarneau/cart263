@@ -97,13 +97,26 @@ class UI {
     fill(0);
     textSize(24);
     textStyle(BOLD);
-    text(player.sunPoints, 60, 88);
+    text(player.currentSunPoints, 60, 88);
     pop();
   }
 
   drawAbilities() {
     // draw abilities
     for (let i = 0; i < player.abilities.attacks.length; i++) {
+      if (player.abilities.attacks[i].upgrade) {
+        push();
+        fill(0);
+        ellipse(
+          this.abilities.x + 36,
+          this.abilities.y -
+            i * (this.abilities.size + this.abilities.spacing) -
+            36,
+          42
+        );
+        pop();
+      }
+
       // draw the icon
       push();
       noStroke();
@@ -154,6 +167,17 @@ class UI {
         this.abilities.x,
         this.abilities.y - i * (this.abilities.size + this.abilities.spacing)
       );
+
+      if (player.abilities.attacks[i].upgrade) {
+        image(
+          images.upgrade,
+          this.abilities.x + 36,
+          this.abilities.y -
+            i * (this.abilities.size + this.abilities.spacing) -
+            36
+        );
+      }
+
       pop();
 
       // draw the command indication
@@ -301,6 +325,14 @@ class UI {
         abilityData.abilities[i].status === `unlockable` ||
         abilityData.abilities[i].status === `locked`
       ) {
+        fill(255, 209, 47);
+        noStroke();
+        ellipse(
+          width / 2 + dyn(abilityData.abilities[i].x, `x`) + 40,
+          height / 2 + dyn(abilityData.abilities[i].y, `y`) + 40,
+          28
+        );
+
         imageMode(CENTER);
         image(
           images.sun,
@@ -319,7 +351,64 @@ class UI {
         );
       }
 
+      if (abilityData.abilities[i].upgrade) {
+        imageMode(CENTER);
+        image(
+          images.upgrade,
+          width / 2 + dyn(abilityData.abilities[i].x, `x`) + 36,
+          height / 2 + dyn(abilityData.abilities[i].y, `y`) - 36
+        );
+      }
       pop();
+    }
+  }
+
+  buyAbility(ability) {
+    if (ability.status === `unlockable`) {
+      if (player.currentSunPoints >= ability.cost) {
+        player.currentSunPoints -= ability.cost;
+        ability.status = `unlocked`;
+
+        for (let i = 0; i < ability.unlocks.length; i++) {
+          for (let j = 0; j < abilityData.abilities.length; j++) {
+            if (ability.unlocks[i] === abilityData.abilities[j].name) {
+              abilityData.abilities[j].status = `unlockable`;
+            }
+          }
+        }
+
+        if (ability.name === `minimap`) {
+          player.abilities.minimap = true;
+        } else if (ability.name === `minimap2`) {
+          player.abilities.minimap2 = true;
+        } else if (ability.name === `wingAttack`) {
+          player.abilities.attacks.push(playerData.attacks.wingAttack);
+        } else if (ability.name === `flameBreath`) {
+          player.abilities.attacks.push(playerData.attacks.flameBreath);
+        } else if (ability.name === `emberNova`) {
+          player.abilities.attacks.push(playerData.attacks.emberNova);
+        } else if (ability.name === `improvedPeck`) {
+          player.abilities.attacks.splice(
+            player.abilities.attacks.indexOf[playerData.attacks.peck],
+            1
+          );
+          player.abilities.attacks.push(playerData.attacks.improvedPeck);
+        } else if (ability.name === `improvedWingAttack`) {
+          player.abilities.attacks.splice(
+            player.abilities.attacks.indexOf[playerData.attacks.wingAttack],
+            1
+          );
+          player.abilities.attacks.push(playerData.attacks.improvedWingAttack);
+        } else if (ability.name === `improvedFlameBreath`) {
+          player.abilities.attacks.splice(
+            player.abilities.attacks.indexOf[playerData.attacks.flameBreath],
+            1
+          );
+          player.abilities.attacks.push(playerData.attacks.improvedFlameBreath);
+        }
+      } else {
+        alert("Not enough Sun Points");
+      }
     }
   }
 }
