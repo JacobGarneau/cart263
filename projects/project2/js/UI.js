@@ -355,12 +355,20 @@ class UI {
       for (let i = 0; i < entities.length; i++) {
         entities[i].movable = true;
       }
+
+      for (let i = 0; i < projectiles.length; i++) {
+        projectiles[i].movable = true;
+      }
     } else {
       this.menuOpen = true;
       player.movable = false;
 
       for (let i = 0; i < entities.length; i++) {
         entities[i].movable = false;
+      }
+
+      for (let i = 0; i < projectiles.length; i++) {
+        projectiles[i].movable = false;
       }
     }
   }

@@ -8,6 +8,16 @@ class Spirit extends Entity {
     this.healthIncrease = 25;
     this.type = `spirit`;
 
+    this.meleeTimer = 0;
+    this.meleeChargeup = 30;
+    this.meleeRange = 60;
+    this.meleeDamage = 20;
+
+    this.rangedTimer = 0;
+    this.rangedChargeup = 120;
+    this.rangedRange = 180;
+    this.rangedDamage = 12;
+
     this.vx = 0;
     this.vy = 0;
     this.ax = 0.1;
@@ -72,6 +82,51 @@ class Spirit extends Entity {
     }
 
     super.move();
+  }
+
+  detectPlayer() {
+    if (player.mapX === this.mapX && player.mapY === this.mapY) {
+      let d = dist(this.x, this.y + 20, player.x, player.y);
+
+      push();
+      noStroke();
+      fill(255, 0, 0, 100);
+      ellipse(this.x, this.y + 20, this.meleeRange * 2);
+      fill(0, 255, 0, 100);
+      ellipse(this.x, this.y + 20, this.rangedRange * 2);
+      pop();
+
+      if (d < this.meleeRange) {
+        this.meleeTimer++;
+        console.log(this.meleeTimer);
+
+        if (this.meleeTimer >= this.meleeChargeup) {
+          this.attackMelee();
+          this.meleeTimer = 0;
+        }
+      } else {
+        this.meleeTimer = 0;
+      }
+
+      if (d > this.rangedRange) {
+        this.rangedTimer++;
+
+        if (this.rangedTimer >= this.rangedChargeup) {
+          this.attackRanged();
+          this.rangedTimer = 0;
+        }
+      } else {
+        this.rangedTimer = 0;
+      }
+    }
+  }
+
+  attackMelee() {
+    player.healthTarget -= this.meleeDamage;
+  }
+
+  attackRanged() {
+    let projectile = new Projectile(this);
   }
 
   die() {

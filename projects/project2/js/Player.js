@@ -230,7 +230,7 @@ class Player {
             this.attackX = [];
             this.attackY = [];
 
-            let fireball = new Projectile(this.rotation);
+            let fireball = new Fireball(this.rotation);
             projectiles.push(fireball);
           } else {
             this.attackX = attack.posX;

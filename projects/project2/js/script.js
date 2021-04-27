@@ -210,14 +210,18 @@ function draw() {
   map.changeTile();
   player.handleActions();
 
-  for (let i = 0; i < entities.length; i++) {
-    entities[i].move();
-    entities[i].display();
-  }
-
   for (let i = 0; i < projectiles.length; i++) {
     projectiles[i].move();
     projectiles[i].display();
+  }
+
+  for (let i = 0; i < entities.length; i++) {
+    entities[i].move();
+    entities[i].display();
+
+    if (entities[i].type === `spirit`) {
+      entities[i].detectPlayer();
+    }
   }
 
   map.displayContents();
