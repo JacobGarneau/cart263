@@ -371,7 +371,10 @@ class UI {
 
         for (let i = 0; i < ability.unlocks.length; i++) {
           for (let j = 0; j < abilityData.abilities.length; j++) {
-            if (ability.unlocks[i] === abilityData.abilities[j].name) {
+            if (
+              ability.unlocks[i] === abilityData.abilities[j].name &&
+              abilityData.abilities[j].status === `locked`
+            ) {
               abilityData.abilities[j].status = `unlockable`;
             }
           }
@@ -383,32 +386,34 @@ class UI {
           player.abilities.minimap2 = true;
         } else if (ability.name === `wingAttack`) {
           player.abilities.attacks.push(playerData.attacks.wingAttack);
-        } else if (ability.name === `flameBreath`) {
-          player.abilities.attacks.push(playerData.attacks.flameBreath);
+        } else if (ability.name === `fireBreath`) {
+          player.abilities.attacks.push(playerData.attacks.fireBreath);
         } else if (ability.name === `emberNova`) {
           player.abilities.attacks.push(playerData.attacks.emberNova);
         } else if (ability.name === `improvedPeck`) {
           player.abilities.attacks.splice(
-            player.abilities.attacks.indexOf[playerData.attacks.peck],
-            1
+            player.abilities.attacks.indexOf(playerData.attacks.peck),
+            1,
+            playerData.attacks.improvedPeck
           );
-          player.abilities.attacks.push(playerData.attacks.improvedPeck);
         } else if (ability.name === `improvedWingAttack`) {
           player.abilities.attacks.splice(
-            player.abilities.attacks.indexOf[playerData.attacks.wingAttack],
-            1
+            player.abilities.attacks.indexOf(playerData.attacks.wingAttack),
+            1,
+            playerData.attacks.improvedWingAttack
           );
-          player.abilities.attacks.push(playerData.attacks.improvedWingAttack);
-        } else if (ability.name === `improvedFlameBreath`) {
+        } else if (ability.name === `improvedFireBreath`) {
           player.abilities.attacks.splice(
-            player.abilities.attacks.indexOf[playerData.attacks.flameBreath],
-            1
+            player.abilities.attacks.indexOf(playerData.attacks.fireBreath),
+            1,
+            playerData.attacks.improvedFireBreath
           );
-          player.abilities.attacks.push(playerData.attacks.improvedFlameBreath);
         }
       } else {
         alert("Not enough Sun Points");
       }
+    } else if (ability.status === `locked`) {
+      alert("Lacking prerequisites");
     }
   }
 }

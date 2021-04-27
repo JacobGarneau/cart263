@@ -12,12 +12,12 @@ class Player {
     this.movable = true;
 
     this.abilities = {
-      attacks: [playerData.attacks.peck, playerData.attacks.emberNova],
+      attacks: [playerData.attacks.peck],
       minimap: false,
     };
 
-    this.sunPoints = 0;
-    this.currentSunPoints = 0;
+    this.sunPoints = 500;
+    this.currentSunPoints = 500;
     this.nearShrine = false;
 
     this.maxHealth = playerData.stats.health;
