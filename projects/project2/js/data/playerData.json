@@ -61,11 +61,11 @@
       "hitlag": 60,
       "activeFrames": 360,
       "recharge": 1200,
-      "damage": 50,
+      "damage": 3,
       "frostbite": 40,
       "command": "R",
       "icon": 4,
-      "attackFX": 2,
+      "attackFX": 3,
       "currentRecharge": 0,
       "upgrade": false
     },

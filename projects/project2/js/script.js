@@ -71,6 +71,7 @@ function preload() {
   images.map = loadImage("assets/images/map.svg");
   images.nova = loadImage("assets/images/nova.svg");
   images.nova2 = loadImage("assets/images/nova2.svg");
+  images.nova3 = loadImage("assets/images/nova3.svg");
   images.upgrade = loadImage("assets/images/upgrade.svg");
   images.dash = loadImage("assets/images/dash.svg");
   images.shift = loadImage("assets/images/shift.svg");
@@ -81,9 +82,9 @@ function preload() {
     images.flame,
     images.map,
     images.nova,
-    images.speed,
+    images.dash,
   ];
-  attackFX = [images.strike, images.wind, images.fireball];
+  attackFX = [images.strike, images.wind, images.fireball, images.nova3];
 }
 
 // p5: creates the canvas and the object instances
@@ -207,6 +208,7 @@ function setup() {
 function draw() {
   map.displayTerrain();
   map.changeTile();
+  player.handleActions();
 
   for (let i = 0; i < entities.length; i++) {
     entities[i].move();
@@ -241,7 +243,7 @@ function draw() {
   }
 
   player.move();
-  player.handleActions();
+
   player.updateStats();
   player.display();
 
@@ -363,6 +365,8 @@ function keyPressed() {
     saveGame();
   } else if (keyCode === 16) {
     player.dash();
+  } else if (keyCode === 82) {
+    player.attack(playerData.attacks.emberNova);
   }
 }
 

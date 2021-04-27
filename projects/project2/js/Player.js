@@ -15,8 +15,8 @@ class Player {
 
     this.abilities = attributes.abilities;
 
-    this.sunPoints = attributes.sunPoints;
-    this.currentSunPoints = attributes.currentSunPoints;
+    this.sunPoints = 500; // attributes
+    this.currentSunPoints = 500; // attributes
     this.nearShrine = false;
 
     this.maxHealth = attributes.maxHealth;
@@ -161,11 +161,28 @@ class Player {
         push();
         translate(hitboxX, hitboxY);
         angleMode(DEGREES);
-        if (i === 0) {
-          rotate(this.rotation);
-        } else if (i === 1) {
-          rotate(this.rotation + 180);
+        if (
+          this.rotation === 0 ||
+          this.rotation === 180 ||
+          this.rotation === 270
+        ) {
+          if (i === 0) {
+            rotate(this.rotation);
+          } else if (i === 1) {
+            rotate(this.rotation + 180);
+          }
+        } else {
+          if (i === 0) {
+            rotate(this.rotation + 180);
+          } else if (i === 1) {
+            rotate(this.rotation);
+          }
         }
+
+        if (this.currentAction === `emberNova`) {
+          rotate(this.rotation - this.active);
+        }
+
         imageMode(CENTER);
         image(this.attackFX, 0, 0, this.attackSize[i], this.attackSize[i]);
         pop();
@@ -177,7 +194,11 @@ class Player {
             this.mapX === entities[j].mapX &&
             this.mapY === entities[j].mapY
           ) {
-            entities[j].takeDamage(this.damage, this.active);
+            if (this.currentAction === `emberNova`) {
+              entities[j].takeDamage(this.damage, 2);
+            } else {
+              entities[j].takeDamage(this.damage, this.active);
+            }
           }
         }
       }
