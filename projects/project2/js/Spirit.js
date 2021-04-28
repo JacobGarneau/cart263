@@ -6,7 +6,14 @@ class Spirit extends Entity {
     this.healthTarget = attributes.healthTarget;
     this.healthGain = 15;
     this.healthIncrease = 25;
+
     this.type = `spirit`;
+    this.deathQuotes = [
+      `The Light of the Sun shines anew.`,
+      `Silence reigns once more.`,
+      `The Phoenix burns eternally.`,
+      `None can resist the might the Sun.`,
+    ];
 
     this.meleeTimer = 0;
     this.meleeChargeup = 30;
@@ -149,6 +156,8 @@ class Spirit extends Entity {
         entities[i].healthTarget += this.healthIncrease;
       }
     }
+
+    popup = new Popup(random(this.deathQuotes), 360);
 
     super.die();
   }

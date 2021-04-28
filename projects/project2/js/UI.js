@@ -94,11 +94,7 @@ class UI {
     );
 
     // draw frostbite bar fill
-    fill(
-      this.frostbiteBar.fill.r,
-      this.frostbiteBar.fill.g,
-      this.frostbiteBar.fill.b
-    );
+    fill(this.abilities.fill.r, this.abilities.fill.g, this.abilities.fill.b);
     rect(
       this.frostbiteBar.x,
       this.frostbiteBar.y,
@@ -179,9 +175,9 @@ class UI {
     }
 
     textSize(24);
-    textAlign(RIGHT);
+    textAlign(RIGHT, CENTER);
     textStyle(BOLD);
-    text(player.currentSunPoints, width - 60, 40);
+    text(player.currentSunPoints, width - 60, 34);
     pop();
   }
 

@@ -22,6 +22,7 @@ let playerSaved;
 let map, player, minimap, ui; // objects
 let dataSaved;
 let playerData, terrainData, abilityData; // JSON data
+let popup;
 let shrineCount;
 let shrines = [];
 let entityCount;
@@ -308,9 +309,12 @@ function game() {
   }
 
   player.move();
-
   player.updateStats();
   player.display();
+
+  if (popup !== undefined) {
+    popup.display();
+  }
 
   ui.display();
 }
