@@ -18,12 +18,15 @@ class Spirit extends Entity {
     this.meleeTimer = 0;
     this.meleeChargeup = 30;
     this.meleeRange = 60;
-    this.meleeDamage = 20;
+    this.meleeDamage = 8;
+    this.meleeX = 0;
+    this.meleeY = 0;
+    this.meleeHit = false;
 
     this.rangedTimer = 0;
     this.rangedChargeup = 120;
     this.rangedRange = 180;
-    this.rangedDamage = 12;
+    this.rangedDamage = 4;
 
     this.vx = 0;
     this.vy = 0;
@@ -110,7 +113,6 @@ class Spirit extends Entity {
 
         if (this.meleeTimer >= this.meleeChargeup) {
           this.attackMelee();
-          this.meleeTimer = 0;
         }
       } else {
         this.meleeTimer = 0;
@@ -126,11 +128,26 @@ class Spirit extends Entity {
       } else {
         this.rangedTimer = 0;
       }
+
+      if (this.meleeHit) {
+        push();
+        imageMode(CENTER);
+        image(images.strike2, this.meleeX, this.meleeY, 48, 48);
+        pop();
+      }
     }
   }
 
   attackMelee() {
     player.healthTarget -= this.meleeDamage;
+    this.meleeX = player.x;
+    this.meleeY = player.y;
+    this.meleeTimer = -this.meleeChargeup * 1.5;
+    this.meleeHit = true;
+
+    setTimeout(() => {
+      this.meleeHit = false;
+    }, 200);
   }
 
   attackRanged() {
@@ -140,12 +157,6 @@ class Spirit extends Entity {
   die() {
     player.sunPoints++;
     player.currentSunPoints++;
-    player.frostbiteTarget += 20;
-    player.frostbiteTarget = constrain(
-      player.frostbiteTarget,
-      0,
-      player.maxFrostbite
-    );
 
     this.cell.spiritDefeated = true;
     player.mapMovable = true;

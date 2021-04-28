@@ -11,14 +11,17 @@ class GreatSpirit extends Spirit {
     ];
 
     this.meleeTimer = 0;
-    this.meleeChargeup = 30;
+    this.meleeChargeup = 40;
     this.meleeRange = 90;
-    this.meleeDamage = 20;
+    this.meleeDamage = 12;
+    this.meleeX = 0;
+    this.meleeY = 0;
+    this.meleeHit = false;
 
     this.rangedTimer = 0;
     this.rangedChargeup = 120;
     this.rangedRange = 240;
-    this.rangedDamage = 12;
+    this.rangedDamage = 8;
 
     this.rotateRange = 120;
     this.rotateDamage = 4;
@@ -31,7 +34,7 @@ class GreatSpirit extends Spirit {
 
   detectPlayer() {
     if (this.mapX === player.mapX && this.mapY === player.mapY)
-      if (this.health > this.maxHealth / 2) {
+      if (this.health < this.maxHealth / 2) {
         for (let i = 0; i < this.rotateX.length; i++) {
           if (
             this.rotateX[i] < this.rotateRange &&
@@ -99,6 +102,7 @@ class GreatSpirit extends Spirit {
     player.maxHealth += 10;
 
     if (greatSpirits === 0) {
+      finalBossActivated = true;
       this.deathQuotes = [
         `The Phoenix has defeated the Ancients. But it stands not chance against the Protector.`,
       ];

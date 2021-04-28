@@ -19,12 +19,15 @@ class FinalBoss extends Spirit {
     this.meleeTimer = 0;
     this.meleeChargeup = 30;
     this.meleeRange = 60;
-    this.meleeDamage = 20;
+    this.meleeDamage = 12;
+    this.meleeX = 0;
+    this.meleeY = 0;
+    this.meleeHit = false;
 
     this.rangedTimer = 0;
     this.rangedChargeup = 120;
     this.rangedRange = 180;
-    this.rangedDamage = 12;
+    this.rangedDamage = 8;
 
     this.rotateRange = 100;
     this.rotateDamage = 4;
@@ -46,7 +49,7 @@ class FinalBoss extends Spirit {
 
     this.summonTimer = 0;
     this.summonChargeup = 180;
-    this.summonRange = 280;
+    this.summonRange = 320;
     this.summonCooldown = 1200;
     this.currentCooldown = this.summonCooldown;
   }
@@ -118,7 +121,7 @@ class FinalBoss extends Spirit {
             player.x,
             player.y
           );
-          if (d < this.rotateSize / 2 && player.iFrames <= 0) {
+          if (d < this.rotateSize && player.iFrames <= 0) {
             player.healthTarget -= this.rotateDamage;
             player.iFrames = 10;
           }
@@ -142,7 +145,7 @@ class FinalBoss extends Spirit {
           this.summonTimer = 0;
         }
       } else {
-        this.currentCooldown = 0;
+        this.summonTimer = 0;
       }
     }
 
@@ -161,5 +164,10 @@ class FinalBoss extends Spirit {
     });
     minion.x = this.x;
     minion.y = this.y;
+  }
+
+  die() {
+    finalBossActivated = false;
+    super.die();
   }
 }

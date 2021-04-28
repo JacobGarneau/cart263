@@ -4,7 +4,7 @@
 Phoenix of the Arctic
 Jacob Garneau
 
-Find your way in the Arctic and survive the cold!
+Find your way in the Arctic and defeat the cold!
 */
 
 const WORK_WINDOW_SIZE = {
@@ -18,31 +18,26 @@ const MAP_WIDTH = 11;
 const MAP_HEIGHT = 11;
 const BIOMES = [`sea`, `snow`, `snow`, `snow`, `mountains`, `mountains`];
 
-let playerSaved;
+let playerSaved; // localStorage recuperation
 let map, player, minimap, ui; // objects
-let dataSaved;
+let dataSaved; // localStorage recuperation
 let playerData, terrainData, abilityData; // JSON data
 let popup;
-let shrineCount;
-let greatSpirits = 1;
+let shrineCount; // localStorage recuperation
+let greatSpirits = 1; // great spirits to defeat before summoning the final boss
+let finalBossActivated = false;
 let shrines = [];
-let entityCount;
+let entityCount; // localStorage recuperation
 let entities = [];
 let projectiles = [];
 
-let images = {
-  mountain: undefined,
-  tree: undefined,
-  glacier: undefined,
-  fish: undefined,
-  shrine: undefined,
-  ghost: undefined,
-  feather: undefined,
-};
+let images = {};
+let sounds = {};
 let icons = [];
 let attackFX = [];
+let sfx = [];
 
-let state = `title`; // game, dead, title
+let state = `title`; // game, dead, title, victory
 
 let seeFlashingText = true;
 let flashingTextFrames = 0;
@@ -76,6 +71,7 @@ function preload() {
   images.bird = loadImage("assets/images/bird.svg");
   images.wind = loadImage("assets/images/wind.svg");
   images.strike = loadImage("assets/images/strike.svg");
+  images.strike2 = loadImage("assets/images/strike2.svg");
   images.map = loadImage("assets/images/map.svg");
   images.nova = loadImage("assets/images/nova.svg");
   images.nova2 = loadImage("assets/images/nova2.svg");
@@ -94,6 +90,16 @@ function preload() {
     images.dash,
   ];
   attackFX = [images.strike, images.wind, images.fireball, images.nova3];
+
+  // soundFormats("wav");
+  soundFormats("mp3");
+  sounds.dash = loadSound("assets/sounds/dash");
+  sounds.wingAttack = loadSound("assets/sounds/wingAttack");
+  sounds.fireBreath = loadSound("assets/sounds/fireBreath");
+  sounds.emberNova = loadSound("assets/sounds/emberNova");
+  sounds.minimap = loadSound("assets/sounds/minimap");
+
+  sfx = [sounds.dash, sounds.wingAttack, sounds.fireBreath, sounds.emberNova];
 }
 
 // p5: creates the canvas and the object instances
@@ -225,6 +231,8 @@ function draw() {
     game();
   } else if (state === `dead`) {
     dead();
+  } else if (state === `victory`) {
+    victory();
   }
 }
 
@@ -307,15 +315,17 @@ function game() {
   for (let i = 0; i < entities.length; i++) {
     entities[i].move();
     entities[i].display();
-
-    if (entities[i] !== undefined && entities[i].type !== `game`) {
-      entities[i].detectPlayer();
-    }
   }
 
   player.move();
   player.updateStats();
   player.display();
+
+  for (let i = 0; i < entities.length; i++) {
+    if (entities[i] !== undefined && entities[i].type !== `game`) {
+      entities[i].detectPlayer();
+    }
+  }
 
   if (popup !== undefined) {
     popup.display();
@@ -374,6 +384,8 @@ function dead() {
     text(`Press ENTER to return to the title screen`, width / 2, height - 60);
   }
 }
+
+function victory() {}
 
 function saveGame() {
   localStorage.setItem("mapGrid", JSON.stringify(mapGrid));
@@ -542,6 +554,7 @@ function keyPressed() {
   ) {
     // press M to open the minimap
     minimap.toggle();
+    sounds.minimap.play();
   } else if (state === `game` && keyCode === 81) {
     // press Q to perform a wing attack
     for (let i = 0; i < player.abilities.attacks.length; i++) {

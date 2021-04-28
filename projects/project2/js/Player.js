@@ -15,8 +15,8 @@ class Player {
 
     this.abilities = attributes.abilities;
 
-    this.sunPoints = attributes.sunPoints;
-    this.currentSunPoints = attributes.currentSunPoints;
+    this.sunPoints = 500;
+    this.currentSunPoints = 500;
     this.nearShrine = false;
 
     this.maxHealth = attributes.maxHealth;
@@ -38,12 +38,22 @@ class Player {
 
     let frostbiteLoss = setInterval(() => {
       if (this.movable) {
-        this.frostbiteTarget--;
-        if (this.frostbiteTarget < 0) {
-          this.frostbiteTarget = 0;
+        if (
+          mapGrid[this.mapX][this.mapY].hasShrine &&
+          mapGrid[this.mapX][this.mapY].spiritDefeated
+        ) {
+          this.frostbiteTarget += 2;
+          if (this.frostbiteTarget > this.maxFrostbite) {
+            this.frostbiteTarget = this.maxFrostbite;
+          }
+        } else {
+          this.frostbiteTarget--;
+          if (this.frostbiteTarget < 0) {
+            this.frostbiteTarget = 0;
+          }
         }
       }
-    }, 3500);
+    }, 800);
   }
 
   // display the player icon
@@ -107,6 +117,10 @@ class Player {
       // move the player
       this.x += this.vx;
       this.y += this.vy;
+    }
+
+    if (finalBossActivated && this.mapX === 5 && this.mapY === 5) {
+      this.mapMovable = false;
     }
   }
 
@@ -228,6 +242,8 @@ class Player {
             0,
             this.maxFrostbite
           );
+
+          sfx[attack.sfx].play();
 
           if (this.currentAction === `fireBreath`) {
             this.attackX = [];
