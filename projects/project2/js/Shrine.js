@@ -4,6 +4,8 @@ class Shrine extends Structure {
     this.interactionRange = 200;
     this.icon = images.shrine;
 
+    this.cell.hasShrine = true;
+
     if (!this.cell.spiritDefeated) {
       let spirit = new Spirit({
         mapX: this.mapX,

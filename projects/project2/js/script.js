@@ -40,7 +40,7 @@ let images = {
 let icons = [];
 let attackFX = [];
 
-let state = `game`; // game, dead, title
+let state = `title`; // game, dead, title
 
 let seeFlashingText = true;
 let flashingTextFrames = 0;
@@ -221,7 +221,50 @@ function draw() {
   }
 }
 
-function title() {}
+function title() {
+  background(0);
+
+  flashingTextFrames++;
+
+  if (flashingTextFrames >= flashingTextDuration && seeFlashingText) {
+    seeFlashingText = false;
+    flashingTextFrames = 0;
+  } else if (flashingTextFrames >= flashingTextDuration && !seeFlashingText) {
+    seeFlashingText = true;
+    flashingTextFrames = 0;
+  }
+
+  fill(246, 122, 51);
+  textAlign(CENTER, CENTER);
+  textStyle(BOLD);
+  textSize(96);
+  text(`PHOENIX`, width / 2, height / 2 - 80);
+  fill(255);
+  textSize(32);
+  text(`OF THE`, width / 2, height / 2);
+  fill(0, 255, 255);
+  textSize(96);
+  text(`ARCTIC`, width / 2, height / 2 + 80);
+
+  if (seeFlashingText) {
+    fill(0, 255, 255);
+  } else {
+    fill(246, 122, 51);
+  }
+  textStyle(NORMAL);
+  textSize(24);
+  text(`Press N to start a new game`, width / 2, height - 60);
+
+  playerSaved = localStorage.getItem("playerSaved");
+  if (playerSaved) {
+    if (seeFlashingText) {
+      fill(246, 122, 51);
+    } else {
+      fill(0, 255, 255);
+    }
+    text(`Press ENTER to continue your current game`, width / 2, height - 100);
+  }
+}
 
 function game() {
   map.displayTerrain();
@@ -273,8 +316,7 @@ function game() {
 }
 
 function dead() {
-  fill(0);
-  rect(0, 0, width, height);
+  background(0);
 
   fill(255);
   textSize(24);
@@ -312,7 +354,7 @@ function dead() {
     );
   } else {
     fill(0, 255, 255);
-    text(`The cold of the Arctic permeates all.`, width / 2, height / 2 + 20);
+    text(`The cold of the Arctic consumes all.`, width / 2, height / 2 + 20);
 
     if (seeFlashingText) {
       fill(255);
@@ -398,9 +440,6 @@ function respawn() {
   player.currentSunPoints = playerData.currentSunPoints;
   player.mapMovable = playerData.mapMovable;
 
-  console.log(player.mapX + `,` + player.mapY);
-  console.log(player.x + `,` + player.y);
-
   state = `game`;
 }
 
@@ -481,6 +520,8 @@ function mouseMoved() {
 
 // p5: handle keyboard inputs
 function keyPressed() {
+  playerSaved = localStorage.getItem("playerSaved");
+
   if (
     state === `game` &&
     keyCode === 77 &&
@@ -500,18 +541,28 @@ function keyPressed() {
     ui.toggleMenu();
     saveGame();
   } else if (state === `game` && keyCode === 27 && ui.menuOpen) {
+    // press ESCAPE to close the ability menu
     ui.toggleMenu();
     saveGame();
   } else if (state === `game` && keyCode === 16) {
+    // press SHIFT to dash
     player.dash();
   } else if (state === `game` && keyCode === 82) {
+    // press R to use Ember Nova
     player.attack(playerData.attacks.emberNova);
   } else if (state === `dead` && keyCode == 13) {
+    // press ENTER to respawn/reset the game
     if (player.frostbite > 0 && playerSaved) {
       respawn();
     } else {
       resetGame();
     }
+  } else if (state === `title` && keyCode == 13 && playerSaved) {
+    // press ENTER to continue your current game
+    respawn();
+  } else if (state === `title` && keyCode == 78) {
+    // press N to start a new game
+    resetGame();
   }
 }
 
