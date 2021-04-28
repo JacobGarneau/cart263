@@ -24,7 +24,7 @@ let dataSaved;
 let playerData, terrainData, abilityData; // JSON data
 let popup;
 let shrineCount;
-let greatSpirits = 4;
+let greatSpirits = 1;
 let shrines = [];
 let entityCount;
 let entities = [];
@@ -208,6 +208,10 @@ function setup() {
         let entity = new Game(entityData);
       } else if (entityData.type === `spirit`) {
         let entity = new Spirit(entityData);
+      } else if (entityData.type === `greatSpirit`) {
+        let entity = new GreatSpirit(entityData);
+      } else if (entityData.type === `finalBoss`) {
+        let entity = new FinalBoss(entityData);
       }
     }
   }
@@ -280,15 +284,6 @@ function game() {
     projectiles[i].display();
   }
 
-  for (let i = 0; i < entities.length; i++) {
-    entities[i].move();
-    entities[i].display();
-
-    if (entities[i].type === `spirit`) {
-      entities[i].detectPlayer();
-    }
-  }
-
   minimap.display();
 
   for (let i = 0; i < shrines.length; i++) {
@@ -306,6 +301,15 @@ function game() {
       break;
     } else {
       player.nearShrine = false;
+    }
+  }
+
+  for (let i = 0; i < entities.length; i++) {
+    entities[i].move();
+    entities[i].display();
+
+    if (entities[i] !== undefined && entities[i].type !== `game`) {
+      entities[i].detectPlayer();
     }
   }
 

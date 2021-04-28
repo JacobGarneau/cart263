@@ -97,10 +97,11 @@ class Spirit extends Entity {
       let d = dist(this.x, this.y + 20, player.x, player.y);
 
       push();
-      noStroke();
-      fill(255, 0, 0, 100);
+      noFill();
+      strokeWeight(6);
+      stroke(255, 0, 0, 100);
       ellipse(this.x, this.y + 20, this.meleeRange * 2);
-      fill(0, 255, 0, 100);
+      stroke(0, 255, 0, 100);
       ellipse(this.x, this.y + 20, this.rangedRange * 2);
       pop();
 

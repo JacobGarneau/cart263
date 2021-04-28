@@ -15,8 +15,8 @@ class Player {
 
     this.abilities = attributes.abilities;
 
-    this.sunPoints = 50;
-    this.currentSunPoints = 50;
+    this.sunPoints = attributes.sunPoints;
+    this.currentSunPoints = attributes.currentSunPoints;
     this.nearShrine = false;
 
     this.maxHealth = attributes.maxHealth;
