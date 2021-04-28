@@ -63,14 +63,20 @@ class Map {
         let cellX = i * width - player.mapX * width;
         let cellY = j * height - player.mapY * height;
 
+        // draw the lakes
+        for (let k = 0; k < mapGrid[i][j].template.lakes.length; k++) {
+          image(
+            images.lake,
+            cellX + dyn(mapGrid[i][j].template.lakes[k].x, `x`),
+            cellY + dyn(mapGrid[i][j].template.lakes[k].y, `y`)
+          );
+        }
         // draw the glaciers
         for (let k = 0; k < mapGrid[i][j].template.glaciers.length; k++) {
           image(
             images.glacier,
             cellX + dyn(mapGrid[i][j].template.glaciers[k].x, `x`),
-            cellY + dyn(mapGrid[i][j].template.glaciers[k].y, `y`),
-            mapGrid[i][j].template.glaciers[k].size,
-            mapGrid[i][j].template.glaciers[k].size
+            cellY + dyn(mapGrid[i][j].template.glaciers[k].y, `y`)
           );
         }
         // draw the trees
@@ -85,10 +91,8 @@ class Map {
         for (let k = 0; k < mapGrid[i][j].template.mountains.length; k++) {
           image(
             images.mountain,
-            cellX + mapGrid[i][j].template.mountains[k].x,
-            cellY + mapGrid[i][j].template.mountains[k].y,
-            mapGrid[i][j].template.mountains[k].size,
-            mapGrid[i][j].template.mountains[k].size
+            cellX + dyn(mapGrid[i][j].template.mountains[k].x, `x`),
+            cellY + dyn(mapGrid[i][j].template.mountains[k].y, `y`)
           );
         }
       }

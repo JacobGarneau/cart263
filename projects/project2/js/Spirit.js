@@ -5,14 +5,14 @@ class Spirit extends Entity {
     this.health = attributes.health;
     this.healthTarget = attributes.healthTarget;
     this.healthGain = 15;
-    this.healthIncrease = 25;
+    this.healthIncrease = 10;
 
     this.type = `spirit`;
     this.deathQuotes = [
       `The Light of the Sun shines anew.`,
       `Silence reigns once more.`,
       `The Phoenix burns eternally.`,
-      `None can resist the might the Sun.`,
+      `None can resist the might of the Sun.`,
     ];
 
     this.meleeTimer = 0;
@@ -41,10 +41,11 @@ class Spirit extends Entity {
     super.display();
     push();
     fill(0, 255, 0);
+    imageMode(CENTER);
     image(
       images.ghost,
-      this.mapX * width + this.x - player.mapX * width - 20,
-      this.mapY * height + this.y - player.mapY * height,
+      this.mapX * width + this.x - player.mapX * width,
+      this.mapY * height + this.y - player.mapY * height + 20,
       this.size,
       this.size
     );
@@ -105,7 +106,6 @@ class Spirit extends Entity {
 
       if (d < this.meleeRange) {
         this.meleeTimer++;
-        console.log(this.meleeTimer);
 
         if (this.meleeTimer >= this.meleeChargeup) {
           this.attackMelee();

@@ -8,6 +8,7 @@ class Entity {
     this.health = this.health;
     this.healthTarget = this.healthTarget;
     this.healthGain = 0;
+    this.healthBarShift = 0;
     this.mapX = attributes.mapX;
     this.mapY = attributes.mapY;
     this.movable = true;
@@ -31,7 +32,11 @@ class Entity {
     fill(0);
     rect(
       this.mapX * width + this.x - this.size / 2 - player.mapX * width,
-      this.mapY * height + this.y - 16 - player.mapY * height,
+      this.mapY * height +
+        this.y -
+        16 -
+        player.mapY * height -
+        this.healthBarShift,
       this.size,
       6
     );
@@ -40,7 +45,11 @@ class Entity {
     let healthBarSize = (this.size / this.maxHealth) * this.health;
     rect(
       this.mapX * width + this.x - this.size / 2 - player.mapX * width,
-      this.mapY * height + this.y - 16 - player.mapY * height,
+      this.mapY * height +
+        this.y -
+        16 -
+        player.mapY * height -
+        this.healthBarShift,
       healthBarSize,
       6
     );

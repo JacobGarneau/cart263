@@ -7,7 +7,7 @@ class Shrine extends Structure {
     this.cell.hasShrine = true;
 
     if (!this.cell.spiritDefeated) {
-      let spirit = new Spirit({
+      let spirit = new GreatSpirit({
         mapX: this.mapX,
         mapY: this.mapY,
         maxHealth: 50,

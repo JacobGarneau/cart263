@@ -15,8 +15,8 @@ class Player {
 
     this.abilities = attributes.abilities;
 
-    this.sunPoints = attributes.sunPoints;
-    this.currentSunPoints = attributes.currentSunPoints;
+    this.sunPoints = 50;
+    this.currentSunPoints = 50;
     this.nearShrine = false;
 
     this.maxHealth = attributes.maxHealth;
@@ -183,8 +183,10 @@ class Player {
           rotate(this.rotation - this.active);
         }
 
-        imageMode(CENTER);
-        image(this.attackFX, 0, 0, this.attackSize[i], this.attackSize[i]);
+        if (i !== 2) {
+          imageMode(CENTER);
+          image(this.attackFX, 0, 0, this.attackSize[i], this.attackSize[i]);
+        }
         pop();
 
         for (let j = 0; j < entities.length; j++) {

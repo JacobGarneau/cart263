@@ -24,6 +24,7 @@ let dataSaved;
 let playerData, terrainData, abilityData; // JSON data
 let popup;
 let shrineCount;
+let greatSpirits = 4;
 let shrines = [];
 let entityCount;
 let entities = [];
@@ -82,6 +83,7 @@ function preload() {
   images.upgrade = loadImage("assets/images/upgrade.svg");
   images.dash = loadImage("assets/images/dash.svg");
   images.shift = loadImage("assets/images/shift.svg");
+  images.lake = loadImage("assets/images/lake.svg");
 
   icons = [
     images.attack,
@@ -270,6 +272,7 @@ function title() {
 function game() {
   map.displayTerrain();
   map.changeTile();
+  map.displayContents();
   player.handleActions();
 
   for (let i = 0; i < projectiles.length; i++) {
@@ -285,8 +288,6 @@ function game() {
       entities[i].detectPlayer();
     }
   }
-
-  map.displayContents();
 
   minimap.display();
 
@@ -539,10 +540,32 @@ function keyPressed() {
     minimap.toggle();
   } else if (state === `game` && keyCode === 81) {
     // press Q to perform a wing attack
-    player.attack(playerData.attacks.wingAttack);
+    for (let i = 0; i < player.abilities.attacks.length; i++) {
+      if (
+        player.abilities.attacks[i].command ===
+        playerData.attacks.wingAttack.command
+      ) {
+        if (player.abilities.attacks[i].upgrade) {
+          player.attack(playerData.attacks.improvedWingAttack);
+        } else {
+          player.attack(playerData.attacks.wingAttack);
+        }
+      }
+    }
   } else if (state === `game` && keyCode === 69) {
     // press E to shoot a fireball
-    player.attack(playerData.attacks.fireBreath);
+    for (let i = 0; i < player.abilities.attacks.length; i++) {
+      if (
+        player.abilities.attacks[i].command ===
+        playerData.attacks.fireBreath.command
+      ) {
+        if (player.abilities.attacks[i].upgrade) {
+          player.attack(playerData.attacks.improvedFireBreath);
+        } else {
+          player.attack(playerData.attacks.fireBreath);
+        }
+      }
+    }
   } else if (state === `game` && keyCode === 32 && player.nearShrine) {
     // press SPACEBAR to interact with a shrine
     ui.toggleMenu();
