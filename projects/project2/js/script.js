@@ -24,7 +24,7 @@ let dataSaved; // localStorage recuperation
 let playerData, terrainData, abilityData; // JSON data
 let popup;
 let shrineCount; // localStorage recuperation
-let greatSpirits = 1; // great spirits to defeat before summoning the final boss
+let greatSpirits = 5; // great spirits to defeat before summoning the final boss
 let finalBossActivated = false;
 let shrines = [];
 let entityCount; // localStorage recuperation
@@ -39,6 +39,7 @@ let sfx = [];
 
 let state = `title`; // game, dead, title, victory
 
+let firstTimeOnMenu = true;
 let seeFlashingText = true;
 let flashingTextFrames = 0;
 let flashingTextDuration = 40;
@@ -93,18 +94,38 @@ function preload() {
 
   // soundFormats("wav");
   soundFormats("mp3");
-  sounds.dash = loadSound("assets/sounds/dash");
+  sounds.peck = loadSound("assets/sounds/peck");
   sounds.wingAttack = loadSound("assets/sounds/wingAttack");
   sounds.fireBreath = loadSound("assets/sounds/fireBreath");
   sounds.emberNova = loadSound("assets/sounds/emberNova");
+  sounds.dash = loadSound("assets/sounds/dash");
   sounds.minimap = loadSound("assets/sounds/minimap");
+  sounds.abilityPurchased = loadSound("assets/sounds/abilityPurchased");
+  sounds.chimes = loadSound("assets/sounds/chimes");
+  sounds.shrineDefeated = loadSound("assets/sounds/shrineDefeated");
+  sounds.summon = loadSound("assets/sounds/summon");
+  sounds.spiritDefeat = loadSound("assets/sounds/spiritDefeat");
+  sounds.spiritDamage = loadSound("assets/sounds/spiritDamage");
+  sounds.spiritHit = loadSound("assets/sounds/spiritHit");
+  sounds.spiritShoot = loadSound("assets/sounds/spiritShoot");
+  sounds.rotateHum = loadSound("assets/sounds/rotateHum");
+  sounds.death = loadSound("assets/sounds/death");
+  sounds.menu = loadSound("assets/sounds/menu");
+  sounds.spawn = loadSound("assets/sounds/spawn");
 
-  sfx = [sounds.dash, sounds.wingAttack, sounds.fireBreath, sounds.emberNova];
+  sfx = [sounds.peck, sounds.wingAttack, sounds.fireBreath, sounds.emberNova];
 }
 
 // p5: creates the canvas and the object instances
 function setup() {
   createCanvas(windowWidth, windowHeight);
+
+  if (firstTimeOnMenu) {
+    getAudioContext().suspend();
+    sounds.chimes.play();
+    sounds.chimes.loop();
+    firstTimeOnMenu = false;
+  }
 
   mapGrid = JSON.parse(localStorage.getItem("mapGrid"));
 
@@ -532,24 +553,26 @@ function newGame() {
 
 // p5: handle mouse clicks
 function mouseClicked() {
-  for (let i = 0; i < player.abilities.attacks.length; i++) {
-    if (
-      state === `game` &&
-      player.abilities.attacks[i].command === playerData.attacks.peck.command
-    ) {
-      if (player.abilities.attacks[i].upgrade) {
-        player.attack(playerData.attacks.improvedPeck);
-      } else {
-        player.attack(playerData.attacks.peck);
+  userStartAudio();
+  if (state === `game`) {
+    for (let i = 0; i < player.abilities.attacks.length; i++) {
+      if (
+        player.abilities.attacks[i].command === playerData.attacks.peck.command
+      ) {
+        if (player.abilities.attacks[i].upgrade) {
+          player.attack(playerData.attacks.improvedPeck);
+        } else {
+          player.attack(playerData.attacks.peck);
+        }
       }
     }
-  }
 
-  if (state === `game` && ui.menuOpen) {
-    for (let i = 0; i < abilityData.abilities.length; i++) {
-      if (abilityData.abilities[i].hover) {
-        ui.buyAbility(abilityData.abilities[i]);
-        saveGame();
+    if (ui.menuOpen) {
+      for (let i = 0; i < abilityData.abilities.length; i++) {
+        if (abilityData.abilities[i].hover) {
+          ui.buyAbility(abilityData.abilities[i]);
+          saveGame();
+        }
       }
     }
   }
@@ -557,6 +580,7 @@ function mouseClicked() {
 
 // p5: handles mouse movement
 function mouseMoved() {
+  userStartAudio();
   if (state === `game` && ui.menuOpen) {
     for (let i = 0; i < abilityData.abilities.length; i++) {
       let d = dist(
@@ -618,10 +642,12 @@ function keyPressed() {
   } else if (state === `game` && keyCode === 32 && player.nearShrine) {
     // press SPACEBAR to interact with a shrine
     ui.toggleMenu();
+    sounds.menu.play();
     saveGame();
   } else if (state === `game` && keyCode === 27 && ui.menuOpen) {
     // press ESCAPE to close the ability menu
     ui.toggleMenu();
+    sounds.menu.play();
     saveGame();
   } else if (state === `game` && keyCode === 16) {
     // press SHIFT to dash
@@ -633,18 +659,29 @@ function keyPressed() {
     // press ENTER to respawn/reset the game
     if (player.frostbite > 0 && playerSaved) {
       respawn();
+      sounds.spawn.play();
     } else {
       state = `title`;
+      sounds.menu.play();
+      sounds.chimes.play();
+      sounds.chimes.loop();
     }
   } else if (state === `title` && keyCode == 13 && playerSaved) {
     // press ENTER to continue your current game
     respawn();
+    sounds.chimes.stop();
+    sounds.spawn.play();
   } else if (state === `title` && keyCode == 78) {
     // press N to start a new game
     newGame();
+    sounds.chimes.stop();
+    sounds.spawn.play();
   } else if (state === `victory` && keyCode === 13) {
     // press ENTER to return to the main menu
     state = `title`;
+    sounds.menu.play();
+    sounds.chimes.play();
+    sounds.chimes.loop();
   }
 }
 

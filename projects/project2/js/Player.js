@@ -35,21 +35,29 @@ class Player {
     this.attackY = 0; // vertical position of the attack hitbox
     this.damage = 0;
     this.attackFX;
+    this.justEnded = true; // detects if the game is on the first frame after a move has ended
 
     let frostbiteLoss = setInterval(() => {
       if (state === `game` && this.movable) {
-        if (
-          mapGrid[this.mapX][this.mapY].hasShrine &&
-          mapGrid[this.mapX][this.mapY].spiritDefeated
-        ) {
-          this.frostbiteTarget += 2;
-          if (this.frostbiteTarget > this.maxFrostbite) {
-            this.frostbiteTarget = this.maxFrostbite;
-          }
-        } else {
+        if (this.mapX === 5 && this.mapY === 5 && finalBossActivated) {
           this.frostbiteTarget--;
           if (this.frostbiteTarget < 0) {
             this.frostbiteTarget = 0;
+          }
+        } else {
+          if (
+            mapGrid[this.mapX][this.mapY].hasShrine &&
+            mapGrid[this.mapX][this.mapY].spiritDefeated
+          ) {
+            this.frostbiteTarget += 2;
+            if (this.frostbiteTarget > this.maxFrostbite) {
+              this.frostbiteTarget = this.maxFrostbite;
+            }
+          } else {
+            this.frostbiteTarget--;
+            if (this.frostbiteTarget < 0) {
+              this.frostbiteTarget = 0;
+            }
           }
         }
       }
@@ -196,6 +204,10 @@ class Player {
 
         if (this.currentAction === `emberNova`) {
           rotate(this.rotation - this.active);
+
+          setInterval(function () {
+            sounds.emberNova.stop();
+          }, (playerData.attacks.emberNova.activeFrames / 60) * 1000);
         }
 
         if (i !== 2) {
@@ -266,6 +278,7 @@ class Player {
 
   dash() {
     if (this.abilities.dash && !this.dashing) {
+      sounds.dash.play();
       let speedFactor = 1.5;
       this.dashing = true;
       if (this.rotation === 0) {
@@ -322,6 +335,7 @@ class Player {
     if (this.health <= 0) {
       state = `dead`;
       this.movable = false;
+      sounds.death.play();
 
       if (this.frostbite <= 0) {
         resetGame();

@@ -521,6 +521,8 @@ class UI {
       if (player.currentSunPoints >= ability.cost) {
         player.currentSunPoints -= ability.cost;
         ability.status = `unlocked`;
+        sounds.abilityPurchased.stop();
+        sounds.abilityPurchased.play(0, 2);
 
         for (let i = 0; i < ability.unlocks.length; i++) {
           for (let j = 0; j < abilityData.abilities.length; j++) {

@@ -2,6 +2,9 @@ class Projectile {
   constructor(owner) {
     this.x = owner.x;
     this.y = owner.y;
+    this.rotation = 0;
+    this.mapX = owner.mapX;
+    this.mapY = owner.mapY;
     this.vx = 0;
     this.vy = 0;
     this.ax = 0.4;
@@ -15,31 +18,36 @@ class Projectile {
     this.age = 0;
 
     projectiles.push(this);
+    sounds.spiritShoot.play();
   }
 
   display() {
-    // console.log(`PROJECTILE INCOMING`);
     this.age++;
     if (this.age >= this.duration) {
       this.die();
     }
 
+    this.rotation--;
     push();
+    translate(
+      this.mapX * width + this.x - player.mapX * width,
+      this.mapY * height + this.y - player.mapY * height
+    );
+    rotate(this.rotation);
     fill(255, 255, 0);
     imageMode(CENTER);
-    image(images.nova3, this.x, this.y, this.size, this.size);
-    // console.log(`PROJECTILE INCOMING`);
+    image(images.nova3, 0, 0);
 
     noStroke();
     fill(255, 200, 0);
-    ellipse(this.x, this.y, 32);
+    ellipse(0, 0, 32);
     pop();
 
     this.dealDamage();
   }
 
   move() {
-    if (this.movable) {
+    if (player.movable) {
       if (this.x < player.x) {
         this.vx += this.ax;
         this.vx = constrain(this.vx, -this.maxSpeed, this.maxSpeed);
@@ -65,8 +73,13 @@ class Projectile {
 
   dealDamage() {
     let d = dist(this.x, this.y, player.x, player.y);
-    if (d < this.size / 2) {
+    if (
+      d < this.size / 2 &&
+      this.mapX === player.mapX &&
+      this.mapY === player.mapY
+    ) {
       player.healthTarget -= this.damage;
+      sounds.spiritHit.play();
       this.die();
     }
   }

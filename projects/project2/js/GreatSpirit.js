@@ -39,7 +39,11 @@ class GreatSpirit extends Spirit {
   }
 
   detectPlayer() {
-    if (this.mapX === player.mapX && this.mapY === player.mapY)
+    if (
+      this.mapX === player.mapX &&
+      this.mapY === player.mapY &&
+      player.movable
+    )
       if (this.health < this.maxHealth / 2) {
         for (let i = 0; i < this.rotateX.length; i++) {
           if (
@@ -106,6 +110,9 @@ class GreatSpirit extends Spirit {
   die() {
     greatSpirits--;
     player.maxHealth += 10;
+    sounds.shrineDefeated.play();
+
+    sounds.rotateHum.stop();
 
     if (greatSpirits === 0) {
       finalBossActivated = true;

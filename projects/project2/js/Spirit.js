@@ -97,7 +97,11 @@ class Spirit extends Entity {
   }
 
   detectPlayer() {
-    if (player.mapX === this.mapX && player.mapY === this.mapY) {
+    if (
+      player.mapX === this.mapX &&
+      player.mapY === this.mapY &&
+      player.movable
+    ) {
       let d = dist(this.x, this.y + 20, player.x, player.y);
 
       push();
@@ -145,6 +149,7 @@ class Spirit extends Entity {
     this.meleeY = player.y;
     this.meleeTimer = -this.meleeChargeup * 1.5;
     this.meleeHit = true;
+    sounds.spiritHit.play();
 
     setTimeout(() => {
       this.meleeHit = false;
@@ -158,9 +163,11 @@ class Spirit extends Entity {
   die() {
     player.sunPoints++;
     player.currentSunPoints++;
-
     this.cell.spiritDefeated = true;
     player.mapMovable = true;
+    if (this.type === `spirit`) {
+      sounds.spiritDefeat.play();
+    }
 
     for (let i = 0; i < entities.length; i++) {
       if (entities[i] instanceof Spirit) {

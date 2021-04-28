@@ -70,6 +70,22 @@ class Entity {
     if (this.iFrames === 0) {
       this.healthTarget -= amount;
       this.iFrames = frames + 1;
+
+      if (
+        this.type === `spirit` ||
+        this.type === `greatSpirit` ||
+        this.type === `finalBoss`
+      ) {
+        sounds.spiritDamage.play();
+        if (
+          (this.type === `greatSpirit` &&
+            this.healthTarget < this.maxHealth / 2) ||
+          (this.type === `finalBoss` && this.healthTarget < this.maxHealth / 2)
+        ) {
+          sounds.rotateHum.play();
+          sounds.rotateHum.loop();
+        }
+      }
     }
   }
 

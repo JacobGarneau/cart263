@@ -52,7 +52,11 @@ class FinalBoss extends Spirit {
   }
 
   detectPlayer() {
-    if (player.mapX === this.mapX && player.mapY === this.mapY) {
+    if (
+      player.mapX === this.mapX &&
+      player.mapY === this.mapY &&
+      player.movable
+    ) {
       let d = dist(this.x, this.y + 20, player.x, player.y);
 
       push();
@@ -161,10 +165,13 @@ class FinalBoss extends Spirit {
     });
     minion.x = this.x;
     minion.y = this.y;
+    sounds.summon.play();
   }
 
   die() {
     finalBossActivated = false;
+    sounds.shrineDefeated.play();
+    sounds.rotateHum.stop();
     resetGame();
     state = `victory`;
     super.die();
