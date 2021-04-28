@@ -282,6 +282,7 @@ class UI {
       );
 
       fill(255);
+      textSize(14);
       textAlign(CENTER, CENTER);
       textStyle(BOLD);
       text(

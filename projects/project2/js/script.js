@@ -40,6 +40,12 @@ let images = {
 let icons = [];
 let attackFX = [];
 
+let state = `game`; // game, dead, title
+
+let seeFlashingText = true;
+let flashingTextFrames = 0;
+let flashingTextDuration = 40;
+
 // p5: load JSON data and images
 function preload() {
   dataSaved = localStorage.getItem("dataSaved");
@@ -206,6 +212,18 @@ function setup() {
 
 // p5: draw the game elements on the canvas
 function draw() {
+  if (state === `title`) {
+    title();
+  } else if (state === `game`) {
+    game();
+  } else if (state === `dead`) {
+    dead();
+  }
+}
+
+function title() {}
+
+function game() {
   map.displayTerrain();
   map.changeTile();
   player.handleActions();
@@ -252,6 +270,58 @@ function draw() {
   player.display();
 
   ui.display();
+}
+
+function dead() {
+  fill(0);
+  rect(0, 0, width, height);
+
+  fill(255);
+  textSize(24);
+  textAlign(CENTER, CENTER);
+  text(`You died.`, width / 2, height / 2 - 20);
+
+  flashingTextFrames++;
+  if (flashingTextFrames >= flashingTextDuration && seeFlashingText) {
+    seeFlashingText = false;
+    flashingTextFrames = 0;
+  } else if (flashingTextFrames >= flashingTextDuration && !seeFlashingText) {
+    seeFlashingText = true;
+    flashingTextFrames = 0;
+  }
+
+  playerSaved = localStorage.getItem("playerSaved");
+  if (player.frostbite > 0 && playerSaved) {
+    fill(246, 122, 51);
+    text(
+      `But the Phoenix rises from its ashes to be born again.`,
+      width / 2,
+      height / 2 + 20
+    );
+
+    if (seeFlashingText) {
+      fill(255);
+    } else {
+      fill(246, 122, 51);
+    }
+
+    text(
+      `Press ENTER to respawn at the last shrine you visited`,
+      width / 2,
+      height - 60
+    );
+  } else {
+    fill(0, 255, 255);
+    text(`The cold of the Arctic permeates all.`, width / 2, height / 2 + 20);
+
+    if (seeFlashingText) {
+      fill(255);
+    } else {
+      fill(0, 255, 255);
+    }
+
+    text(`Press ENTER to start a new game`, width / 2, height - 60);
+  }
 }
 
 function saveGame() {
@@ -306,6 +376,66 @@ function saveGame() {
   }
 }
 
+function respawn() {
+  let playerData = JSON.parse(localStorage.getItem("player"));
+
+  player.healthTarget = player.health = playerData.maxHealth;
+  player.frostbiteTarget = player.frostbite = playerData.maxFrostbite;
+  player.movable = true;
+  player.x = width / 2;
+  player.y = height / 2 + dyn(32, `y`);
+  player.vx = 0;
+  player.vy = 0;
+  player.vxTarget = 0;
+  player.vyTarget = 0;
+  player.rotation = 270;
+  player.mapX = playerData.mapX;
+  player.mapY = playerData.mapY;
+  map.mapTargetX = playerData.mapX;
+  map.mapTargetY = playerData.mapY;
+  player.abilities = playerData.abilities;
+  player.sunPoints = playerData.sunPoints;
+  player.currentSunPoints = playerData.currentSunPoints;
+  player.mapMovable = playerData.mapMovable;
+
+  console.log(player.mapX + `,` + player.mapY);
+  console.log(player.x + `,` + player.y);
+
+  state = `game`;
+}
+
+function resetGame() {
+  mapGrid = [];
+  projectiles = [];
+  entities = [];
+  shrines = [];
+
+  abilityData = loadJSON("js/data/abilityData.json");
+  localStorage.removeItem("abilityData");
+  localStorage.removeItem("dataSaved");
+  localStorage.removeItem("mapGrid");
+  localStorage.removeItem("entityCount");
+  localStorage.removeItem("shrineCount");
+  localStorage.removeItem("player");
+  localStorage.removeItem("playerSaved");
+
+  for (let i = 0; i < entityCount; i++) {
+    localStorage.removeItem("entity" + i);
+  }
+
+  for (let i = 0; i < entityCount; i++) {
+    localStorage.removeItem("entity" + i);
+  }
+
+  for (let i = 0; i < shrineCount; i++) {
+    localStorage.removeItem("shrine" + i);
+  }
+
+  setup();
+
+  state = `game`;
+}
+
 // p5: handle mouse clicks
 function mouseClicked() {
   for (let i = 0; i < player.abilities.attacks.length; i++) {
@@ -351,26 +481,37 @@ function mouseMoved() {
 
 // p5: handle keyboard inputs
 function keyPressed() {
-  if (keyCode === 77 && player.abilities.minimap && player.movable) {
+  if (
+    state === `game` &&
+    keyCode === 77 &&
+    player.abilities.minimap &&
+    player.movable
+  ) {
     // press M to open the minimap
     minimap.toggle();
-  } else if (keyCode === 81) {
+  } else if (state === `game` && keyCode === 81) {
     // press Q to perform a wing attack
     player.attack(playerData.attacks.wingAttack);
-  } else if (keyCode === 69) {
+  } else if (state === `game` && keyCode === 69) {
     // press E to shoot a fireball
     player.attack(playerData.attacks.fireBreath);
-  } else if (keyCode === 32 && player.nearShrine) {
+  } else if (state === `game` && keyCode === 32 && player.nearShrine) {
     // press SPACEBAR to interact with a shrine
     ui.toggleMenu();
     saveGame();
-  } else if (keyCode === 27 && ui.menuOpen) {
+  } else if (state === `game` && keyCode === 27 && ui.menuOpen) {
     ui.toggleMenu();
     saveGame();
-  } else if (keyCode === 16) {
+  } else if (state === `game` && keyCode === 16) {
     player.dash();
-  } else if (keyCode === 82) {
+  } else if (state === `game` && keyCode === 82) {
     player.attack(playerData.attacks.emberNova);
+  } else if (state === `dead` && keyCode == 13) {
+    if (player.frostbite > 0 && playerSaved) {
+      respawn();
+    } else {
+      resetGame();
+    }
   }
 }
 

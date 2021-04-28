@@ -60,7 +60,6 @@ class Projectile {
       this.y += this.vy;
       this.x = constrain(this.x, 0, width);
       this.y = constrain(this.y, 0, height);
-      console.log(this.x + `,` + this.y);
     }
   }
 

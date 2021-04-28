@@ -297,5 +297,10 @@ class Player {
     } else if (this.frostbite > this.frostbiteTarget) {
       this.frostbite--;
     }
+
+    if (this.health <= 0) {
+      state = `dead`;
+      this.movable = false;
+    }
   }
 }
