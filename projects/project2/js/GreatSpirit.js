@@ -9,6 +9,16 @@ class GreatSpirit extends Spirit {
         greatSpirits - 1
       } remain against the Light.`,
     ];
+
+    this.meleeTimer = 0;
+    this.meleeChargeup = 30;
+    this.meleeRange = 60;
+    this.meleeDamage = 20;
+
+    this.rangedTimer = 0;
+    this.rangedChargeup = 120;
+    this.rangedRange = 180;
+    this.rangedDamage = 12;
   }
 
   die() {
