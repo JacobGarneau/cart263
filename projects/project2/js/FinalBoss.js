@@ -27,7 +27,7 @@ class FinalBoss extends Spirit {
     this.rangedDamage = 8;
 
     this.rotateRange = 100;
-    this.rotateDamage = 4;
+    this.rotateDamage = 1;
     this.rotateX = [
       -this.rotateRange,
       this.rotateRange,
@@ -124,7 +124,8 @@ class FinalBoss extends Spirit {
           );
           if (d < this.rotateSize && player.iFrames <= 0) {
             player.healthTarget -= this.rotateDamage;
-            player.iFrames = 10;
+            player.iFrames = 2;
+            sounds.tick.play();
           }
         }
       }

@@ -4,7 +4,6 @@ class Game extends Entity {
     this.maxHealth = attributes.maxHealth;
     this.health = attributes.health;
     this.healthTarget = attributes.healthTarget;
-    this.healthGain = 15;
     this.detectionDistance = 200;
     this.type = `game`;
 
@@ -17,8 +16,10 @@ class Game extends Entity {
 
     if (this.cell.biome === `sea`) {
       this.icon = images.fish;
+      this.healthGain = 15;
     } else {
       this.icon = images.rabbit;
+      this.healthGain = 5;
     }
 
     if (this.health > 0) {

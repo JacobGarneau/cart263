@@ -15,8 +15,8 @@ class Player {
 
     this.abilities = attributes.abilities;
 
-    this.sunPoints = 500;
-    this.currentSunPoints = 500;
+    this.sunPoints = attributes.sunPoints;
+    this.currentSunPoints = attributes.currentSunPoints;
     this.nearShrine = false;
 
     this.maxHealth = attributes.maxHealth;
@@ -54,9 +54,16 @@ class Player {
               this.frostbiteTarget = this.maxFrostbite;
             }
           } else {
-            this.frostbiteTarget--;
-            if (this.frostbiteTarget < 0) {
-              this.frostbiteTarget = 0;
+            if (mapGrid[this.mapX][this.mapY].biome === `sea`) {
+              this.frostbiteTarget -= 2;
+              if (this.frostbiteTarget < 0) {
+                this.frostbiteTarget = 0;
+              }
+            } else {
+              this.frostbiteTarget--;
+              if (this.frostbiteTarget < 0) {
+                this.frostbiteTarget = 0;
+              }
             }
           }
         }

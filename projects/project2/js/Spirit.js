@@ -4,7 +4,7 @@ class Spirit extends Entity {
     this.maxHealth = attributes.maxHealth;
     this.health = attributes.health;
     this.healthTarget = attributes.healthTarget;
-    this.healthGain = 15;
+    this.healthGain = 0;
     this.healthIncrease = 10;
 
     this.type = `spirit`;

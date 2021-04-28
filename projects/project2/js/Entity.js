@@ -85,6 +85,12 @@ class Entity {
           sounds.rotateHum.play();
           sounds.rotateHum.loop();
         }
+      } else if (this.type === `game`) {
+        if (this.cell.biome === `sea`) {
+          sounds.fishDamage.play();
+        } else {
+          sounds.rabbitDamage.play();
+        }
       }
     }
   }

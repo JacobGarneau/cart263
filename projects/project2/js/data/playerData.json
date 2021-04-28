@@ -61,7 +61,7 @@
       "posX": [0],
       "posY": [0],
       "size": [120],
-      "hitlag": 60,
+      "hitlag": 360,
       "activeFrames": 360,
       "recharge": 1200,
       "damage": 3,

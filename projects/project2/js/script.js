@@ -112,8 +112,15 @@ function preload() {
   sounds.death = loadSound("assets/sounds/death");
   sounds.menu = loadSound("assets/sounds/menu");
   sounds.spawn = loadSound("assets/sounds/spawn");
+  sounds.tick = loadSound("assets/sounds/tick");
+  sounds.rabbitDamage = loadSound("assets/sounds/rabbitDamage");
+  sounds.fishDamage = loadSound("assets/sounds/fishDamage");
+  sounds.wind = loadSound("assets/sounds/wind");
 
   sfx = [sounds.peck, sounds.wingAttack, sounds.fireBreath, sounds.emberNova];
+
+  sounds.wind.setVolume(0.25);
+  sounds.chimes.setVolume(0.25);
 }
 
 // p5: creates the canvas and the object instances
@@ -122,6 +129,8 @@ function setup() {
 
   if (firstTimeOnMenu) {
     getAudioContext().suspend();
+    sounds.wind.play();
+    sounds.wind.loop();
     sounds.chimes.play();
     sounds.chimes.loop();
     firstTimeOnMenu = false;

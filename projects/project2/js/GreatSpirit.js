@@ -24,7 +24,7 @@ class GreatSpirit extends Spirit {
     this.rangedDamage = 8;
 
     this.rotateRange = 120;
-    this.rotateDamage = 4;
+    this.rotateDamage = 1;
     this.rotateX = [-this.rotateRange, this.rotateRange];
     this.rotateY = [-this.rotateRange, this.rotateRange];
     this.rotateSpeed = 2;
@@ -94,7 +94,8 @@ class GreatSpirit extends Spirit {
           );
           if (d < this.rotateSize / 2 && player.iFrames <= 0) {
             player.healthTarget -= this.rotateDamage;
-            player.iFrames = 10;
+            player.iFrames = 3;
+            sounds.tick.play();
           }
         }
       }
