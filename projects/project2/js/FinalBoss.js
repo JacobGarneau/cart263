@@ -27,7 +27,7 @@ class FinalBoss extends Spirit {
     this.rangedDamage = 12;
 
     this.rotateRange = 100;
-    this.rotateDamage = 1;
+    this.rotateDamage = 4;
     this.rotateX = [
       -this.rotateRange,
       this.rotateRange,
@@ -42,7 +42,7 @@ class FinalBoss extends Spirit {
     ];
     this.rotateSpeed = 2;
     this.rotateSpin = 0;
-    this.rotateSize = 40;
+    this.rotateSize = 44;
 
     this.summonTimer = 0;
     this.summonChargeup = 180;
@@ -118,12 +118,9 @@ class FinalBoss extends Spirit {
             player.x,
             player.y
           );
-          if (
-            d < this.rotateSize / 2 &&
-            this.mapX === player.mapX &&
-            this.mapY === player.mapY
-          ) {
+          if (d < this.rotateSize / 2 && player.iFrames <= 0) {
             player.healthTarget -= this.rotateDamage;
+            player.iFrames = 10;
           }
         }
       }

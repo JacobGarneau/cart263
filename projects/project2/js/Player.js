@@ -25,6 +25,7 @@ class Player {
     this.maxFrostbite = attributes.maxFrostbite;
     this.frostbite = attributes.frostbite;
     this.frostbiteTarget = attributes.frostbiteTarget;
+    this.iFrames = 0;
 
     this.currentAction = undefined; // currently activated action
     this.hitlag = 0; // time before you can make another attack
@@ -288,6 +289,8 @@ class Player {
   }
 
   updateStats() {
+    this.iFrames--;
+
     if (this.health < this.healthTarget) {
       this.health++;
     } else if (this.health > this.healthTarget) {
