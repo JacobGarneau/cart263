@@ -301,6 +301,10 @@ class Player {
     if (this.health <= 0) {
       state = `dead`;
       this.movable = false;
+
+      if (this.frostbite <= 0) {
+        resetGame();
+      }
     }
   }
 }

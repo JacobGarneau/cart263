@@ -366,7 +366,7 @@ function dead() {
       fill(0, 255, 255);
     }
 
-    text(`Press ENTER to start a new game`, width / 2, height - 60);
+    text(`Press ENTER to return to the title screen`, width / 2, height - 60);
   }
 }
 
@@ -473,7 +473,10 @@ function resetGame() {
   for (let i = 0; i < shrineCount; i++) {
     localStorage.removeItem("shrine" + i);
   }
+}
 
+function newGame() {
+  resetGame();
   setup();
 
   state = `game`;
@@ -559,14 +562,14 @@ function keyPressed() {
     if (player.frostbite > 0 && playerSaved) {
       respawn();
     } else {
-      resetGame();
+      state = `title`;
     }
   } else if (state === `title` && keyCode == 13 && playerSaved) {
     // press ENTER to continue your current game
     respawn();
   } else if (state === `title` && keyCode == 78) {
     // press N to start a new game
-    resetGame();
+    newGame();
   }
 }
 
