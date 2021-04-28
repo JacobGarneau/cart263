@@ -37,7 +37,7 @@ class Player {
     this.attackFX;
 
     let frostbiteLoss = setInterval(() => {
-      if (this.movable) {
+      if (state === `game` && this.movable) {
         if (
           mapGrid[this.mapX][this.mapY].hasShrine &&
           mapGrid[this.mapX][this.mapY].spiritDefeated

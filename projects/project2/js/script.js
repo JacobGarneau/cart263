@@ -385,7 +385,38 @@ function dead() {
   }
 }
 
-function victory() {}
+function victory() {
+  background(0);
+
+  flashingTextFrames++;
+
+  if (flashingTextFrames >= flashingTextDuration && seeFlashingText) {
+    seeFlashingText = false;
+    flashingTextFrames = 0;
+  } else if (flashingTextFrames >= flashingTextDuration && !seeFlashingText) {
+    seeFlashingText = true;
+    flashingTextFrames = 0;
+  }
+
+  fill(0, 255, 255);
+  textAlign(CENTER, CENTER);
+  textSize(36);
+  text(`The cold is defeated`, width / 2, height / 2 - 120);
+  fill(255);
+  text(`Spirits consumed by the Light`, width / 2, height / 2 - 40);
+  text(`Burn the flame of the mighty`, width / 2, height / 2 + 40);
+  fill(246, 122, 51);
+  text(`Phoenix of the Arctic`, width / 2, height / 2 + 120);
+
+  if (seeFlashingText) {
+    fill(0, 255, 255);
+  } else {
+    fill(246, 122, 51);
+  }
+  textStyle(NORMAL);
+  textSize(24);
+  text(`Press ENTER to return to the title screen`, width / 2, height - 60);
+}
 
 function saveGame() {
   localStorage.setItem("mapGrid", JSON.stringify(mapGrid));
@@ -503,6 +534,7 @@ function newGame() {
 function mouseClicked() {
   for (let i = 0; i < player.abilities.attacks.length; i++) {
     if (
+      state === `game` &&
       player.abilities.attacks[i].command === playerData.attacks.peck.command
     ) {
       if (player.abilities.attacks[i].upgrade) {
@@ -513,7 +545,7 @@ function mouseClicked() {
     }
   }
 
-  if (ui.menuOpen) {
+  if (state === `game` && ui.menuOpen) {
     for (let i = 0; i < abilityData.abilities.length; i++) {
       if (abilityData.abilities[i].hover) {
         ui.buyAbility(abilityData.abilities[i]);
@@ -525,7 +557,7 @@ function mouseClicked() {
 
 // p5: handles mouse movement
 function mouseMoved() {
-  if (ui.menuOpen) {
+  if (state === `game` && ui.menuOpen) {
     for (let i = 0; i < abilityData.abilities.length; i++) {
       let d = dist(
         width / 2 + dyn(abilityData.abilities[i].x, `x`),
@@ -610,6 +642,9 @@ function keyPressed() {
   } else if (state === `title` && keyCode == 78) {
     // press N to start a new game
     newGame();
+  } else if (state === `victory` && keyCode === 13) {
+    // press ENTER to return to the main menu
+    state = `title`;
   }
 }
 

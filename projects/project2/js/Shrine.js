@@ -10,9 +10,9 @@ class Shrine extends Structure {
       let spirit = new GreatSpirit({
         mapX: this.mapX,
         mapY: this.mapY,
-        maxHealth: 50,
-        health: 50,
-        healthTarget: 50,
+        maxHealth: 150,
+        health: 150,
+        healthTarget: 150,
       });
     }
 

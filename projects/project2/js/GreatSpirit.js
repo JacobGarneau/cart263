@@ -30,6 +30,12 @@ class GreatSpirit extends Spirit {
     this.rotateSpeed = 2;
     this.rotateSpin = 0;
     this.rotateSize = 44;
+
+    if (this.mapX === 5 && this.mapY === 5) {
+      this.health = 50;
+      this.maxHealth = 50;
+      this.healthTarget = 50;
+    }
   }
 
   detectPlayer() {
@@ -109,9 +115,9 @@ class GreatSpirit extends Spirit {
       let finalBoss = new FinalBoss({
         mapX: 5,
         mapY: 5,
-        maxHealth: 420,
-        health: 420,
-        healthTarget: 420,
+        maxHealth: 500,
+        health: 500,
+        healthTarget: 500,
       });
     }
     super.die();

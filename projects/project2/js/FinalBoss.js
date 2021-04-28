@@ -10,9 +10,6 @@ class FinalBoss extends Spirit {
 
     this.size = 120;
     this.healthBarShift = 40;
-    this.deathQuotes = [
-      `The cold has been defeated. The Phoenix has reclaimed the Arctic.`,
-    ];
 
     this.maxSpeed = 1;
 
@@ -50,7 +47,7 @@ class FinalBoss extends Spirit {
     this.summonTimer = 0;
     this.summonChargeup = 180;
     this.summonRange = 320;
-    this.summonCooldown = 1200;
+    this.summonCooldown = 600;
     this.currentCooldown = this.summonCooldown;
   }
 
@@ -168,6 +165,8 @@ class FinalBoss extends Spirit {
 
   die() {
     finalBossActivated = false;
+    resetGame();
+    state = `victory`;
     super.die();
   }
 }

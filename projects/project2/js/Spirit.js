@@ -14,6 +14,7 @@ class Spirit extends Entity {
       `The Phoenix burns eternally.`,
       `None can resist the might of the Sun.`,
     ];
+    this.popupDuration = 360;
 
     this.meleeTimer = 0;
     this.meleeChargeup = 30;
@@ -169,7 +170,7 @@ class Spirit extends Entity {
       }
     }
 
-    popup = new Popup(random(this.deathQuotes), 360);
+    popup = new Popup(random(this.deathQuotes), this.popupDuration);
 
     super.die();
   }
