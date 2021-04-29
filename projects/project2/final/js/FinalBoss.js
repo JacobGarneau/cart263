@@ -181,6 +181,7 @@ class FinalBoss extends Spirit {
     finalBossActivated = false;
     sounds.shrineDefeated.play();
     sounds.rotateHum.stop();
+    sounds.music.stop();
 
     // resets the game data and moves on to victory screen
     resetGame();
