@@ -133,9 +133,9 @@ class GreatSpirit extends Spirit {
       let finalBoss = new FinalBoss({
         mapX: 5,
         mapY: 5,
-        maxHealth: 1,
-        health: 1,
-        healthTarget: 1,
+        maxHealth: 500,
+        health: 500,
+        healthTarget: 500,
       });
     } else if (greatSpirits === 1) {
       // change the death quote to adapt to the number of remaining great spirits
