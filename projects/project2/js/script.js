@@ -23,6 +23,7 @@ let map, player, minimap, ui; // objects
 let dataSaved; // localStorage recuperation
 let playerData, terrainData, abilityData; // JSON data
 let popup;
+let superPopup; // popup that happens above the menu
 let shrineCount; // localStorage recuperation
 let greatSpirits = 5; // great spirits to defeat before summoning the final boss
 let finalBossActivated = false;
@@ -324,6 +325,11 @@ function game() {
 
   minimap.display();
 
+  for (let i = 0; i < entities.length; i++) {
+    entities[i].move();
+    entities[i].display();
+  }
+
   for (let i = 0; i < shrines.length; i++) {
     shrines[i].display();
     shrines[i].interact();
@@ -342,11 +348,6 @@ function game() {
     }
   }
 
-  for (let i = 0; i < entities.length; i++) {
-    entities[i].move();
-    entities[i].display();
-  }
-
   player.move();
   player.updateStats();
   player.display();
@@ -362,6 +363,11 @@ function game() {
   }
 
   ui.display();
+
+  if (superPopup !== undefined) {
+    superPopup.display();
+    console.log(`superPopup`);
+  }
 }
 
 function dead() {
@@ -498,6 +504,8 @@ function saveGame() {
       })
     );
   }
+
+  superPopup = new Popup(`Game saved.`, 60, false, true);
 }
 
 function respawn() {

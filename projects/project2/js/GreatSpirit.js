@@ -4,11 +4,6 @@ class GreatSpirit extends Spirit {
     this.size = 80;
     this.healthBarShift = 20;
     this.type = `greatSpirit`;
-    this.deathQuotes = [
-      `Another Great One has fallen. Only ${
-        greatSpirits - 1
-      } remain against the Light.`,
-    ];
 
     this.meleeTimer = 0;
     this.meleeChargeup = 40;
@@ -127,6 +122,10 @@ class GreatSpirit extends Spirit {
         health: 500,
         healthTarget: 500,
       });
+    } else {
+      this.deathQuotes = [
+        `Another Great One has fallen. Only ${greatSpirits} remain against the Light.`,
+      ];
     }
     super.die();
   }

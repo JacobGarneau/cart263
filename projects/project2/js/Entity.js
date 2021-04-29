@@ -76,7 +76,12 @@ class Entity {
         this.type === `greatSpirit` ||
         this.type === `finalBoss`
       ) {
-        sounds.spiritDamage.play();
+        if (player.currentAction === `emberNova`) {
+          sounds.tick.play();
+        } else {
+          sounds.spiritDamage.play();
+        }
+
         if (
           (this.type === `greatSpirit` &&
             this.healthTarget < this.maxHealth / 2) ||
