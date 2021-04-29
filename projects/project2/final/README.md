@@ -1,8 +1,6 @@
 # Project 2 - Anything
 
-## Artist Statement
-
-This statement should succinctly explain your artistic vision, the desired user experience, and how you believe you accomplished this both technically and artistically.
+## Artist's Statement
 
 _Phoenix of the Arctic_ is a single-player exploration and survival game. In it, the player controls the **Phoenix**, a legendary fire bird that got lost in the Arctic and must now free it from the **Spirits** that haunt the region.
 
