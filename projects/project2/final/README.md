@@ -58,6 +58,8 @@ The game is optimized for a screen resolution of 1920 x 1080 pixels. Other resol
 
 All icons were taken from **FontAwesome** (fontawesome.com) under Creative Commons license.
 
+The music was taken from **Bensound** (bensound.com) under Creative Commons attribution license.
+
 All sound effects were taken from **Freesound** (freesound.org) under Creative Commons license. Here are the users credited for each of the sound effects:
 
 dash: user **InspectorJ**
