@@ -1,4 +1,4 @@
-# Project 2 - Anything
+# Project 2 - Phoenix of the Arctic
 
 ## Artist's Statement
 
