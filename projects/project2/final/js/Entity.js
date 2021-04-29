@@ -98,7 +98,7 @@ class Entity {
           sounds.rotateHum.loop();
         }
 
-        if (this.type === `finalBoss` || this.type === `greatSpirit`) {
+        if (this.type === `finalBoss`) {
           // refill the player's Warmth gauge when they hit a great spirit or the final boss
           player.frostbiteTarget += 6;
           player.frostbiteTarget = constrain(

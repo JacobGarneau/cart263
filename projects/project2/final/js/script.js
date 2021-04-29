@@ -125,13 +125,24 @@ function preload() {
   sounds.rabbitDamage = loadSound("assets/sounds/rabbitDamage");
   sounds.fishDamage = loadSound("assets/sounds/fishDamage");
   sounds.wind = loadSound("assets/sounds/wind");
+  sounds.music = loadSound("assets/sounds/music");
 
   // attribute attack sound effects
   sfx = [sounds.peck, sounds.wingAttack, sounds.fireBreath, sounds.emberNova];
 
   // sets volume of sounds
-  sounds.wind.setVolume(0.25);
-  sounds.chimes.setVolume(0.25);
+  sounds.wind.setVolume(0.1);
+  sounds.chimes.setVolume(0.1);
+  sounds.peck.setVolume(0.5);
+  sounds.spiritShoot.setVolume(0.5);
+  sounds.spiritHit.setVolume(0.25);
+  sounds.spiritDamage.setVolume(0.5);
+  sounds.spiritDefeat.setVolume(0.25);
+  sounds.abilityPurchased.setVolume(0.25);
+  sounds.shrineDefeated.setVolume(0.25);
+  sounds.rotateHum.setVolume(0.5);
+  sounds.death.setVolume(0.25);
+  sounds.music.setVolume(0.25);
 }
 
 // p5: creates the canvas and the object instances
@@ -155,7 +166,7 @@ function setup() {
   }
 
   // creates a new map
-  map = new Map();
+  map = new Map(5, 5);
 
   // gets the saved player data or generates new data
   playerSaved = localStorage.getItem("playerSaved");
@@ -347,12 +358,6 @@ function game() {
   map.displayContents(); // displays the map eements (trees, mountains, lakes, glaciers)
   player.handleActions(); // handles the player's inputted actions
 
-  // displays the projectiles (fireballs and spirit projectiles)
-  for (let i = 0; i < projectiles.length; i++) {
-    projectiles[i].move();
-    projectiles[i].display();
-  }
-
   // displays the shrines
   for (let i = 0; i < shrines.length; i++) {
     shrines[i].display();
@@ -372,6 +377,12 @@ function game() {
     } else {
       player.nearShrine = false;
     }
+  }
+
+  // displays the projectiles (fireballs and spirit projectiles)
+  for (let i = 0; i < projectiles.length; i++) {
+    projectiles[i].move();
+    projectiles[i].display();
   }
 
   // displays the entities (game and spirits)
@@ -762,6 +773,8 @@ function keyPressed() {
     if (player.frostbite > 0 && playerSaved) {
       respawn();
       sounds.spawn.play();
+      sounds.music.play();
+      sounds.music.loop();
     } else {
       state = `title`;
       sounds.menu.play();
@@ -773,11 +786,15 @@ function keyPressed() {
     respawn();
     sounds.chimes.stop();
     sounds.spawn.play();
+    sounds.music.play();
+    sounds.music.loop();
   } else if (state === `title` && keyCode == 78) {
     // press N to start a new game
     newGame();
     sounds.chimes.stop();
     sounds.spawn.play();
+    sounds.music.play();
+    sounds.music.loop();
   } else if (state === `victory` && keyCode === 13) {
     // press ENTER to return to the main menu
     state = `title`;

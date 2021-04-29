@@ -1,7 +1,7 @@
 class Map {
-  constructor() {
-    this.mapTargetX; // tile to which the map is currently scrolling horizontally
-    this.mapTargetY; // tile to which the map is currently scrolling vertically
+  constructor(mapTargetX, mapTargetY) {
+    this.mapTargetX = mapTargetX; // tile to which the map is currently scrolling horizontally
+    this.mapTargetY = mapTargetY; // tile to which the map is currently scrolling vertically
     this.mapScrollSpeed = 0.05; // speed at which the map scroll from one tile to another
     this.transitionX = 0;
     this.transitionY = 0;

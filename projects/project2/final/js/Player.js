@@ -48,8 +48,8 @@ class Player {
           }
         } else {
           if (
-            mapGrid[this.mapX][this.mapY].hasShrine &&
-            mapGrid[this.mapX][this.mapY].spiritDefeated
+            mapGrid[map.mapTargetX][map.mapTargetX].hasShrine &&
+            mapGrid[map.mapTargetX][map.mapTargetX].spiritDefeated
           ) {
             // regain Warmth if the player is on a defeated shrine tile
             this.frostbiteTarget += 5;
@@ -58,7 +58,7 @@ class Player {
               this.frostbiteTarget = this.maxFrostbite;
             }
           } else {
-            if (mapGrid[this.mapX][this.mapY].biome === `sea`) {
+            if (mapGrid[map.mapTargetX][map.mapTargetX].biome === `sea`) {
               // lose more Warmth if the player is on a sea tile
               this.frostbiteTarget -= 2;
               if (this.frostbiteTarget < 0) {
@@ -359,6 +359,7 @@ class Player {
       state = `dead`;
       this.movable = false;
       sounds.death.play();
+      sounds.music.stop();
 
       // if the Warmth gauge was empty at the moment of death, erases the current save data
       if (this.frostbite <= 0) {

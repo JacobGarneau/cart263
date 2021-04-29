@@ -34,6 +34,8 @@ When the player is fighting a Spirit, colored circles will appear. They indicate
 - Standing outside the green circle for too long will make the Spirit shoot a projectile at the player. This projectile will curve its trajectory to follow the player but will disappear after a short while.
 - Standing outside the blue circle (only active on the final boss) for too long will make the boss summon another Spirit that will also try to attack the player.
 
+If the player enters a tile where there is an undefeated Great Spirit, they will not be able to exit the tile until the have defeated it.
+
 ### Shrines and Saving the Game
 
 When a **Great Spirit** is defeated, the Shrine it haunted is activated. To visit the Shrine, the player must press the spacebar while near to it. This will save the game and bring up the ability purchase menu. This menu can be navigated with the mouse. Pressing the escape key or hitting the spacebar again will close the menu.

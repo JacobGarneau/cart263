@@ -190,7 +190,7 @@ class Spirit extends Entity {
     this.cell.spiritDefeated = true;
     player.mapMovable = true;
     if (this.type === `spirit`) {
-      // refill the player's Warmth gauge by a little bit if this spirit was not a great one nor the boss
+      // refill the player's Warmth gauge by a little bit if this spirit was not a great one nor the final boss
       sounds.spiritDefeat.play();
       player.frostbiteTarget += 5;
     }
