@@ -46,7 +46,7 @@ class Minimap {
 
         for (let i = 0; i < MAP_WIDTH; i++) {
           for (let j = 0; j < MAP_HEIGHT; j++) {
-            if (mapGrid[i][j].hasShrine) {
+            if (mapGrid[i][j].hasShrine && mapGrid[i][j].spiritDefeated) {
               fill(199, 66, 66);
               ellipse(
                 this.x + (i * width) / 40 + dyn(12, `x`),
