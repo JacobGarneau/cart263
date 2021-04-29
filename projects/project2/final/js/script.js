@@ -25,7 +25,7 @@ let playerData, terrainData, abilityData; // JSON data
 let popup;
 let superPopup; // popup that happens above the menu
 let shrineCount; // localStorage recuperation
-let greatSpirits = 1; // great spirits to defeat before summoning the final boss
+let greatSpirits = 5; // great spirits to defeat before summoning the final boss
 let finalBossActivated = false;
 let shrines = [];
 let entityCount; // localStorage recuperation
@@ -142,7 +142,7 @@ function preload() {
   sounds.shrineDefeated.setVolume(0.25);
   sounds.rotateHum.setVolume(0.5);
   sounds.death.setVolume(0.25);
-  sounds.music.setVolume(0.25);
+  sounds.music.setVolume(0.5);
 }
 
 // p5: creates the canvas and the object instances
@@ -626,7 +626,7 @@ function resetGame() {
   projectiles = [];
   entities = [];
   shrines = [];
-  greatSpirits = 1;
+  greatSpirits = 5;
   finalBossActivated = false;
 
   // clears the data saved in localStorage
