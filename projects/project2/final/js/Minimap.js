@@ -9,7 +9,7 @@ class Minimap {
   display() {
     if (player.abilities.minimap) {
       if (this.open) {
-        // draw the minimap
+        // draw the minimap if it is currently open
         for (let i = 0; i < MAP_WIDTH; i++) {
           for (let j = 0; j < MAP_HEIGHT; j++) {
             // set the appropriate biome color
@@ -47,6 +47,7 @@ class Minimap {
         for (let i = 0; i < MAP_WIDTH; i++) {
           for (let j = 0; j < MAP_HEIGHT; j++) {
             if (mapGrid[i][j].hasShrine && mapGrid[i][j].spiritDefeated) {
+              // if the tile is a defeated shrine tile, add a marker on the minimap
               fill(199, 66, 66);
               ellipse(
                 this.x + (i * width) / 40 + dyn(12, `x`),
@@ -58,7 +59,7 @@ class Minimap {
         }
         pop();
       } else {
-        // draw the command indication
+        // draw the command indication to open the minimap
         push();
         noStroke();
         fill(0);
@@ -77,6 +78,7 @@ class Minimap {
     }
   }
 
+  // toggle the minimap from open to closed and from closed to open
   toggle() {
     if (this.open) {
       this.open = false;

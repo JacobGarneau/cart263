@@ -3,17 +3,18 @@ class Entity {
     this.x = random(0, width);
     this.y = random(0, height);
     this.size = 40;
-    this.damage = 0;
+    this.damage = 0; // damage dealt by this entity
     this.maxHealth = attributes.maxHealth;
     this.health = this.health;
     this.healthTarget = this.healthTarget;
-    this.healthGain = 0;
-    this.healthBarShift = 0;
+    this.healthGain = 0; // health gained by the player when this entity dies
+    this.healthBarShift = 0; // vertical displacement of the health bar
     this.mapX = attributes.mapX;
     this.mapY = attributes.mapY;
     this.movable = true;
     this.iFrames = 0; // frames of intangibility, often used to avoid taking the same attack multiple times
 
+    // attributes this entity to a specific map tile
     for (let i = 0; i < MAP_WIDTH; i++) {
       for (let j = 0; j < MAP_HEIGHT; j++) {
         if (i === this.mapX && j === this.mapY) {
@@ -27,6 +28,7 @@ class Entity {
   display() {
     this.updateStats();
 
+    // draw the health bar container
     push();
     noStroke();
     fill(0);
@@ -41,6 +43,7 @@ class Entity {
       6
     );
 
+    // draw the health bar
     fill(255, 0, 0);
     let healthBarSize = (this.size / this.maxHealth) * this.health;
     rect(
@@ -66,7 +69,9 @@ class Entity {
     }
   }
 
+  // reduce this entity's health in response to the player's actions
   takeDamage(amount, frames) {
+    // entity is immune to damage if it got hit too fast twice
     if (this.iFrames === 0) {
       this.healthTarget -= amount;
       this.iFrames = frames + 1;
@@ -76,6 +81,7 @@ class Entity {
         this.type === `greatSpirit` ||
         this.type === `finalBoss`
       ) {
+        // play the appropriate damage sound for spirits
         if (player.currentAction === `emberNova`) {
           sounds.tick.play();
         } else {
@@ -87,11 +93,13 @@ class Entity {
             this.healthTarget < this.maxHealth / 2) ||
           (this.type === `finalBoss` && this.healthTarget < this.maxHealth / 2)
         ) {
+          // play the sounds for the spirits' rotating attack
           sounds.rotateHum.play();
           sounds.rotateHum.loop();
         }
 
         if (this.type === `finalBoss` || this.type === `greatSpirit`) {
+          // refill the player's Warmth gauge when they hit a great spirit or the final boss
           player.frostbiteTarget += 6;
           player.frostbiteTarget = constrain(
             player.frostbiteTarget,
@@ -100,6 +108,7 @@ class Entity {
           );
         }
       } else if (this.type === `game`) {
+        // play the sounds for the various types of game depending on their biome
         if (this.cell.biome === `sea`) {
           sounds.fishDamage.play();
         } else {
@@ -109,25 +118,32 @@ class Entity {
     }
   }
 
+  // updates the entity's health and other stats
   updateStats() {
+    // ticks down invincibility frames
     if (this.iFrames > 0) {
       this.iFrames--;
     }
 
+    // adjusts health depending on current health target
     if (this.healthTarget < this.health) {
       this.health--;
     } else if (this.healthTarget > this.health) {
       this.health++;
     }
 
+    // kill the entity if its health reaches 0
     if (this.health <= 0) {
       this.die();
     }
   }
 
+  // kill the entity
   die() {
+    // refill the player's health a certain amount
     player.healthTarget += this.healthGain;
     player.healthTarget = constrain(player.healthTarget, 0, player.maxHealth);
+    // remove this entity from the entity array
     entities.splice(entities.indexOf(this), 1);
   }
 }

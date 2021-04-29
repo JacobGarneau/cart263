@@ -4,9 +4,10 @@ class Game extends Entity {
     this.maxHealth = attributes.maxHealth;
     this.health = attributes.health;
     this.healthTarget = attributes.healthTarget;
-    this.detectionDistance = 200;
+    this.detectionDistance = 200; // distance at which the game will detect the player's approach
     this.type = `game`;
 
+    // movement and acceleration stats
     this.vx = 0;
     this.vy = 0;
     this.ax = 0.1;
@@ -14,6 +15,7 @@ class Game extends Entity {
 
     this.maxSpeed = 1;
 
+    // change the game's icon depending on its biome
     if (this.cell.biome === `sea`) {
       this.icon = images.fish;
       this.healthGain = 15;
@@ -22,13 +24,17 @@ class Game extends Entity {
       this.healthGain = 5;
     }
 
+    // places the game on the map if it was not alread killed
     if (this.health > 0) {
       entities.push(this);
     }
   }
 
+  // displays the game
   display() {
     super.display();
+
+    // draws the game's icon
     push();
     fill(0, 255, 0);
     image(
@@ -41,8 +47,10 @@ class Game extends Entity {
     pop();
   }
 
+  // moves the game
   move() {
     if (this.movable) {
+      // detect the game's distance from the player
       let distance = dist(
         this.mapX * width + this.x - player.mapX * width,
         this.mapY * height + this.y - player.mapY * height,
@@ -50,6 +58,7 @@ class Game extends Entity {
         player.y
       );
 
+      // move the game away from the player if they get too close
       if (this.mapX === player.mapX && this.mapY === player.mapY) {
         if (this.x > player.x && distance <= this.detectionDistance) {
           this.vx += this.ax;

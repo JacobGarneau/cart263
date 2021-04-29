@@ -10,7 +10,7 @@ class UI {
         g: 0,
         b: 0,
       },
-    };
+    }; // attributes of the health bar
     this.frostbiteBar = {
       x: 20,
       y: 48,
@@ -21,7 +21,7 @@ class UI {
         g: 143,
         b: 81,
       },
-    };
+    }; // attributes of the Warmth gauge
     this.abilities = {
       x: 80,
       y: height - 80,
@@ -36,28 +36,33 @@ class UI {
         g: 122,
         b: 51,
       },
-    };
+    }; // attributes of the ability icons
 
     this.shrinePopup = false;
   }
 
-  // display the UI
+  // displays the UI
   display() {
+    // draws the ability icons
     this.drawAbilities();
 
+    // draws a popup if the player is near a shrine
     if (this.shrinePopup) {
       this.drawShrinePopup();
     }
 
+    // draws the ability purchase menu if it has been opened
     if (this.menuOpen) {
       this.drawMenu();
     }
 
+    // draws the health and Warmth gauges
     this.drawGauges();
   }
 
+  // draws the health and Warmth gauges
   drawGauges() {
-    // draw health bar container
+    // draws the health bar container
     push();
     noStroke();
     fill(0);
@@ -68,7 +73,7 @@ class UI {
       this.healthBar.height
     );
 
-    // draw health bar fill
+    // draws the health bar
     fill(this.healthBar.fill.r, this.healthBar.fill.g, this.healthBar.fill.b);
     rect(
       this.healthBar.x,
@@ -77,7 +82,7 @@ class UI {
       this.healthBar.height
     );
 
-    // draw health bar text
+    // draws the health bar text
     push();
     fill(255);
     textAlign(CENTER, CENTER);
@@ -90,7 +95,7 @@ class UI {
     );
     pop();
 
-    // draw frostbite bar container
+    // draws the Warmth gauge container
     fill(0);
     rect(
       this.frostbiteBar.x,
@@ -99,7 +104,7 @@ class UI {
       this.frostbiteBar.height
     );
 
-    // draw frostbite bar fill
+    // draws the Warmth gauge
     fill(this.abilities.fill.r, this.abilities.fill.g, this.abilities.fill.b);
     rect(
       this.frostbiteBar.x,
@@ -108,7 +113,7 @@ class UI {
       this.frostbiteBar.height
     );
 
-    // draw frostbite bar text
+    // draws the Warmth gauge text
     push();
     fill(255);
     textAlign(CENTER, CENTER);
@@ -121,7 +126,7 @@ class UI {
     );
     pop();
 
-    // draw Flame Breath and Ember Nova cost markers
+    // draws the flame breath and ember nova cost markers on the Warmth gauge
     push();
     stroke(255);
     strokeWeight(2);
@@ -131,6 +136,7 @@ class UI {
         player.abilities.attacks[i].command ===
         playerData.attacks.fireBreath.command
       ) {
+        // draws the flame breath cost marker
         line(
           this.frostbiteBar.x +
             this.frostbiteBar.width * playerData.attacks.fireBreath.frostbite,
@@ -152,6 +158,7 @@ class UI {
         player.abilities.attacks[i].command ===
         playerData.attacks.emberNova.command
       ) {
+        // draws the ember nova cost marker
         line(
           this.frostbiteBar.x +
             this.frostbiteBar.width * playerData.attacks.emberNova.frostbite,
@@ -172,14 +179,15 @@ class UI {
     }
     pop();
 
-    // draw sun points
+    // draws the sun points
     image(images.sun, width - 50, 16, 30, 30);
+
+    // changes the sun points' color if the menu is open
     if (this.menuOpen) {
       fill(255);
     } else {
       fill(0);
     }
-
     textSize(24);
     textAlign(RIGHT, CENTER);
     textStyle(BOLD);
@@ -187,10 +195,11 @@ class UI {
     pop();
   }
 
+  // draws the ability icons
   drawAbilities() {
-    // draw abilities
     for (let i = 0; i < player.abilities.attacks.length; i++) {
       if (player.abilities.attacks[i].upgrade) {
+        // draws the ability
         push();
         fill(0);
         ellipse(
@@ -203,10 +212,10 @@ class UI {
         pop();
       }
 
-      // draw the icon
       push();
       noStroke();
       fill(this.abilities.fill.r, this.abilities.fill.g, this.abilities.fill.b);
+      // draws the ability's recharge progress bar
       arc(
         this.abilities.x,
         this.abilities.y - i * (this.abilities.size + this.abilities.spacing),
@@ -218,13 +227,16 @@ class UI {
           90
       );
 
+      // draws the ability icon's circle differently depending on if it is currently recharging or not
       if (player.abilities.attacks[i].currentRecharge > 0) {
+        // changes the ability icon's circle color depending on if the player is still in hitlag or not
         if (player.hitlag > 0) {
           fill(100);
         } else {
           fill(187);
         }
 
+        // draws the ability icon's circle
         ellipse(
           this.abilities.x,
           this.abilities.y - i * (this.abilities.size + this.abilities.spacing),
@@ -232,6 +244,7 @@ class UI {
         );
       } else {
         if (player.hitlag > 0) {
+          // changes the ability icon's circle color depending on if the player is still in hitlag or not
           fill(100);
         } else {
           fill(
@@ -240,6 +253,8 @@ class UI {
             this.abilities.fill.b
           );
         }
+
+        // draws the ability icon's circle
         ellipse(
           this.abilities.x,
           this.abilities.y - i * (this.abilities.size + this.abilities.spacing),
@@ -247,6 +262,7 @@ class UI {
         );
       }
 
+      // draws the ability's image icon
       imageMode(CENTER);
       image(
         icons[player.abilities.attacks[i].icon],
@@ -255,6 +271,7 @@ class UI {
       );
 
       if (player.abilities.attacks[i].upgrade) {
+        // draws the "upgraded" icon if the ability has been upgraded
         image(
           images.upgrade,
           this.abilities.x + 36,
@@ -263,10 +280,9 @@ class UI {
             36
         );
       }
-
       pop();
 
-      // draw the command indication
+      // draws the ability's command indication
       push();
       fill(0);
       rectMode(CENTER);
@@ -297,9 +313,10 @@ class UI {
       pop();
     }
 
-    // draw the Dash icon
+    // draws the dash icon
     if (player.abilities.dash) {
       push();
+      // changes the dash icon's circle color depending on if the player is currently dashing or not
       if (player.dashing) {
         fill(100);
       } else {
@@ -310,13 +327,16 @@ class UI {
         );
       }
 
+      // draws the dash icon's circle
       noStroke();
-      rectMode(CENTER);
+      ellipseMode(CENTER);
       ellipse(
         this.abilities.x + this.abilities.size + this.abilities.spacing,
         this.abilities.y,
         this.abilities.size
       );
+
+      // draws dash's image icon
       imageMode(CENTER);
       image(
         images.dash,
@@ -324,6 +344,8 @@ class UI {
         this.abilities.y
       );
       fill(0);
+
+      // draws dash's command indication
       rectMode(CENTER);
       rect(
         this.abilities.x +
@@ -350,8 +372,9 @@ class UI {
     }
   }
 
+  // draws a popup if the player is near a shrine
   drawShrinePopup() {
-    // draw command prompt
+    // draws the command prompt
     push();
     fill(246, 122, 51);
     noStroke();
@@ -368,8 +391,10 @@ class UI {
     pop();
   }
 
+  // toggles the menu from open to closed and from closed to open
   toggleMenu() {
     if (this.menuOpen) {
+      // if the menu is being closed, allows all entities to move again and resumes the game
       this.menuOpen = false;
       player.movable = true;
 
@@ -381,6 +406,7 @@ class UI {
         projectiles[i].movable = true;
       }
     } else {
+      // if the menu is being opened, prevents all entities from moving and freezes the game
       this.menuOpen = true;
       player.movable = false;
 
@@ -394,16 +420,19 @@ class UI {
     }
   }
 
+  // draws the ability purchase menu
   drawMenu() {
     push();
     noStroke();
     fill(0, 0, 0, 150);
     rect(0, 0, width, height);
 
+    // draws the menu's background
     fill(199, 66, 66);
     rectMode(CENTER);
     rect(width / 2, height / 2, dyn(900, `x`), dyn(700, `y`));
 
+    // draws the menu title and the commmand indication to close the menu
     fill(255);
     textAlign(CENTER, CENTER);
     textSize(64);
@@ -413,6 +442,7 @@ class UI {
     text(`[ESC]`, width / 2 + dyn(400, `x`), dyn(60, `y`));
     pop();
 
+    // draws the lines that connect the ability icons to indicate prerequisites
     push();
     stroke(255);
     strokeWeight(2);
@@ -454,14 +484,14 @@ class UI {
     );
     pop();
 
-    // draw the ability icons
+    // draws the ability icons
     for (let i = 0; i < abilityData.abilities.length; i++) {
       push();
       if (abilityData.abilities[i].hover) {
         stroke(255);
         strokeWeight(6);
 
-        // draw ability name and description in menu
+        // draws the hovered ability's name and description in the menu
         push();
         fill(255);
         noStroke();
@@ -476,6 +506,7 @@ class UI {
         noStroke();
       }
 
+      // changes the ability icons' color depending on if the ability is unlocked, unlockable, or locked
       if (abilityData.abilities[i].status === `unlocked`) {
         fill(
           this.abilities.fill.r,
@@ -488,6 +519,7 @@ class UI {
         fill(100);
       }
 
+      // draws the ability icons
       ellipse(
         width / 2 + dyn(abilityData.abilities[i].x, `x`),
         height / 2 + dyn(abilityData.abilities[i].y, `y`),
@@ -504,6 +536,7 @@ class UI {
         abilityData.abilities[i].status === `unlockable` ||
         abilityData.abilities[i].status === `locked`
       ) {
+        // if the abilities are not already unlocked, draw the sun point cost icon
         fill(255, 209, 47);
         noStroke();
         ellipse(
@@ -519,6 +552,7 @@ class UI {
           height / 2 + dyn(abilityData.abilities[i].y, `y`) + 40
         );
 
+        // draws the sun point cost number
         fill(0);
         textStyle(BOLD);
         textSize(20);
@@ -531,6 +565,7 @@ class UI {
       }
 
       if (abilityData.abilities[i].upgrade) {
+        // if the ability is an upgrade of a previous one, draw the upgrade icon next to it
         imageMode(CENTER);
         image(
           images.upgrade,
@@ -542,9 +577,11 @@ class UI {
     }
   }
 
+  // buys new abilities from the menu
   buyAbility(ability) {
     if (ability.status === `unlockable`) {
       if (player.currentSunPoints >= ability.cost) {
+        // if the ability is unlockable and the player has enough sun points, unlocks the ability
         player.currentSunPoints -= ability.cost;
         ability.status = `unlocked`;
         sounds.abilityPurchased.stop();
@@ -552,6 +589,7 @@ class UI {
 
         for (let i = 0; i < ability.unlocks.length; i++) {
           for (let j = 0; j < abilityData.abilities.length; j++) {
+            // changes abilities for which the purchased ability was a prerequisite from locked to unlockable
             if (
               ability.unlocks[i] === abilityData.abilities[j].name &&
               abilityData.abilities[j].status === `locked`
@@ -562,28 +600,36 @@ class UI {
         }
 
         if (ability.name === `minimap`) {
+          // add the minimap to the player's abilities
           player.abilities.minimap = true;
         } else if (ability.name === `dash`) {
+          // add dash to the player's abilities
           player.abilities.dash = true;
         } else if (ability.name === `wingAttack`) {
+          // add wing attack to the player's abilities
           player.abilities.attacks.push(playerData.attacks.wingAttack);
         } else if (ability.name === `fireBreath`) {
+          // add flame breath to the player's abilities
           player.abilities.attacks.push(playerData.attacks.fireBreath);
         } else if (ability.name === `emberNova`) {
+          // add ember nova to the player's abilities
           player.abilities.attacks.push(playerData.attacks.emberNova);
         } else if (ability.name === `improvedPeck`) {
+          // replace peck with its improved version in the player's abilities
           player.abilities.attacks.splice(
             player.abilities.attacks.indexOf(playerData.attacks.peck),
             1,
             playerData.attacks.improvedPeck
           );
         } else if (ability.name === `improvedWingAttack`) {
+          // replace wing attack with its improved version in the player's abilities
           player.abilities.attacks.splice(
             player.abilities.attacks.indexOf(playerData.attacks.wingAttack),
             1,
             playerData.attacks.improvedWingAttack
           );
         } else if (ability.name === `improvedFireBreath`) {
+          // replace flame breath with its improved version in the player's abilities
           player.abilities.attacks.splice(
             player.abilities.attacks.indexOf(playerData.attacks.fireBreath),
             1,
@@ -591,7 +637,7 @@ class UI {
           );
         }
       } else {
-        // alert("Not enough Sun Points");
+        // shows a popup if the player does not have enough sun points to purchase the ability
         superPopup = new Popup(
           `Insufficient Sun Points.`,
           60,
@@ -601,6 +647,7 @@ class UI {
         );
       }
     } else if (ability.status === `locked`) {
+      // shows a popup if the ability being purchased is still locked
       superPopup = new Popup(`Lacking prerequisites.`, 60, false, true, false);
     }
   }

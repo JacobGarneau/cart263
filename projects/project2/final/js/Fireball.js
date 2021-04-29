@@ -4,18 +4,21 @@ class Fireball {
     this.y = player.y;
     this.mapX = player.mapX;
     this.mapY = player.mapY;
-    this.progress = 0;
+    this.progress = 0; // distance the fireball has travelled so far
     this.size = player.attackSize;
     this.speed = 10;
-    this.direction = direction;
+    this.direction = direction; // direction in which the fireball is moving
     this.movable = true;
   }
 
+  // displays the fireball
   display() {
     if (player.currentAction === undefined) {
+      // destroys the fireball if the player's active attack frames run out
       this.die();
     }
 
+    // draws the fireball with an image and an ellipse layered one on top of the other
     push();
     fill(255, 255, 0);
     translate(this.x, this.y);
@@ -30,10 +33,12 @@ class Fireball {
     pop();
   }
 
+  // moves the fireball
   move() {
     if (this.movable) {
       this.progress += this.speed;
 
+      // add the fireball's progress to its position depending on the direction it is going
       let hitboxX;
       let hitboxY;
       if (this.direction === 0) {
@@ -51,6 +56,7 @@ class Fireball {
       }
 
       for (let i = 0; i < entities.length; i++) {
+        // deal damage to all entities that touch the fireball and give them appropriate invincibility frames to prevent repeating damage
         if (
           dist(hitboxX, hitboxY, entities[i].x, entities[i].y) <=
             this.size / 2 + entities[i].size / 2 &&
@@ -63,7 +69,9 @@ class Fireball {
     }
   }
 
+  // destroys the fireball
   die() {
+    // removes the fireball from the projectile array
     projectiles.splice(projectiles.indexOf(this), 1);
   }
 }

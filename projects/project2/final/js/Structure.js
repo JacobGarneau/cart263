@@ -10,6 +10,7 @@ class Structure {
       b: 0,
     };
 
+    // attributes this structure to a specific map tile
     for (let i = 0; i < MAP_WIDTH; i++) {
       for (let j = 0; j < MAP_HEIGHT; j++) {
         if (i === this.mapX && j === this.mapY) {
@@ -19,7 +20,9 @@ class Structure {
     }
   }
 
+  // displays the structure
   display() {
+    // draws the structure's icon
     push();
     imageMode(CENTER);
     image(

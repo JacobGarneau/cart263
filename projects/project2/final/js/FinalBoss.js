@@ -7,51 +7,56 @@ class FinalBoss extends Spirit {
     this.mapX = attributes.mapX;
     this.mapY = attributes.mapY;
     this.type = `finalBoss`;
-    this.deathQuotes = [``];
+    this.deathQuotes = [``]; // quotes that popup when the spirit is defeated
 
     this.size = 120;
-    this.healthBarShift = 40;
+    this.healthBarShift = 40; // vertical displacement of the health bar
 
     this.maxSpeed = 1;
 
+    // stats for the spirit's melee attack
     this.meleeTimer = 0;
-    this.meleeChargeup = 30;
-    this.meleeRange = 60;
+    this.meleeChargeup = 30; // time the player has to spend in the attack's range for it to trigger
+    this.meleeRange = 60; // range of the attack
     this.meleeDamage = 12;
     this.meleeX = 0;
     this.meleeY = 0;
     this.meleeHit = false;
 
+    // stats for the spirit's ranged attack
     this.rangedTimer = 0;
-    this.rangedChargeup = 90;
-    this.rangedRange = 120;
+    this.rangedChargeup = 90; // time the player has to spend in the attack's range for it to trigger
+    this.rangedRange = 120; // range of the attack
     this.rangedDamage = 8;
 
-    this.rotateRange = 100;
+    // stats for the spirit's rotating attack
+    this.rotateRange = 100; // range of the attack
     this.rotateDamage = 1;
     this.rotateX = [
       -this.rotateRange,
       this.rotateRange,
       -this.rotateRange,
       this.rotateRange,
-    ];
+    ]; // horizontal position of each iteration of the attack
     this.rotateY = [
       -this.rotateRange,
       this.rotateRange,
       this.rotateRange,
       -this.rotateRange,
-    ];
+    ]; // vertical position of each iteration of the attack
     this.rotateSpeed = 2;
     this.rotateSpin = 0;
     this.rotateSize = 44;
 
+    // stats for the spirit's summon attack
     this.summonTimer = 0;
-    this.summonChargeup = 120;
-    this.summonRange = 240;
-    this.summonCooldown = 600;
+    this.summonChargeup = 120; // time the player has to spend in the attack's range for it to trigger
+    this.summonRange = 240; // range of the attack
+    this.summonCooldown = 600; // minimum time between each occurrence of this attack
     this.currentCooldown = this.summonCooldown;
   }
 
+  // check the player's position for attacks
   detectPlayer() {
     if (
       player.mapX === this.mapX &&
@@ -60,6 +65,7 @@ class FinalBoss extends Spirit {
     ) {
       let d = dist(this.x, this.y + 20, player.x, player.y);
 
+      // draw the range of the summon attack in blue
       push();
       noFill();
       strokeWeight(6);
@@ -68,15 +74,9 @@ class FinalBoss extends Spirit {
       pop();
 
       if (this.health < this.maxHealth / 2) {
-        push();
-        noFill();
-        strokeWeight(6);
-        stroke(255, 0, 255, 100);
-        rectMode(CENTER);
-        // rect(this.x, this.y + 20, this.rotateRange * 2, this.rotateRange * 2);
-        pop();
-
+        // trigger the rotating attack if the spirit's health is lower than half its maximum
         for (let i = 0; i < this.rotateX.length; i++) {
+          // move the rotating attak around the spirit in a square pattern
           if (
             this.rotateX[i] < this.rotateRange &&
             this.rotateY[i] === -this.rotateRange
@@ -109,6 +109,7 @@ class FinalBoss extends Spirit {
             this.rotateRange
           );
 
+          // draw the rotating attack
           push();
           translate(this.x + this.rotateX[i], this.y + this.rotateY[i] + 20);
           angleMode(DEGREES);
@@ -124,6 +125,7 @@ class FinalBoss extends Spirit {
             player.y
           );
           if (d < this.rotateSize && player.iFrames <= 0) {
+            // deal repeated damage to the player if they stand in the rotating attack's hitbox
             player.healthTarget -= this.rotateDamage;
             player.iFrames = 2;
             sounds.tick.play();
@@ -131,11 +133,13 @@ class FinalBoss extends Spirit {
         }
       }
 
+      // spin the rotating attack on itself
       this.rotateSpin += this.rotateSpeed;
       if (this.rotateSpin >= 360) {
         this.rotateSpin = 0;
       }
 
+      // handle the summon attack
       if (d > this.summonRange) {
         this.summonTimer++;
 
@@ -143,6 +147,7 @@ class FinalBoss extends Spirit {
           this.summonTimer >= this.summonChargeup &&
           this.currentCooldown <= 0
         ) {
+          // if the player is outside the summon attack's range for too long, summon a new spirit
           this.attackSummon();
           this.currentCooldown = this.summonCooldown;
           this.summonTimer = 0;
@@ -157,6 +162,7 @@ class FinalBoss extends Spirit {
     super.detectPlayer();
   }
 
+  // summons a new spirit
   attackSummon() {
     let minion = new Spirit({
       mapX: this.mapX,
@@ -170,12 +176,16 @@ class FinalBoss extends Spirit {
     sounds.summon.play();
   }
 
+  // kills the spirit
   die() {
     finalBossActivated = false;
     sounds.shrineDefeated.play();
     sounds.rotateHum.stop();
+
+    // resets the game data and moves on to victory screen
     resetGame();
     state = `victory`;
+
     super.die();
   }
 }

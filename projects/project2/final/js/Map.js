@@ -11,12 +11,14 @@ class Map {
       let row = []; // create the rows
 
       for (let j = 0; j < MAP_HEIGHT; j++) {
+        // generate a new cell with its attributes
         let cell = {
           biome: random(BIOMES),
           template: undefined,
           spiritDefeated: false,
         };
 
+        // assign a tile set depending on the cell's biome
         if (cell.biome === `sea`) {
           cell.template = random(terrainData.seaTiles);
         } else if (cell.biome === `snow`) {
@@ -36,7 +38,7 @@ class Map {
   displayTerrain() {
     for (let i = 0; i < MAP_WIDTH; i++) {
       for (let j = 0; j < MAP_HEIGHT; j++) {
-        // set biome color
+        // sets the cell's color depending on its biome
         if (mapGrid[i][j].biome === `sea`) {
           fill(165, 233, 255);
         } else if (mapGrid[i][j].biome === `snow`) {
@@ -148,6 +150,7 @@ class Map {
         this.transitionY = 1 / this.mapScrollSpeed; // set map scroll delay
       }
     } else {
+      // if the player cannot currently move out of their current map tile, make them bounce at the border
       if (player.x <= 0) {
         player.x = 0;
         player.vx *= -1;
@@ -191,6 +194,7 @@ class Map {
           player.mapY === shrines[i].mapY &&
           !shrines[i].cell.spiritDefeated
         ) {
+          // if it is, prevent the player from exiting the tile
           player.mapMovable = false;
           break;
         } else {
@@ -206,6 +210,7 @@ class Map {
           player.mapY === shrines[i].mapY &&
           !shrines[i].cell.spiritDefeated
         ) {
+          // if it is, prevent the player from exiting the tile
           player.mapMovable = false;
           break;
         } else {

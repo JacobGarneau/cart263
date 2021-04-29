@@ -10,13 +10,13 @@ Find your way in the Arctic and defeat the cold!
 const WORK_WINDOW_SIZE = {
   x: 1536,
   y: 754,
-};
+}; // screen resolution used as a basis for the dyn() function
 
-let mapGrid = [];
+let mapGrid = []; // the current map's tile set
 
 const MAP_WIDTH = 11;
 const MAP_HEIGHT = 11;
-const BIOMES = [`sea`, `snow`, `snow`, `snow`, `mountains`, `mountains`];
+const BIOMES = [`sea`, `snow`, `snow`, `snow`, `mountains`, `mountains`]; // weighted probabilites of each biome for tile generation
 
 let playerSaved; // localStorage recuperation
 let map, player, minimap, ui; // objects
@@ -34,9 +34,9 @@ let projectiles = [];
 
 let images = {};
 let sounds = {};
-let icons = [];
-let attackFX = [];
-let sfx = [];
+let icons = []; // atack icons (used to interpret JSON data)
+let attackFX = []; // visual effects of attacks (used to interpret JSON data)
+let sfx = []; // sound effects from attacks (used to interpret JSON data)
 
 let state = `title`; // game, dead, title, victory
 
@@ -47,6 +47,7 @@ let flashingTextDuration = 40;
 
 // p5: load JSON data and images
 function preload() {
+  // get saved ability unlocking data or generate new data from JSON
   dataSaved = localStorage.getItem("dataSaved");
   if (dataSaved) {
     abilityData = JSON.parse(localStorage.getItem("abilityData"));
@@ -54,9 +55,11 @@ function preload() {
     abilityData = loadJSON("js/data/abilityData.json");
   }
 
+  // generate new player and terrain data from JSON
   playerData = loadJSON("js/data/playerData.json");
   terrainData = loadJSON("js/data/terrainData.json");
 
+  // load all project images
   images.mountain = loadImage("assets/images/mountain.svg");
   images.tree = loadImage("assets/images/tree.svg");
   images.glacier = loadImage("assets/images/glacier.svg");
@@ -85,6 +88,7 @@ function preload() {
   images.island1 = loadImage("assets/images/island1.svg");
   images.island2 = loadImage("assets/images/island2.svg");
 
+  // attribute icon images
   icons = [
     images.attack,
     images.feather,
@@ -93,9 +97,11 @@ function preload() {
     images.nova,
     images.dash,
   ];
+
+  // attribute attack visual effects
   attackFX = [images.strike, images.wind, images.fireball, images.nova3];
 
-  // soundFormats("wav");
+  // load all project sounds
   soundFormats("mp3");
   sounds.peck = loadSound("assets/sounds/peck");
   sounds.wingAttack = loadSound("assets/sounds/wingAttack");
@@ -120,8 +126,10 @@ function preload() {
   sounds.fishDamage = loadSound("assets/sounds/fishDamage");
   sounds.wind = loadSound("assets/sounds/wind");
 
+  // attribute attack sound effects
   sfx = [sounds.peck, sounds.wingAttack, sounds.fireBreath, sounds.emberNova];
 
+  // sets volume of sounds
   sounds.wind.setVolume(0.25);
   sounds.chimes.setVolume(0.25);
 }
@@ -130,6 +138,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
+  // plays menu sounds if the menu has never been shown before
   if (firstTimeOnMenu) {
     getAudioContext().suspend();
     sounds.wind.play();
@@ -139,22 +148,24 @@ function setup() {
     firstTimeOnMenu = false;
   }
 
+  // gets the saved map data or generates new data
   mapGrid = JSON.parse(localStorage.getItem("mapGrid"));
-
   if (mapGrid === null) {
     mapGrid = [];
   }
 
+  // creates a new map
   map = new Map();
 
+  // gets the saved player data or generates new data
   playerSaved = localStorage.getItem("playerSaved");
   if (playerSaved) {
     let playerData = JSON.parse(localStorage.getItem("player"));
     player = new Player(playerData);
   } else {
     player = new Player({
-      mapX: 5,
-      mapY: 5,
+      mapX: 5, // horizontal player position on the map
+      mapY: 5, // vertical player position on the map
       maxHealth: playerData.stats.health,
       health: playerData.stats.health,
       healthTarget: playerData.stats.health,
@@ -165,19 +176,19 @@ function setup() {
         attacks: [playerData.attacks.peck],
         minimap: false,
         dash: false,
-      },
+      }, // list of unlocked player abilities
       sunPoints: 0,
       currentSunPoints: 0,
-      mapMovable: false,
+      mapMovable: false, // capacity of the player to move from one map tile to the other
     });
   }
 
+  // creates new minimap and UI objects
   minimap = new Minimap();
   ui = new UI();
 
-  // place the shrines on the map
+  // places the saved shrines on the map or creates new ones
   shrineCount = localStorage.getItem("shrineCount");
-
   if (shrineCount === null) {
     let shrine = new Shrine({
       mapX: 5,
@@ -201,17 +212,18 @@ function setup() {
     });
   } else {
     for (let i = 0; i < shrineCount; i++) {
+      // places shrines on the map according to saved data
       let shrineData = JSON.parse(localStorage.getItem("shrine" + i));
       let shrine = new Shrine(shrineData);
     }
   }
 
-  // add the entities on each tile of the map
+  // adds the saved entities on each tile of the map or creates new ones
   entityCount = localStorage.getItem("entityCount");
-
   if (entityCount === null) {
     for (let i = 0; i < MAP_WIDTH; i++) {
       for (let j = 0; j < MAP_HEIGHT; j++) {
+        // creates new game on each tile
         for (let k = 0; k < random([2, 5]); k++) {
           let game = new Game({
             mapX: i,
@@ -222,6 +234,7 @@ function setup() {
           });
         }
 
+        // has 2/3 chances of creating new spirits on the map
         let spiritRoll = random([0, 1, 1]);
         if (spiritRoll === 1) {
           let spirit = new Spirit({
@@ -234,6 +247,7 @@ function setup() {
 
           for (let k = 0; k < shrines.length; k++) {
             if (i === shrines[k].mapX && j === shrines[k].mapY) {
+              // removes spirits from the map if there was already a shrine on their tile
               entities.splice(entities.indexOf(spirit), 1);
             }
           }
@@ -242,22 +256,28 @@ function setup() {
     }
   } else {
     for (let i = 0; i < entityCount; i++) {
+      // retrieves saved entity data or generates new data
       let entityData = JSON.parse(localStorage.getItem("entity" + i));
       if (entityData.type === `game`) {
+        // creates saved game-type entities
         let entity = new Game(entityData);
       } else if (entityData.type === `spirit`) {
+        // creates saved spirit-type entities
         let entity = new Spirit(entityData);
       } else if (entityData.type === `greatSpirit`) {
+        // creates saved great spirit-type entities
         let entity = new GreatSpirit(entityData);
       } else if (entityData.type === `finalBoss`) {
+        // creates saved final boss-type entities
         let entity = new FinalBoss(entityData);
       }
     }
   }
 }
 
-// p5: draw the game elements on the canvas
+// p5: draws the game elements on the canvas
 function draw() {
+  // handles the various states of the game
   if (state === `title`) {
     title();
   } else if (state === `game`) {
@@ -269,11 +289,12 @@ function draw() {
   }
 }
 
+// displays the title screen
 function title() {
   background(0);
 
+  // handles the flashing text
   flashingTextFrames++;
-
   if (flashingTextFrames >= flashingTextDuration && seeFlashingText) {
     seeFlashingText = false;
     flashingTextFrames = 0;
@@ -282,6 +303,7 @@ function title() {
     flashingTextFrames = 0;
   }
 
+  // draws the game title
   fill(246, 122, 51);
   textAlign(CENTER, CENTER);
   textStyle(BOLD);
@@ -294,15 +316,19 @@ function title() {
   textSize(96);
   text(`ARCTIC`, width / 2, height / 2 + 80);
 
+  // changes the flashing text's fill color
   if (seeFlashingText) {
     fill(0, 255, 255);
   } else {
     fill(246, 122, 51);
   }
+
+  // displays the "new game" command prompt
   textStyle(NORMAL);
   textSize(24);
   text(`Press N to start a new game`, width / 2, height - 60);
 
+  // if there is currently saved player data, displays the "resume game" command prompt
   playerSaved = localStorage.getItem("playerSaved");
   if (playerSaved) {
     if (seeFlashingText) {
@@ -314,17 +340,20 @@ function title() {
   }
 }
 
+// displays the game
 function game() {
-  map.displayTerrain();
-  map.changeTile();
-  map.displayContents();
-  player.handleActions();
+  map.displayTerrain(); // displays the map cells
+  map.changeTile(); // changes map tiles if the player reached the end of their current one
+  map.displayContents(); // displays the map eements (trees, mountains, lakes, glaciers)
+  player.handleActions(); // handles the player's inputted actions
 
+  // displays the projectiles (fireballs and spirit projectiles)
   for (let i = 0; i < projectiles.length; i++) {
     projectiles[i].move();
     projectiles[i].display();
   }
 
+  // displays the shrines
   for (let i = 0; i < shrines.length; i++) {
     shrines[i].display();
     shrines[i].interact();
@@ -335,6 +364,8 @@ function game() {
       player.x,
       player.y
     );
+
+    // checks if the player is close to a defeated shrine to allow them to interact with it
     if (d < shrines[i].interactionRange && shrines[i].cell.spiritDefeated) {
       player.nearShrine = true;
       break;
@@ -343,34 +374,40 @@ function game() {
     }
   }
 
+  // displays the entities (game and spirits)
   for (let i = 0; i < entities.length; i++) {
     entities[i].move();
     entities[i].display();
   }
 
+  // displays the player and updates their stats
   player.move();
   player.updateStats();
   player.display();
 
+  // allows the entities to detect the player's presence
   for (let i = 0; i < entities.length; i++) {
     if (entities[i] !== undefined && entities[i].type !== `game`) {
       entities[i].detectPlayer();
     }
   }
 
+  // displays regular popups
   if (popup !== undefined) {
     popup.display();
   }
 
+  // displays the minimap and the rest of the UI
   minimap.display();
   ui.display();
 
+  // displays super popups
   if (superPopup !== undefined) {
     superPopup.display();
-    console.log(`superPopup`);
   }
 }
 
+// displays the death screen
 function dead() {
   background(0);
 
@@ -379,6 +416,7 @@ function dead() {
   textAlign(CENTER, CENTER);
   text(`You died.`, width / 2, height / 2 - 20);
 
+  // handles the flashing text
   flashingTextFrames++;
   if (flashingTextFrames >= flashingTextDuration && seeFlashingText) {
     seeFlashingText = false;
@@ -390,6 +428,7 @@ function dead() {
 
   playerSaved = localStorage.getItem("playerSaved");
   if (player.frostbite > 0 && playerSaved) {
+    // if the player had some Warmth left and there is saved player data, allows the player to respawn
     fill(246, 122, 51);
     text(
       `But the Phoenix rises from its ashes to be born again.`,
@@ -397,36 +436,42 @@ function dead() {
       height / 2 + 20
     );
 
+    // changes the color of the flashing text
     if (seeFlashingText) {
       fill(255);
     } else {
       fill(246, 122, 51);
     }
 
+    // displays the "respawn" command prompt
     text(
       `Press ENTER to respawn at the last shrine you visited`,
       width / 2,
       height - 60
     );
   } else {
+    // if the player had no Warmth left or there is no saved player data, ends the game
     fill(0, 255, 255);
     text(`The cold of the Arctic consumes all.`, width / 2, height / 2 + 20);
 
+    // changes the color of the flashing text
     if (seeFlashingText) {
       fill(255);
     } else {
       fill(0, 255, 255);
     }
 
+    // displays the "return to title screen" command prompt
     text(`Press ENTER to return to the title screen`, width / 2, height - 60);
   }
 }
 
+// displays the victory screen
 function victory() {
   background(0);
 
+  // handles the flashing text
   flashingTextFrames++;
-
   if (flashingTextFrames >= flashingTextDuration && seeFlashingText) {
     seeFlashingText = false;
     flashingTextFrames = 0;
@@ -435,6 +480,7 @@ function victory() {
     flashingTextFrames = 0;
   }
 
+  // displays the ending quote
   fill(0, 255, 255);
   textAlign(CENTER, CENTER);
   textSize(36);
@@ -445,22 +491,29 @@ function victory() {
   fill(246, 122, 51);
   text(`Phoenix of the Arctic`, width / 2, height / 2 + 120);
 
+  // changes the color of the flashing text
   if (seeFlashingText) {
     fill(0, 255, 255);
   } else {
     fill(246, 122, 51);
   }
+
+  // displays the "return to title screen" command prompt
   textStyle(NORMAL);
   textSize(24);
   text(`Press ENTER to return to the title screen`, width / 2, height - 60);
 }
 
+// saves the game in localStorage
 function saveGame() {
+  // saves map data
   localStorage.setItem("mapGrid", JSON.stringify(mapGrid));
 
+  // saves ability data
   localStorage.setItem("dataSaved", true);
   localStorage.setItem("abilityData", JSON.stringify(abilityData));
 
+  // saves player data
   localStorage.setItem("playerSaved", true);
   localStorage.setItem(
     "player",
@@ -480,6 +533,7 @@ function saveGame() {
     })
   );
 
+  // saves shrine data
   localStorage.setItem("shrineCount", shrines.length);
   for (let i = 0; i < shrines.length; i++) {
     localStorage.setItem(
@@ -491,6 +545,7 @@ function saveGame() {
     );
   }
 
+  // saves entity data
   localStorage.setItem("entityCount", entities.length);
   for (let i = 0; i < entities.length; i++) {
     localStorage.setItem(
@@ -506,12 +561,19 @@ function saveGame() {
     );
   }
 
+  // saves spirits defeated progress data
+  localStorage.setItem("greatSpirits", greatSpirits);
+  localStorage.setItem("finalBossActivated", finalBossActivated);
+
+  // displays a popup to notify the player that the game has been saved
   superPopup = new Popup(`Game saved.`, 60, false, true);
 }
 
+// after death, sends the player back to the last shrine they visited
 function respawn() {
   let playerData = JSON.parse(localStorage.getItem("player"));
 
+  // resets the player's stats to what they were when the last interacted with a shrine
   player.healthTarget = player.health = playerData.maxHealth;
   player.frostbiteTarget = player.frostbite = playerData.maxFrostbite;
   player.movable = true;
@@ -531,10 +593,24 @@ function respawn() {
   player.currentSunPoints = playerData.currentSunPoints;
   player.mapMovable = playerData.mapMovable;
 
+  // resets the amount of great spirits and the final boss activation
+  greatSpirits = 0;
+  finalBossActivated = false;
+  for (let i = 0; i < entities.length; i++) {
+    if (entities[i].type === `greatSpirit`) {
+      greatSpirits++;
+    } else if (entities[i].type === `finalBoss`) {
+      finalBossActivated = true;
+    }
+  }
+
+  // returns to the game
   state = `game`;
 }
 
+// erases saved game data
 function resetGame() {
+  // erases arrays and resets amuont of great spirits to be defeated
   mapGrid = [];
   projectiles = [];
   entities = [];
@@ -542,6 +618,7 @@ function resetGame() {
   greatSpirits = 5;
   finalBossActivated = false;
 
+  // clears the data saved in localStorage
   abilityData = loadJSON("js/data/abilityData.json");
   localStorage.removeItem("abilityData");
   localStorage.removeItem("dataSaved");
@@ -550,32 +627,35 @@ function resetGame() {
   localStorage.removeItem("shrineCount");
   localStorage.removeItem("player");
   localStorage.removeItem("playerSaved");
+  localStorage.removeItem("greatSpirits");
+  localStorage.removeItem("finalBossActivated");
 
+  // clears saved entity data
   for (let i = 0; i < entityCount; i++) {
     localStorage.removeItem("entity" + i);
   }
 
-  for (let i = 0; i < entityCount; i++) {
-    localStorage.removeItem("entity" + i);
-  }
-
+  // clears saved shrine data
   for (let i = 0; i < shrineCount; i++) {
     localStorage.removeItem("shrine" + i);
   }
 }
 
+// starts a new game by resetting and rebooting
 function newGame() {
   resetGame();
   setup();
 
+  // returns to the game
   state = `game`;
 }
 
-// p5: handle mouse clicks
+// p5: handles mouse clicks
 function mouseClicked() {
   userStartAudio();
   if (state === `game`) {
     for (let i = 0; i < player.abilities.attacks.length; i++) {
+      // performs a peck attack when the player clicks with the mouse
       if (
         player.abilities.attacks[i].command === playerData.attacks.peck.command
       ) {
@@ -588,6 +668,7 @@ function mouseClicked() {
     }
 
     if (ui.menuOpen) {
+      // buys abilities and saves the game when the player clicks on an ability icon inside the ability purchase menu
       for (let i = 0; i < abilityData.abilities.length; i++) {
         if (abilityData.abilities[i].hover) {
           saveGame();
@@ -602,6 +683,7 @@ function mouseClicked() {
 function mouseMoved() {
   userStartAudio();
   if (state === `game` && ui.menuOpen) {
+    // handles hovering on ability icons inside the ability purchase menu
     for (let i = 0; i < abilityData.abilities.length; i++) {
       let d = dist(
         width / 2 + dyn(abilityData.abilities[i].x, `x`),
@@ -618,7 +700,7 @@ function mouseMoved() {
   }
 }
 
-// p5: handle keyboard inputs
+// p5: handles keyboard inputs
 function keyPressed() {
   playerSaved = localStorage.getItem("playerSaved");
 
