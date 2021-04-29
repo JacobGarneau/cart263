@@ -90,6 +90,10 @@ class Entity {
           sounds.rotateHum.play();
           sounds.rotateHum.loop();
         }
+
+        if (this.type === `finalBoss`) {
+          player.frostbiteTarget += 6;
+        }
       } else if (this.type === `game`) {
         if (this.cell.biome === `sea`) {
           sounds.fishDamage.play();

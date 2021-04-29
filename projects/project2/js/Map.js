@@ -42,7 +42,7 @@ class Map {
         } else if (mapGrid[i][j].biome === `snow`) {
           fill(243, 253, 255);
         } else if (mapGrid[i][j].biome === `mountains`) {
-          fill(196);
+          fill(214);
         }
 
         // draw the map cells

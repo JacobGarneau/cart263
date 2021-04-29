@@ -21,6 +21,22 @@ class Shrine extends Structure {
   }
 
   display() {
+    if (this.cell.biome === `sea`) {
+      push();
+      imageMode(CENTER);
+      image(
+        images.island1,
+        this.mapX * width - player.mapX * width + this.x,
+        this.mapY * height - player.mapY * height + this.y + 129
+      );
+      image(
+        images.island2,
+        this.mapX * width - player.mapX * width + this.x,
+        this.mapY * height - player.mapY * height + this.y + 86
+      );
+      pop();
+    }
+
     super.display();
 
     if (this.cell.spiritDefeated) {

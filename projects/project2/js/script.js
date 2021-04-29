@@ -82,6 +82,8 @@ function preload() {
   images.dash = loadImage("assets/images/dash.svg");
   images.shift = loadImage("assets/images/shift.svg");
   images.lake = loadImage("assets/images/lake.svg");
+  images.island1 = loadImage("assets/images/island1.svg");
+  images.island2 = loadImage("assets/images/island2.svg");
 
   icons = [
     images.attack,
