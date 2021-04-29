@@ -538,6 +538,8 @@ function resetGame() {
   projectiles = [];
   entities = [];
   shrines = [];
+  greatSpirits = 5;
+  finalBossActivated = false;
 
   abilityData = loadJSON("js/data/abilityData.json");
   localStorage.removeItem("abilityData");

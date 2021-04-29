@@ -7,6 +7,7 @@ class FinalBoss extends Spirit {
     this.mapX = attributes.mapX;
     this.mapY = attributes.mapY;
     this.type = `finalBoss`;
+    this.deathQuotes = [``];
 
     this.size = 120;
     this.healthBarShift = 40;

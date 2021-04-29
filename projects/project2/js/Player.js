@@ -254,6 +254,7 @@ class Player {
           this.hitlag = attack.hitlag;
           this.attackSize = attack.size;
           this.damage = attack.damage;
+          this.abilities.attacks[i].currentRecharge = attack.recharge;
 
           this.frostbiteTarget -= attack.frostbite;
           this.frostbiteTarget = constrain(
@@ -275,8 +276,6 @@ class Player {
             this.attackY = attack.posY;
             this.attackSize = attack.size;
             this.attackFX = attackFX[attack.attackFX];
-
-            this.abilities.attacks[i].currentRecharge = attack.recharge;
           }
         }
       }
