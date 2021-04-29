@@ -60,25 +60,25 @@ The music was taken from **Bensound** (bensound.com) under Creative Commons attr
 
 All sound effects were taken from **Freesound** (freesound.org) under Creative Commons license. Here are the users credited for each of the sound effects:
 
-dash: user **InspectorJ**
-fireBreath: user **qubodup**
-flameNova: user **midimagician**
-wingAttack: user **AgentDD**
-minimap: user **partheeban**
-shrineDefeated: user **BOSS MUSIC**
-abilityPurchased: user **InspectorJ**
-chimes: user **InspectorJ**
-peck: user **oldhiccup**
-summon: user **chrisw92**
-spiritDefeat: user **HorrorAudio**
-rotateHum: user **kaboose102**
-spiritDamage: user **ash_rez**
-spiritHit: user **qubodup**
-spiritShoot: user **Leszek_Szary**
-death: user **PhonosUPF**
-menu: user **broumbroum**
-spawn: user **broumbroum**
-tick: user **Snapper4298**
-wind: user **InspectorJ**
-rabbitDamage: user **JoseAgudelo**
-fishDamage: user **CGEffex**
+- dash: user **InspectorJ**
+- fireBreath: user **qubodup**
+- flameNova: user **midimagician**
+- wingAttack: user **AgentDD**
+- minimap: user **partheeban**
+- shrineDefeated: user **BOSS MUSIC**
+- abilityPurchased: user **InspectorJ**
+- chimes: user **InspectorJ**
+- peck: user **oldhiccup**
+- summon: user **chrisw92**
+- spiritDefeat: user **HorrorAudio**
+- rotateHum: user **kaboose102**
+- spiritDamage: user **ash_rez**
+- spiritHit: user **qubodup**
+- spiritShoot: user **Leszek_Szary**
+- death: user **PhonosUPF**
+- menu: user **broumbroum**
+- spawn: user **broumbroum**
+- tick: user **Snapper4298**
+- wind: user **InspectorJ**
+- rabbitDamage: user **JoseAgudelo**
+- fishDamage: user **CGEffex**
