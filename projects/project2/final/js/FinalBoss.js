@@ -23,8 +23,8 @@ class FinalBoss extends Spirit {
     this.meleeHit = false;
 
     this.rangedTimer = 0;
-    this.rangedChargeup = 120;
-    this.rangedRange = 180;
+    this.rangedChargeup = 90;
+    this.rangedRange = 120;
     this.rangedDamage = 8;
 
     this.rotateRange = 100;
@@ -46,8 +46,8 @@ class FinalBoss extends Spirit {
     this.rotateSize = 44;
 
     this.summonTimer = 0;
-    this.summonChargeup = 180;
-    this.summonRange = 320;
+    this.summonChargeup = 120;
+    this.summonRange = 240;
     this.summonCooldown = 600;
     this.currentCooldown = this.summonCooldown;
   }

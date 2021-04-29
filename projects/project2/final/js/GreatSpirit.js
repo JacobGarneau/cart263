@@ -14,15 +14,15 @@ class GreatSpirit extends Spirit {
     this.meleeHit = false;
 
     this.rangedTimer = 0;
-    this.rangedChargeup = 120;
-    this.rangedRange = 240;
+    this.rangedChargeup = 90;
+    this.rangedRange = 150;
     this.rangedDamage = 8;
 
     this.rotateRange = 120;
     this.rotateDamage = 1;
     this.rotateX = [-this.rotateRange, this.rotateRange];
     this.rotateY = [-this.rotateRange, this.rotateRange];
-    this.rotateSpeed = 2;
+    this.rotateSpeed = 4;
     this.rotateSpin = 0;
     this.rotateSize = 44;
 
@@ -113,7 +113,7 @@ class GreatSpirit extends Spirit {
     if (greatSpirits === 0) {
       finalBossActivated = true;
       this.deathQuotes = [
-        `The Phoenix has defeated the Ancients. But it stands not chance against the Protector.`,
+        `The Phoenix has defeated the Great Ones, but it stands no chance against the Ancient.\nIt lies in wait at the place of the Firebird's birth.`,
       ];
       let finalBoss = new FinalBoss({
         mapX: 5,
@@ -122,9 +122,19 @@ class GreatSpirit extends Spirit {
         health: 500,
         healthTarget: 500,
       });
-    } else {
+    } else if (greatSpirits === 1) {
+      this.deathQuotes = [`The last Great One stands alone.`];
+    } else if (greatSpirits === 2) {
       this.deathQuotes = [
         `Another Great One has fallen. Only ${greatSpirits} remain against the Light.`,
+      ];
+    } else if (greatSpirits === 3) {
+      this.deathQuotes = [
+        `Three of the Great Ones remain, guarding their Shrines.`,
+      ];
+    } else if (greatSpirits === 4) {
+      this.deathQuotes = [
+        `Great Ones in all four corners of the world beware.\nThe Phoenix is coming.`,
       ];
     }
     super.die();

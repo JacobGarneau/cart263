@@ -37,11 +37,17 @@ class UI {
         b: 51,
       },
     };
+
+    this.shrinePopup = false;
   }
 
   // display the UI
   display() {
     this.drawAbilities();
+
+    if (this.shrinePopup) {
+      this.drawShrinePopup();
+    }
 
     if (this.menuOpen) {
       this.drawMenu();
@@ -344,6 +350,24 @@ class UI {
     }
   }
 
+  drawShrinePopup() {
+    // draw command prompt
+    push();
+    fill(246, 122, 51);
+    noStroke();
+    rectMode(CENTER);
+    rect(width / 2, height - 60, 510, 40, 12, 12, 12, 12);
+    textSize(24);
+    textAlign(CENTER, CENTER);
+    fill(255);
+    text(
+      `Press [SPACEBAR] to interact with the shrine`,
+      width / 2,
+      height - 59
+    );
+    pop();
+  }
+
   toggleMenu() {
     if (this.menuOpen) {
       this.menuOpen = false;
@@ -385,6 +409,8 @@ class UI {
     textSize(64);
     textStyle(BOLD);
     text(`ABILITIES`, width / 2, dyn(120, `y`));
+    textSize(24);
+    text(`[ESC]`, width / 2 + dyn(400, `x`), dyn(60, `y`));
     pop();
 
     push();
@@ -565,10 +591,17 @@ class UI {
           );
         }
       } else {
-        alert("Not enough Sun Points");
+        // alert("Not enough Sun Points");
+        superPopup = new Popup(
+          `Insufficient Sun Points.`,
+          60,
+          false,
+          true,
+          false
+        );
       }
     } else if (ability.status === `locked`) {
-      alert("Lacking prerequisites");
+      superPopup = new Popup(`Lacking prerequisites.`, 60, false, true, false);
     }
   }
 }

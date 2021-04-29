@@ -1,5 +1,11 @@
 class Popup {
-  constructor(string, duration, fadeOut = true, superPopup = false) {
+  constructor(
+    string,
+    duration,
+    fadeOut = true,
+    superPopup = false,
+    textBox = false
+  ) {
     this.x = width / 2;
     this.y = height / 4;
     this.string = string;
@@ -7,6 +13,7 @@ class Popup {
     this.fadeOut = fadeOut;
     this.opacity = 0;
     this.superPopup = superPopup;
+    this.textBox = textBox;
   }
 
   display() {
@@ -30,10 +37,12 @@ class Popup {
     textStyle(BOLD);
     textSize(24);
     if (this.superPopup) {
-      fill(199, 66, 66, this.opacity);
-      noStroke();
-      rectMode(CENTER);
-      rect(this.x, this.y - 40, 180, 48, 12, 12, 12, 12);
+      if (this.textBox) {
+        fill(199, 66, 66, this.opacity);
+        noStroke();
+        rectMode(CENTER);
+        rect(this.x, this.y - 40, 180, 48, 12, 12, 12, 12);
+      }
       fill(0, 255, 255, this.opacity);
       text(this.string, this.x, this.y - 40);
     } else {

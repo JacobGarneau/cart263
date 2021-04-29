@@ -13,6 +13,7 @@ class Spirit extends Entity {
       `Silence reigns once more.`,
       `The Phoenix burns eternally.`,
       `None can resist the might of the Sun.`,
+      `Spirits will haunt these lands no more.`,
     ];
     this.popupDuration = 360;
 
@@ -167,6 +168,7 @@ class Spirit extends Entity {
     player.mapMovable = true;
     if (this.type === `spirit`) {
       sounds.spiritDefeat.play();
+      player.frostbiteTarget += 5;
     }
 
     for (let i = 0; i < entities.length; i++) {

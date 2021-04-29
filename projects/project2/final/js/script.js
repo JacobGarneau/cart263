@@ -325,13 +325,6 @@ function game() {
     projectiles[i].display();
   }
 
-  minimap.display();
-
-  for (let i = 0; i < entities.length; i++) {
-    entities[i].move();
-    entities[i].display();
-  }
-
   for (let i = 0; i < shrines.length; i++) {
     shrines[i].display();
     shrines[i].interact();
@@ -350,6 +343,11 @@ function game() {
     }
   }
 
+  for (let i = 0; i < entities.length; i++) {
+    entities[i].move();
+    entities[i].display();
+  }
+
   player.move();
   player.updateStats();
   player.display();
@@ -364,6 +362,7 @@ function game() {
     popup.display();
   }
 
+  minimap.display();
   ui.display();
 
   if (superPopup !== undefined) {
@@ -591,8 +590,8 @@ function mouseClicked() {
     if (ui.menuOpen) {
       for (let i = 0; i < abilityData.abilities.length; i++) {
         if (abilityData.abilities[i].hover) {
-          ui.buyAbility(abilityData.abilities[i]);
           saveGame();
+          ui.buyAbility(abilityData.abilities[i]);
         }
       }
     }

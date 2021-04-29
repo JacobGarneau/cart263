@@ -49,7 +49,7 @@ class Player {
             mapGrid[this.mapX][this.mapY].hasShrine &&
             mapGrid[this.mapX][this.mapY].spiritDefeated
           ) {
-            this.frostbiteTarget += 2;
+            this.frostbiteTarget += 5;
             if (this.frostbiteTarget > this.maxFrostbite) {
               this.frostbiteTarget = this.maxFrostbite;
             }
@@ -68,7 +68,7 @@ class Player {
           }
         }
       }
-    }, 800);
+    }, 1000);
   }
 
   // display the player icon
@@ -243,7 +243,11 @@ class Player {
 
   // perform attacks
   attack(attack) {
-    if (this.hitlag === 0 && this.movable) {
+    if (
+      this.hitlag === 0 &&
+      this.movable &&
+      this.frostbite >= attack.frostbite
+    ) {
       for (let i = 0; i < this.abilities.attacks.length; i++) {
         if (
           this.abilities.attacks[i].name === attack.name &&
@@ -304,7 +308,7 @@ class Player {
       setTimeout(function (e) {
         setTimeout(function (e) {
           player.dashing = false;
-        }, 1000);
+        }, 2000);
         player.speed /= speedFactor;
         if (this.rotation === 0) {
           this.speed *= speedFactor;

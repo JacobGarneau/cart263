@@ -91,8 +91,13 @@ class Entity {
           sounds.rotateHum.loop();
         }
 
-        if (this.type === `finalBoss`) {
+        if (this.type === `finalBoss` || this.type === `greatSpirit`) {
           player.frostbiteTarget += 6;
+          player.frostbiteTarget = constrain(
+            player.frostbiteTarget,
+            0,
+            player.maxFrostbite
+          );
         }
       } else if (this.type === `game`) {
         if (this.cell.biome === `sea`) {
