@@ -621,6 +621,9 @@ function respawn() {
 
 // erases saved game data
 function resetGame() {
+  // closes the minimap to prevent undefined mapGrid
+  minimap.open = false;
+
   // erases arrays and resets amuont of great spirits to be defeated
   mapGrid = [];
   projectiles = [];

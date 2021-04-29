@@ -183,9 +183,8 @@ class FinalBoss extends Spirit {
     sounds.rotateHum.stop();
 
     // resets the game data and moves on to victory screen
-    state = `victory`;
     resetGame();
-
+    state = `victory`;
     super.die();
   }
 }
