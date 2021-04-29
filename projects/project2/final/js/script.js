@@ -25,7 +25,7 @@ let playerData, terrainData, abilityData; // JSON data
 let popup;
 let superPopup; // popup that happens above the menu
 let shrineCount; // localStorage recuperation
-let greatSpirits = 5; // great spirits to defeat before summoning the final boss
+let greatSpirits = 1; // great spirits to defeat before summoning the final boss
 let finalBossActivated = false;
 let shrines = [];
 let entityCount; // localStorage recuperation
@@ -626,7 +626,7 @@ function resetGame() {
   projectiles = [];
   entities = [];
   shrines = [];
-  greatSpirits = 5;
+  greatSpirits = 1;
   finalBossActivated = false;
 
   // clears the data saved in localStorage
